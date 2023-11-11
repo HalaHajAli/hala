@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_application/views/Welcome.dart';
 import 'package:flutter_application/views/login.dart';
 import 'package:flutter_application/views/signup.dart';
 import 'package:flutter_application/views/homepage.dart';
 import 'package:flutter_application/views/plannerpage.dart';
-import 'dart:io';
 import 'package:flutter_application/views/plannersign.dart';
-
 import 'package:get/get.dart';
 
 void main() {
@@ -20,7 +19,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Welcome(),
+      // Localizations setup
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', 'US'), // English
+        Locale('ar', 'SA'), // Arabic (Saudi Arabia)
+      ],
+      locale: const Locale('ar', 'SA'), // Set the initial locale to Arabic
+      textDirection: TextDirection.rtl, // Set the initial text direction to RTL
+
+      home: HomePage(),
     );
   }
 }

@@ -8,70 +8,153 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   List<Map<String, dynamic>> medCat = [
     {
       "icon": Icons.event,
-      "category": "Appointments",
+      "category": "المواعيد",
     },
     {
       "icon": Icons.note,
-      "category": "Tasks",
+      "category": "المهام",
     },
     {
       "icon": Icons.email,
-      "category": "Requests",
+      "category": "الطلبات",
     },
   ];
 
   List<Map<String, dynamic>> Events = [
     {
-      "user": "User 1",
-      "date": "Oct 20, 2023",
-      "time": "10:00 AM",
+      "user": "المستخدم 1",
+      "date": "20 أكتوبر 2023",
+      "time": "10:00 ص",
     },
     {
-      "user": "User 2",
-      "date": "Oct 22, 2023",
-      "time": "2:30 PM",
+      "user": "المستخدم 2",
+      "date": "22 أكتوبر 2023",
+      "time": "2:30 م",
     },
     // Add more upcoming appointments
   ];
 
+  void onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+      if (index == 0) {
+        // Open the End Drawer when "الملف الشخصي" (My Profile) is clicked
+        _scaffoldKey.currentState?.openEndDrawer();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        backgroundColor: Color(0xFF5BA581),
+        title: Text("اسم المنسق"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.menu), // Replace with your icon (e.g., three dashes)
+            onPressed: () {
+              // Handle the action here to open the End Drawer
+              _scaffoldKey.currentState?.openEndDrawer();
+            },
+          ),
+        ],
+      ),
+endDrawer: Drawer(
+  // Define your End Drawer content here
+  child: ListView(
+    padding: EdgeInsets.zero,
+    children: <Widget>[
+      Container(
+        height: 250, // Adjust the height as needed
+        child: DrawerHeader(
+          decoration: BoxDecoration(
+            color: Color(0xFF5BA581),
+          ),
+          child: Column(
+            children: [
+              CircleAvatar(
+                backgroundImage: AssetImage('assets/your_image.png'), // Replace with your image path
+                radius: 50,
+              ),
+              SizedBox(height: 5),
+              Text(
+                'Planner Name',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+              Text(
+                'planner@email.com',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      ListTile(
+        title: Row(
+          children: [
+            Icon(Icons.message, color: Colors.black), // Add an icon for Messages
+            SizedBox(width: 10),
+            Text('الرسائل'), // Change to Arabic
+          ],
+        ),
+        onTap: () {
+          // Handle Messages action
+        },
+      ),
+      ListTile(
+        title: Row(
+          children: [
+            Icon(Icons.logout, color: Colors.black), // Add an icon for Log Out
+            SizedBox(width: 10),
+            Text('تسجيل الخروج'), // Change to Arabic
+          ],
+        ),
+        onTap: () {
+          // Handle Log Out action
+        },
+      ),
+      // Add more items as needed
+    ],
+  ),
+),
+
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Container(
-          margin: EdgeInsets.only(top: 40.0), // Shift everything down
+          margin: EdgeInsets.only(top: 2.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(
-                    'Planner Name',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundImage: AssetImage('assets/download.jpg'),
-                  ),
+                  // Add any additional widgets here
                 ],
               ),
-              SizedBox(height: 30.0),
+              SizedBox(height: 7.0),
               Text(
-                'Category',
+                'الفئة',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10.0),
+              SizedBox(height: 7.0),
               Container(
                 height: 60.0,
                 child: ListView.builder(
@@ -125,25 +208,22 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
-              SizedBox(height: 40.0), // space
-
-              // Upcoming Appointments
+              SizedBox(height: 1.0),
               Text(
-                'Upcoming Events',
+                'الفعاليات القادمة',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-                            SizedBox(height: 20.0), // space
-
+              SizedBox(height: 10.0),
               Column(
                 children: Events.map((appointment) {
                   return Column(
                     children: <Widget>[
-                      Container( //// the outer container
+                      Container(
                         width: 400.0,
-                        height: 180.0,
+                        height: 183.0,
                         decoration: BoxDecoration(
                           border: Border.all(color: Color(0xFF5BA581)),
                           borderRadius: BorderRadius.circular(10.0),
@@ -157,14 +237,14 @@ class _HomePageState extends State<HomePage> {
                               Row(
                                 children: <Widget>[
                                   Text(
-                                    'User: ${appointment['user']}',
+                                    'المستخدم: ${appointment['user']}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ],
                               ),
-                              Container( // New container for date and time
+                              Container(
                                 width: 400,
                                 height: 60,
                                 decoration: BoxDecoration(
@@ -185,48 +265,47 @@ class _HomePageState extends State<HomePage> {
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 10.0), // Add space between inner box and buttons
-                             
-                            Row(
-                              children: <Widget>[
-                                Container(
-                                  width: 140,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      // Add your cancel logic here
-                                    },
-                                    style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Colors.red),
-                                      padding: MaterialStateProperty.all(
-                                        EdgeInsets.symmetric(horizontal: 5.0),
+                              SizedBox(height: 10.0),
+                              Row(
+                                children: <Widget>[
+                                  Container(
+                                    width: 140,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        // Add your cancel logic here
+                                      },
+                                      style: ButtonStyle(
+                                        backgroundColor: MaterialStateProperty.all(Colors.red),
+                                        padding: MaterialStateProperty.all(
+                                          EdgeInsets.symmetric(horizontal: 5.0),
+                                        ),
                                       ),
+                                      child: Text('إلغاء'),
                                     ),
-                                    child: Text('Cancel'),
                                   ),
-                                ),
-                                Spacer(), // Spacer pushes the second button to the right
-                                Container(
-                                  width: 145,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      // Add your completed logic here
-                                    },
-                                    style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Colors.blue),
-                                      padding: MaterialStateProperty.all(
-                                        EdgeInsets.symmetric(horizontal: 5.0),
+                                  Spacer(),
+                                  Container(
+                                    width: 145,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        // Add your completed logic here
+                                      },
+                                      style: ButtonStyle(
+                                        backgroundColor: MaterialStateProperty.all(Colors.blue),
+                                        padding: MaterialStateProperty.all(
+                                          EdgeInsets.symmetric(horizontal: 5.0),
+                                        ),
                                       ),
+                                      child: Text('مكتمل'),
                                     ),
-                                    child: Text('Completed'),
                                   ),
-                                ),
-                              ],
-                            ),
+                                ],
+                              ),
                             ],
                           ),
                         ),
                       ),
-                      SizedBox(height: 40.0), // Add space between appointments
+                      SizedBox(height: 40.0),
                     ],
                   );
                 }).toList(),
@@ -234,6 +313,25 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+                    backgroundColor: Color(0xFF5BA581) ,
+
+        currentIndex: _currentIndex,
+        items: [
+          BottomNavigationBarItem(
+            backgroundColor: Color(0xFF5BA581) ,
+            icon: Icon(Icons.account_circle,color: Colors.white),
+            label: 'الملف الشخصي',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.message ,color: Colors.white),
+            label: 'الرسائل',
+          ),
+        ],
+     unselectedLabelStyle: TextStyle(color: Colors.white), // Set the color for unselected labels
+
+        onTap: onTabTapped,
       ),
     );
   }
