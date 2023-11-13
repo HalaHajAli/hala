@@ -182,4 +182,8 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
     );
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 6a71350e6bc95347455be93d60908f0f04965542
