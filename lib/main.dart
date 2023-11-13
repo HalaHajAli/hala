@@ -6,6 +6,8 @@ import 'package:flutter_application/views/signup.dart';
 import 'package:flutter_application/views/homepage.dart';
 import 'package:flutter_application/views/plannerpage.dart';
 import 'package:flutter_application/views/plannersign.dart';
+import 'package:flutter_application/views/calender.dart';
+
 import 'package:get/get.dart';
 
 void main() {
@@ -31,7 +33,7 @@ class MyApp extends StatelessWidget {
       locale: const Locale('ar', 'SA'), // Set the initial locale to Arabic
       textDirection: TextDirection.rtl, // Set the initial text direction to RTL
 
-      home: HomePage(),
+      //home: CalendarPage (),
     );
   }
 }
