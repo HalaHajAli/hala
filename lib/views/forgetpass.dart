@@ -21,61 +21,63 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         title: Text('نسيت كلمة المرور؟'),
         backgroundColor: Color(0xFF5BA581),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'أدخل عنوان البريد الإلكتروني الخاص بك لإعادة تعيين كلمة المرور:',
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 20),
-            // Email input field
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: 'البريد الإلكتروني',
-                prefixIcon: Icon(Icons.email),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  borderSide: BorderSide(color: Color(0xFF5BA581)),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'أدخل عنوان البريد الإلكتروني الخاص بك لإعادة تعيين كلمة المرور:',
+                style: TextStyle(fontSize: 18),
+              ),
+              SizedBox(height: 20),
+              // Email input field
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'البريد الإلكتروني',
+                  prefixIcon: Icon(Icons.email),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    borderSide: BorderSide(color: Color(0xFF5BA581)),
+                  ),
+                  errorText: errorMessage, // Display error message
                 ),
-                errorText: errorMessage, // Display error message
-              ),
-              keyboardType: TextInputType.emailAddress,
-              onChanged: (value) {
-                setState(() {
-                  email = value;
-                  // Clear error message when user enters text
-                  errorMessage = '';
-                });
-              },
-            ),
-            SizedBox(height: 20),
-            // Button to send verification code
-            ElevatedButton(
-              onPressed: () {
-                if (email.isEmpty) {
-                  // Show an error message if email is empty
+                keyboardType: TextInputType.emailAddress,
+                onChanged: (value) {
                   setState(() {
-                    errorMessage = 'يجب أن تقوم بإدخال البريد الإلكتروني';
-                    verificationCode = ''; // Clear verification code
+                    email = value;
+                    // Clear error message when the user enters text
+                    errorMessage = '';
                   });
-                } else {
-                  // Generate and send the verification code
-                  sendVerificationCode(email);
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Color(0xFF5BA581),
+                },
               ),
-              child: Text('إرسال رمز التحقق'),
-            ),
-            // Display the verification code (for testing purposes)
-            if (verificationCode.isNotEmpty)
-              Text('رمز التحقق: $verificationCode'),
-          ],
+              SizedBox(height: 20),
+              // Button to send verification code
+              ElevatedButton(
+                onPressed: () {
+                  if (email.isEmpty) {
+                    // Show an error message if the email is empty
+                    setState(() {
+                      errorMessage = 'يجب أن تقوم بإدخال البريد الإلكتروني';
+                      verificationCode = ''; // Clear verification code
+                    });
+                  } else {
+                    // Generate and send the verification code
+                    sendVerificationCode(email);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF5BA581),
+                ),
+                child: Text('إرسال رمز التحقق'),
+              ),
+              // Display the verification code (for testing purposes)
+              if (verificationCode.isNotEmpty)
+                Text('رمز التحقق: $verificationCode'),
+            ],
+          ),
         ),
       ),
     );

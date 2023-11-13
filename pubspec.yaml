@@ -33,6 +33,15 @@ dependencies:
   get: ^4.1.4 # Corrected indentation and spacing
   cupertino_icons: ^1.0.2
   expandable: ^5.0.1
+  image_picker: ^0.8.4+2
+  flutter_screenutil: ^5.0.0
+  convex_bottom_bar: ^3.2.0
+  provider: ^6.0.5
+  url_launcher: ^6.2.1
+
+  
+
+
 
 dev_dependencies:
   flutter_test:
@@ -47,3 +56,58 @@ flutter:
   assets:
     - images/monasaba.png
     - images/download.png
+    - images/999.jpg
+    - images/2.png
+    - images/33.png
+    - images/rings.png
+    - images/graduation.png
+    - images/baby-shower.png
+    - images/happy-birthday.png
+    - images/1.avif
+    - images/blank-profile-circle.png
+    - images/w.jpeg
+    - images/ت.jpeg
+    - images/s.jpeg
+    - images/s1.jpeg
+    - images/1_white.jpeg
+    - images/2_white.jpeg
+    - images/3_white.jpeg
+    - images/4_white.jpeg
+    - images/1_pink.jpeg
+    - images/2_pink.jpeg
+    - images/3_pink.jpeg
+    - images/4_pink.jpeg
+    - images/5_pink.jpeg
+    - images/6_pink.jpeg
+    - images/1_red.jpeg
+    - images/2_red.jpeg
+    - images/3_red.jpeg
+    - images/4_red.jpeg
+    - images/5_red.jpeg
+    - images/6_red.jpeg
+    - images/1_green.jpeg
+    - images/2_green.jpeg
+    - images/3_green.jpeg
+    - images/4_green.jpeg
+    - images/5_green.jpeg
+    - images/1_other.jpeg
+    - images/2_other.jpeg
+    - images/3_other.jpeg
+    - images/4_other.jpeg
+    - images/5_other.jpeg
+    - images/6_other.jpeg
+    - images/7_other.jpeg
+    - images/8_other.jpeg
+    - images/9_other.jpeg
+    - images/10_other.jpeg
+    - images/facebook.png
+    - images/instagram.png
+    - images/ج.jpeg
+    - images/golden.jpeg
+
+
+
+
+
+
+

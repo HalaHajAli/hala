@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/views/forgetpass.dart';
+import 'package:flutter_application/views/servicepage.dart'; // Import the service page
+
 
 class Login1 extends StatefulWidget {
-  final String userType; // Add a named parameter for user type
+  final String userType;
 
   const Login1({
     Key? key,
-    required this.userType, // Make the user type required
+    this.userType = 'visitor', // Set a default value
   }) : super(key: key);
 
   @override
@@ -50,7 +52,7 @@ class _Login1State extends State<Login1> {
               onChanged: (value) {
                 setState(() {
                   username = value;
-                  // Clear error message when user enters text
+                  // Clear error message when the user enters text
                   usernameError = '';
                 });
               },
@@ -74,7 +76,7 @@ class _Login1State extends State<Login1> {
               onChanged: (value) {
                 setState(() {
                   password = value;
-                  // Clear error message when user enters text
+                  // Clear error message when the user enters text
                   passwordError = '';
                 });
               },
@@ -91,12 +93,25 @@ class _Login1State extends State<Login1> {
               }
               if (password.isEmpty) {
                 setState(() {
-                  passwordError = '  من فضك أدخل كلمة المرور ';
+                  passwordError = '  من فضلك أدخل كلمة المرور ';
                 });
               }
               if (username.isNotEmpty && password.isNotEmpty) {
-                // Add your login logic here
-                // Proceed with login
+                // Check if username and password match the condition
+                if (username == 'hala' && password == '123') {
+                  // Navigate to the service page
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ServicePage(userType: widget.userType),
+                    ),
+                  );
+                } else {
+                  // Handle incorrect username or password
+                  setState(() {
+                    usernameError = 'المستخدم غير موجود';
+                    passwordError = 'كلمة المرور غير صحيحة';
+                  });
+                }
               }
             },
             child: Padding(

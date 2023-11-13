@@ -4,7 +4,6 @@ import 'package:flutter_application/views/login.dart';
 import 'package:flutter_application/views/login1.dart';
 import 'package:flutter_application/views/homepage.dart';
 
-
 import 'dart:async';
 
 class Welcome extends StatefulWidget {
@@ -49,9 +48,20 @@ class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: SlideTransition(
-          position: _imageOffset,
-          child: Image.asset('images/monasaba.png'),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            // Determine the image size based on screen width
+            double imageSize = constraints.maxWidth * 0.6;
+
+            return SlideTransition(
+              position: _imageOffset,
+              child: Image.asset(
+                'images/monasaba.png',
+                width: imageSize,
+                height: imageSize,
+              ),
+            );
+          },
         ),
       ),
     );
