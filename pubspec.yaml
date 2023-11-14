@@ -14,16 +14,19 @@ dependencies:
   cupertino_icons: ^1.0.2
   expandable: ^5.0.1
   font_awesome_flutter: 10.6.0
-  flutter_svg: 2.0.7
+  flutter_svg: ^2.0.9
   flutter_localizations:
     sdk: flutter
-  flutter_calendar_carousel: ^2.0.0
   intl: ^0.18.1
+  flutter_calendar_carousel: ^2.0.0
+  jiffy: ^6.2.1 # Replace with the desired version
+  table_calendar: ^3.0.1 # Replace with the desired version
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
+
 
 flutter:
   uses-material-design: true

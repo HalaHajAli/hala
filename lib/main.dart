@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       locale: const Locale('ar', 'SA'), // Set the initial locale to Arabic
       textDirection: TextDirection.rtl, // Set the initial text direction to RTL
 
-      //home: CalendarPage (),
+      home: CalendarPage (),
     );
   }
 }
