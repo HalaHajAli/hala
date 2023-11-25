@@ -14,6 +14,12 @@ import 'package:flutter_application/views/HallServicePage.dart';
 import 'package:flutter_application/views/flowergra.dart';
 import 'package:flutter_application/views/flowerbaby.dart';
 import 'package:flutter_application/views/flowerbirth.dart';
+import 'package:flutter_application/views/saleprovider.dart';
+import 'package:flutter_application/views/serviceadmin.dart';
+
+
+
+
 
 class ServiceItem {
   final String name;
@@ -139,6 +145,9 @@ class SaleItem {
 }
 
 class _ServicePageState extends State<ServicePage> {
+  late SalesOffersProvider saleProvider;
+
+
   List<ServiceItem> services = [
     ServiceItem(
       name: 'Wedding',
@@ -156,7 +165,7 @@ class _ServicePageState extends State<ServicePage> {
       name: 'baby shower',
       description: 'Description for Service 3',
       image: AssetImage('images/baby-shower.png'),
-      servicePageRoute: babyServicePage(),
+      servicePageRoute: BabyServicePage(),
     ),
     ServiceItem(
       name: 'birth day',
@@ -181,6 +190,9 @@ class _ServicePageState extends State<ServicePage> {
 
   @override
   Widget build(BuildContext context) {
+    final sales = getSales(); // Use this function to get sales data
+
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Service Page - ${widget.userType}'),
@@ -238,7 +250,7 @@ class _ServicePageState extends State<ServicePage> {
               child: OffersListView(),
             ),
             // Display SalesListView
-            Padding(
+           Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
                 'Recent Sales:',
@@ -247,7 +259,13 @@ class _ServicePageState extends State<ServicePage> {
             ),
             SizedBox(
               height: 200.0,
-              child: SalesListView(),
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: sales.length,
+                itemBuilder: (context, index) {
+                  return SaleCard(sale: sales[index]);
+                },
+              ),
             ),
           ],
         ),
@@ -313,20 +331,21 @@ class WeddingServicePage extends StatefulWidget {
 class _WeddingServicePageState extends State<WeddingServicePage> {
   String selectedService = '';
 
-  List<String> serviceOptions = [
-    'Flower Management',
-    'Food Management',
-    'القاعة',
+  List<Map<String, dynamic>> serviceOptions = [
+    {'text': 'تنسيق الزهور', 'icon': Icons.local_florist},
+    {'text': 'قائمة الطعام', 'icon': Icons.fastfood},
+    {'text': 'القاعة', 'icon': Icons.location_city},
     // Add more service options if needed
   ];
 
-void navigateToFoodPage() {
+  void navigateToFoodPage() {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => FoodManagementPage(),
       ),
     );
   }
+
   // Function to navigate to the FlowerManagementPage
   void navigateToFlowerPage() {
     Navigator.of(context).push(
@@ -335,62 +354,59 @@ void navigateToFoodPage() {
       ),
     );
   }
+
   void navigateToHallPage() {
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (context) => HallServicePage(),
-    ),
-  );
-}
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => HallServicePage(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-return Scaffold(
-  appBar: AppBar(
-    title: Text('Wedding Service Page'),
-  ),
-  body: Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Welcome to the Wedding Service Page!',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 20),
-        Text(
-          'Select Service Item:',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 10),
-        Row(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFF5BA581), // Set app bar background color to green
+        title: Text('الأعراس   '),
+        centerTitle: true, // Center align the title
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: serviceOptions.map((item) {
-            return ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  selectedService = item;
-                });
-                if (item == 'Flower Management') {
-                  navigateToFlowerPage();
-                } else if (item == 'Food Management') {
-                  navigateToFoodPage();
-                } else if (item == 'القاعة') {
-                  navigateToHallPage(); // Navigate to Hall Management page
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                primary: selectedService == item ? Colors.green : Colors.grey,
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: SizedBox(
+                width: 150, // Set a fixed width for each button
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    setState(() {
+                      selectedService = item['text'];
+                    });
+                    if (item['text'] == 'تنسيق الزهور') {
+                      navigateToFlowerPage();
+                    } else if (item['text'] == 'قائمة الطعام') {
+                      navigateToFoodPage();
+                    } else if (item['text'] == 'القاعة') {
+                      navigateToHallPage(); // Navigate to Hall Management page
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF5BA581), // Set button color to green
+                    padding: EdgeInsets.symmetric(vertical: 15), // Adjust button padding
+                  ),
+                  icon: Icon(item['icon']),
+                  label: Text(item['text']),
+                ),
               ),
-              child: Text(item),
             );
           }).toList(),
         ),
-      ],
-    ),
-  ),
-);
- }
+      ),
+    );
+  }
 }
 
 class graduateServicePage extends StatefulWidget {
@@ -400,20 +416,21 @@ class graduateServicePage extends StatefulWidget {
 class _graduateServicePageState extends State<graduateServicePage > {
   String selectedService = '';
 
-  List<String> serviceOptions = [
-    'Flower Management',
-    'Food Management',
-    'القاعة',
+  List<Map<String, dynamic>> serviceOptions = [
+    {'text': 'تنسيق الزهور', 'icon': Icons.local_florist},
+    {'text': 'قائمة الطعام', 'icon': Icons.fastfood},
+    {'text': 'القاعة', 'icon': Icons.location_city},
     // Add more service options if needed
   ];
 
-void navigateToFoodPage() {
+  void navigateToFoodPage() {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => FoodManagementPage(),
       ),
     );
   }
+
   // Function to navigate to the FlowerManagementPage
   void navigateToFlowerPage() {
     Navigator.of(context).push(
@@ -422,85 +439,85 @@ void navigateToFoodPage() {
       ),
     );
   }
+
   void navigateToHallPage() {
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (context) => HallServicePage(),
-    ),
-  );
-}
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => HallServicePage(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-return Scaffold(
-  appBar: AppBar(
-    title: Text('Wedding Service Page'),
-  ),
-  body: Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Welcome to the Wedding Service Page!',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 20),
-        Text(
-          'Select Service Item:',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 10),
-        Row(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFF5BA581), // Set app bar background color to green
+        title: Text(' حفلات التخرج  '),
+        centerTitle: true, // Center align the title
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: serviceOptions.map((item) {
-            return ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  selectedService = item;
-                });
-                if (item == 'Flower Management') {
-                  navigateToFlowerPage();
-                } else if (item == 'Food Management') {
-                  navigateToFoodPage();
-                } else if (item == 'القاعة') {
-                  navigateToHallPage(); // Navigate to Hall Management page
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                primary: selectedService == item ? Colors.green : Colors.grey,
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: SizedBox(
+                width: 150, // Set a fixed width for each button
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    setState(() {
+                      selectedService = item['text'];
+                    });
+                    if (item['text'] == 'تنسيق الزهور') {
+                      navigateToFlowerPage();
+                    } else if (item['text'] == 'قائمة الطعام') {
+                      navigateToFoodPage();
+                    } else if (item['text'] == 'القاعة') {
+                      navigateToHallPage(); // Navigate to Hall Management page
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF5BA581), // Set button color to green
+                    padding: EdgeInsets.symmetric(vertical: 15), // Adjust button padding
+                  ),
+                  icon: Icon(item['icon']),
+                  label: Text(item['text']),
+                ),
               ),
-              child: Text(item),
             );
           }).toList(),
         ),
-      ],
-    ),
-  ),
-);
- }
+      ),
+    );
+  }
 }
 
-class babyServicePage extends StatefulWidget {
+
+class BabyServicePage extends StatefulWidget {
   @override
-  _babyServicePageState createState() => _babyServicePageState();
+  _BabyServicePageState createState() => _BabyServicePageState();
 }
-class _babyServicePageState extends State<babyServicePage > {
+
+class _BabyServicePageState extends State<BabyServicePage> {
   String selectedService = '';
 
-  List<String> serviceOptions = [
-    'Flower Management',
-    'Food Management',
-    'القاعة',
+  List<Map<String, dynamic>> serviceOptions = [
+    {'text': 'تنسيق الزهور', 'icon': Icons.local_florist},
+    {'text': 'قائمة الطعام', 'icon': Icons.fastfood},
+    {'text': 'القاعة', 'icon': Icons.location_city},
     // Add more service options if needed
   ];
 
-void navigateToFoodPage() {
+  void navigateToFoodPage() {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => FoodManagementPage(),
       ),
     );
   }
+
   // Function to navigate to the FlowerManagementPage
   void navigateToFlowerPage() {
     Navigator.of(context).push(
@@ -509,85 +526,82 @@ void navigateToFoodPage() {
       ),
     );
   }
+
   void navigateToHallPage() {
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (context) => HallServicePage(),
-    ),
-  );
-}
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => HallServicePage(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-return Scaffold(
-  appBar: AppBar(
-    title: Text('baby shower Service Page'),
-  ),
-  body: Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Welcome to the baby shower Service Page!',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 20),
-        Text(
-          'Select Service Item:',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 10),
-        Row(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFF5BA581), // Set app bar background color to green
+        title: Text('baby shower  '),
+        centerTitle: true, // Center align the title
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: serviceOptions.map((item) {
-            return ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  selectedService = item;
-                });
-                if (item == 'Flower Management') {
-                  navigateToFlowerPage();
-                } else if (item == 'Food Management') {
-                  navigateToFoodPage();
-                } else if (item == 'القاعة') {
-                  navigateToHallPage(); // Navigate to Hall Management page
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                primary: selectedService == item ? Colors.green : Colors.grey,
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: SizedBox(
+                width: 150, // Set a fixed width for each button
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    setState(() {
+                      selectedService = item['text'];
+                    });
+                    if (item['text'] == 'تنسيق الزهور') {
+                      navigateToFlowerPage();
+                    } else if (item['text'] == 'قائمة الطعام') {
+                      navigateToFoodPage();
+                    } else if (item['text'] == 'القاعة') {
+                      navigateToHallPage(); // Navigate to Hall Management page
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF5BA581), // Set button color to green
+                    padding: EdgeInsets.symmetric(vertical: 15), // Adjust button padding
+                  ),
+                  icon: Icon(item['icon']),
+                  label: Text(item['text']),
+                ),
               ),
-              child: Text(item),
             );
           }).toList(),
         ),
-      ],
-    ),
-  ),
-);
- }
+      ),
+    );
+  }
 }
-
 class birthdayServicePage extends StatefulWidget {
   @override
-  _birtdayServicePageState createState() => _birtdayServicePageState();
+  _birthdayServicePageState createState() => _birthdayServicePageState();
 }
-class _birtdayServicePageState extends State<birthdayServicePage > {
+class _birthdayServicePageState extends State<birthdayServicePage> {
   String selectedService = '';
 
-  List<String> serviceOptions = [
-    'Flower Management',
-    'Food Management',
-    'القاعة',
+  List<Map<String, dynamic>> serviceOptions = [
+    {'text': 'تنسيق الزهور', 'icon': Icons.local_florist},
+    {'text': 'قائمة الطعام', 'icon': Icons.fastfood},
+    {'text': 'القاعة', 'icon': Icons.location_city},
     // Add more service options if needed
   ];
 
-void navigateToFoodPage() {
+  void navigateToFoodPage() {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => FoodManagementPage(),
       ),
     );
   }
+
   // Function to navigate to the FlowerManagementPage
   void navigateToFlowerPage() {
     Navigator.of(context).push(
@@ -596,63 +610,64 @@ void navigateToFoodPage() {
       ),
     );
   }
+
   void navigateToHallPage() {
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (context) => HallServicePage(),
-    ),
-  );
-}
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => HallServicePage(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-return Scaffold(
-  appBar: AppBar(
-    title: Text('birth day Service Page'),
-  ),
-  body: Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Welcome to the birth day Service Page!',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 20),
-        Text(
-          'Select Service Item:',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 10),
-        Row(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFF5BA581), // Set app bar background color to green
+        title: Text('عيد الميلاد '),
+        centerTitle: true, // Center align the title
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: serviceOptions.map((item) {
-            return ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  selectedService = item;
-                });
-                if (item == 'Flower Management') {
-                  navigateToFlowerPage();
-                } else if (item == 'Food Management') {
-                  navigateToFoodPage();
-                } else if (item == 'القاعة') {
-                  navigateToHallPage(); // Navigate to Hall Management page
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                primary: selectedService == item ? Colors.green : Colors.grey,
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: SizedBox(
+                width: 150, // Set a fixed width for each button
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    setState(() {
+                      selectedService = item['text'];
+                    });
+                    if (item['text'] == 'تنسيق الزهور') {
+                      navigateToFlowerPage();
+                    } else if (item['text'] == 'قائمة الطعام') {
+                      navigateToFoodPage();
+                    } else if (item['text'] == 'القاعة') {
+                      navigateToHallPage(); // Navigate to Hall Management page
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF5BA581), // Set button color to green
+                    padding: EdgeInsets.symmetric(vertical: 15), // Adjust button padding
+                  ),
+                  icon: Icon(item['icon']),
+                  label: Text(item['text']),
+                ),
               ),
-              child: Text(item),
             );
           }).toList(),
         ),
-      ],
-    ),
-  ),
-);
- }
+      ),
+    );
+  }
 }
+
+
+
+
 
 class DecorationItem extends StatelessWidget {
   final String name;
@@ -790,6 +805,14 @@ class MyBagPage extends StatelessWidget {
                 );
               },
             ),
+          ),
+         SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              // Send a request to the planner with all items in the cart
+              // You can implement this functionality here
+            },
+            child: Text('إرسال طلب إلى المخطط'),
           ),
         ],
       ),
@@ -958,6 +981,27 @@ class SalesListView extends StatelessWidget {
     );
   }
 }
+
+// Rename SalesListView to getSales
+List<SaleItem> getSales() {
+  // Replace with your actual sales data or logic
+  return [
+    SaleItem(
+      productName: 'wedding',
+      salePrice: 299.99,
+      originalPrice: 399.99,
+      imagePath: 'images/ت.jpeg',
+    ),
+    SaleItem(
+      productName: 'graduation party',
+      salePrice: 199.99,
+      originalPrice: 399.99,
+      imagePath: 'images/w.jpeg',
+    ),
+    // Add more sale items as needed
+  ];
+}
+
 
 class OfferCard extends StatelessWidget {
   final OfferItem offer;

@@ -11,6 +11,14 @@ import 'package:flutter_application/views/favorites_provider.dart';
 import 'package:flutter_application/views/CartProvider.dart';
 import 'package:flutter_application/views/plannerpage.dart';
 import 'package:flutter_application/views/calender.dart';
+import 'package:flutter_application/views/serviceadmin.dart';
+import 'package:flutter_application/views/servicepage.dart';
+
+
+
+
+
+
 
 import 'package:get/get.dart';
 
@@ -30,7 +38,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => FavoritesProvider()),
         ChangeNotifierProvider(create: (context) => CartProvider()), // Provide your CartProvider
-    
+        ChangeNotifierProvider(create: (context) => SalesOffersProvider()), // Provide your CartProvider
+
+
         // You can add more providers if needed
       ],
     

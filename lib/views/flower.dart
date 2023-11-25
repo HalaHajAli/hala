@@ -4,12 +4,14 @@ import 'package:flutter_application/views/servicepage.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_application/views/CartProvider.dart';
 
+
 class FlowerColorPage extends StatefulWidget {
   @override
   _FlowerColorPageState createState() => _FlowerColorPageState();
 }
 
 class _FlowerColorPageState extends State<FlowerColorPage> {
+  bool isAdmin = true; // Set to true for demonstration purposes
   String? selectedColor;
 
   List<String> flowerColors = ['White', 'Pink', 'Green', 'Red', 'Other'];
