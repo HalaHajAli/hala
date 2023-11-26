@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/views/calender.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -44,7 +45,6 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _currentIndex = index;
       if (index == 0) {
-        // Open the End Drawer when "الملف الشخصي" (My Profile) is clicked
         _scaffoldKey.currentState?.openEndDrawer();
       }
     });
@@ -68,7 +68,6 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
 endDrawer: Drawer(
-  // Define your End Drawer content here
   child: ListView(
     padding: EdgeInsets.zero,
     children: <Widget>[
@@ -111,9 +110,7 @@ endDrawer: Drawer(
             Text('الرسائل'), // Change to Arabic
           ],
         ),
-        onTap: () {
-          // Handle Messages action
-        },
+        
       ),
       ListTile(
         title: Row(
@@ -122,12 +119,12 @@ endDrawer: Drawer(
             SizedBox(width: 10),
             Text('تسجيل الخروج'), // Change to Arabic
           ],
+          
         ),
         onTap: () {
           // Handle Log Out action
         },
       ),
-      // Add more items as needed
     ],
   ),
 ),
@@ -182,9 +179,23 @@ endDrawer: Drawer(
                           ),
                         ),
                         onPressed: () {
-                          setState(() {
-                            isSelected = !isSelected;
-                          });
+                          switch (index) {
+            case 0:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CalendarPage()),
+              );
+              break;
+            case 1:
+              
+              break;
+            case 2:
+              // Add navigation for the third icon in medCat
+              break;
+            default:
+              break;
+          }
+        
                         },
                         child: Row(
                           children: <Widget>[
@@ -206,8 +217,12 @@ endDrawer: Drawer(
                       ),
                     );
                   },
-                ),
+                ) 
               ),
+
+
+
+
               SizedBox(height: 1.0),
               Text(
                 'الفعاليات القادمة',

@@ -5,16 +5,15 @@ import 'package:flutter_application/views/signup.dart';
 import 'package:flutter_application/views/homepage.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart'; // Import the provider package
-
 import 'package:get/get.dart';
 import 'package:flutter_application/views/favorites_provider.dart';
 import 'package:flutter_application/views/CartProvider.dart';
 import 'package:flutter_application/views/plannerpage.dart';
 import 'package:flutter_application/views/calender.dart';
-
-import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
+  initializeDateFormatting('ar_SA', null);
   runApp(MyApp());
 }
 
@@ -23,35 +22,34 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize ScreenUtil with a design size (width and height)
     ScreenUtil.init(context, designSize: Size(750, 1334));
 
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => FavoritesProvider()),
-        ChangeNotifierProvider(create: (context) => CartProvider()), // Provide your CartProvider
-    
-        // You can add more providers if needed
+        ChangeNotifierProvider(create: (context) => CartProvider()),
       ],
-    
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Welcome(),
+        // Localizations setup
+        locale: const Locale('ar', 'SA'), // Set the initial locale to Arabic
+        textDirection: TextDirection.rtl, // Set the initial text direction to RTL
+        translations: Messages(), // Custom translation for Arabic
+        fallbackLocale: Locale('ar', 'SA'),
+
+        home: Welcome(), // Set your initial page here
       ),
     );
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      // Localizations setup
-      localizationsDelegates: const [
-      ],
-      supportedLocales: const [
-        Locale('en', 'US'), // English
-        Locale('ar', 'SA'), // Arabic (Saudi Arabia)
-      ],
-      locale: const Locale('ar', 'SA'), // Set the initial locale to Arabic
-      textDirection: TextDirection.rtl, // Set the initial text direction to RTL
-
-      home: CalendarPage (),
-    );
   }
+}
+
+// Custom translations for Arabic
+class Messages extends Translations {
+  @override
+  Map<String, Map<String, String>> get keys => {
+        'ar_SA': {
+          'title': 'عنوان',
+          // Add more translations as needed
+        },
+      };
 }

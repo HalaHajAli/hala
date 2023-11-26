@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/views/forgetpass.dart';
 import 'package:flutter_application/views/servicepage.dart'; // Import the service page
+import 'package:http/http.dart' as http;
 
 
 class Login1 extends StatefulWidget {
@@ -85,7 +86,7 @@ class _Login1State extends State<Login1> {
           SizedBox(height: 20), // Adjust the spacing between the input fields
           // Oval-shaped login button
           ElevatedButton(
-            onPressed: () {
+            onPressed: ()  async {
               if (username.isEmpty) {
                 setState(() {
                   usernameError = '  من فضلك أدخل إسم المستخدم ';
@@ -96,23 +97,31 @@ class _Login1State extends State<Login1> {
                   passwordError = '  من فضلك أدخل كلمة المرور ';
                 });
               }
-              if (username.isNotEmpty && password.isNotEmpty) {
-                // Check if username and password match the condition
-                if (username == 'hala' && password == '123') {
-                  // Navigate to the service page
+
+
+                 if (username.isNotEmpty && password.isNotEmpty) {
+                var url = Uri.parse('http://127.0.0.1:4001/login1'); 
+                var response = await http.post(
+                  url,
+                  body: {'username': username, 'password': password},
+                );
+
+                if (response.statusCode == 200) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => ServicePage(userType: widget.userType),
                     ),
                   );
                 } else {
-                  // Handle incorrect username or password
                   setState(() {
                     usernameError = 'المستخدم غير موجود';
                     passwordError = 'كلمة المرور غير صحيحة';
                   });
                 }
               }
+           
+           
+           
             },
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 15.0),
