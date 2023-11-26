@@ -41,7 +41,7 @@ class Login extends StatelessWidget {
                   horizontal: screenWidth * 0.2, // Responsive width
                   vertical: screenHeight * 0.02, // Responsive height
                 ),
-                child: Text('تسجيل الدخول كزائر'),
+                child: Text('تسجيل الدخول كمستخدم'),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 91, 165, 129),
@@ -66,7 +66,7 @@ class Login extends StatelessWidget {
                   horizontal: screenWidth * 0.2, // Responsive width
                   vertical: screenHeight * 0.02, // Responsive height
                 ),
-                child: Text('تسجيل الدخول كمخطط'),
+                child: Text('تسجيل الدخول كمصمم'),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 91, 165, 129),

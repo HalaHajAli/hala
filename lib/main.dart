@@ -11,6 +11,16 @@ import 'package:flutter_application/views/CartProvider.dart';
 import 'package:flutter_application/views/plannerpage.dart';
 import 'package:flutter_application/views/calender.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:flutter_application/views/serviceadmin.dart';
+import 'package:flutter_application/views/servicepage.dart';
+
+
+
+
+
+
+
+import 'package:get/get.dart';
 
 void main() {
   initializeDateFormatting('ar_SA', null);
@@ -27,7 +37,11 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => FavoritesProvider()),
-        ChangeNotifierProvider(create: (context) => CartProvider()),
+        ChangeNotifierProvider(create: (context) => CartProvider()), // Provide your CartProvider
+        ChangeNotifierProvider(create: (context) => SalesOffersProvider()), // Provide your CartProvider
+
+
+        // You can add more providers if needed
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,

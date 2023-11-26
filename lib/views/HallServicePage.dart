@@ -38,7 +38,7 @@ class _HallServicePageState extends State<HallServicePage> {
           children: [
             Text(
               'Welcome to the Hall Service Page!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF5BA581)),
             ),
             SizedBox(height: 20),
             Text(
@@ -56,7 +56,7 @@ class _HallServicePageState extends State<HallServicePage> {
                       placeImage = null; // Clear previously selected image
                     });
                   },
-                  style: ElevatedButton.styleFrom(primary: hasOwnPlace ? Colors.grey : Colors.green),
+                  style: ElevatedButton.styleFrom(primary: hasOwnPlace ? Colors.grey : Color(0xFF5BA581)),
                   child: Text('Yes, I have a place', style: TextStyle(fontSize: 16)),
                 ),
                 ElevatedButton(
@@ -123,10 +123,6 @@ class _HallServicePageState extends State<HallServicePage> {
                     'Select a place from the application:',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  // Implement a list of available places and their details here
-                  // For example, you can use a ListView to display the available places.
-                  // Each item in the list can represent a place that the user can select.
-                  // Here, we show placeholder cards for available places.
                   SizedBox(
                     height: 300,
                     child: ListView(
@@ -204,7 +200,7 @@ class PlaceItemCard extends StatelessWidget {
     CartProvider cartProvider = Provider.of<CartProvider>(context, listen: false);
     cartProvider.addToCart(placeImage);
   },
-  style: ElevatedButton.styleFrom(primary: Colors.green),
+  style: ElevatedButton.styleFrom(primary: Color(0xFF5BA581)),
   child: Text('Add to Cart', style: TextStyle(fontSize: 16)),
 )
 

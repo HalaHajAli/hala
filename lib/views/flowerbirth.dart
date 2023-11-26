@@ -12,39 +12,25 @@ class FlowerColorPage3 extends StatefulWidget {
 class _FlowerColorPageState extends State<FlowerColorPage3> {
   String? selectedColor;
 
-  List<String> flowerColors = ['White', 'Pink', 'Green', 'Red', 'Other'];
+  List<String> flowerColors = ['White', 'pink', 'Green', 'Other'];
   List<String> flowerImages = [
-    'images/1_white.jpeg',
-    'images/2_white.jpeg',
-    'images/3_white.jpeg',
-    'images/4_white.jpeg',
-    'images/1_pink.jpeg',
-    'images/2_pink.jpeg',
-    'images/3_pink.jpeg',
-    'images/4_pink.jpeg',
-    'images/5_pink.jpeg',
-    'images/6_pink.jpeg',
-    'images/1_red.jpeg',
-    'images/2_red.jpeg',
-    'images/3_red.jpeg',
-    'images/4_red.jpeg',
-    'images/5_red.jpeg',
-    'images/6_red.jpeg',
-    'images/1_green.jpeg',
-    'images/2_green.jpeg',
-    'images/3_green.jpeg',
-    'images/4_green.jpeg',
-    'images/5_green.jpeg',
-    'images/1_other.jpeg',
-    'images/2_other.jpeg',
-    'images/3_other.jpeg',
-    'images/4_other.jpeg',
-    'images/5_other.jpeg',
-    'images/6_other.jpeg',
-    'images/7_other.jpeg',
-    'images/8_other.jpeg',
-    'images/9_other.jpeg',
-    'images/10_other.jpeg',
+    'images/11_white.jpg',
+    'images/22_white.jpg',
+    'images/33_white.jpg',
+    'images/44_white.jpg',
+    'images/11_pink.jpg',
+    'images/22_pink.jpg',
+    'images/33_pink.jpg',
+    'images/44_pink.jpg',
+    'images/11_green.jpg',
+    'images/22_green.jpg',
+    'images/33_green.jpg',
+    'images/44_green.jpg',
+    'images/11_other.jpg',
+    'images/22_other.jpg',
+    'images/33_other.jpg',
+    'images/44_other.jpg',
+    
   ];
     List<String> getFilteredFlowerImages(String? color) {
   if (color == null) {
@@ -120,8 +106,7 @@ class _FlowerColorPageState extends State<FlowerColorPage3> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Image.asset(
-                    imagePath,
-                    width: 100,
+                    imagePath,width: 100,
                     height: 100,
                     fit: BoxFit.cover,
                   ),
