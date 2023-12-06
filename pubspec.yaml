@@ -27,11 +27,14 @@ dependencies:
   flutter_screenutil: ^5.0.0 # Use the latest version or specify a version range
   image_picker: ^0.8.9
   convex_bottom_bar: ^3.2.0
+ # ar_flutter_plugin: ^0.7.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.3
   http: ^1.1.0
+  cupertino_icons: ^1.0.2  # Add Cupertino icons if not already included 
+  arkit_plugin: 1.0.7 # or the latest version available
 
 flutter:
   uses-material-design: true

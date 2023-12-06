@@ -13,14 +13,12 @@ import 'package:flutter_application/views/calender.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_application/views/serviceadmin.dart';
 import 'package:flutter_application/views/servicepage.dart';
-
-
-
-
-
-
-
 import 'package:get/get.dart';
+import 'package:flutter_application/views/review.dart';
+import 'package:flutter_application/views/picDate.dart';
+import 'package:flutter_application/views/HallServicePage.dart';
+import 'package:flutter_application/views/wait.dart';
+
 
 void main() {
   initializeDateFormatting('ar_SA', null);
@@ -51,7 +49,7 @@ class MyApp extends StatelessWidget {
         translations: Messages(), // Custom translation for Arabic
         fallbackLocale: Locale('ar', 'SA'),
 
-        home: Welcome(), // Set your initial page here
+        home:TabBarPage (), // Set your initial page here
       ),
     );
   }

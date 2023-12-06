@@ -16,8 +16,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/App', { useNewUrlParser: true, useUn
 async function creatuser(){
    
     const planner = new Planner({
-        username: 'planner',
-        password: 'plannerpassword',
+        username: 'shahd',
+        password: '111',
         email: 'planner@example.com',
         UserType: 'planner',
       });

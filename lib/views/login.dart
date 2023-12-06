@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/views/signup.dart';
 import 'package:flutter_application/views/login1.dart';
+import 'package:flutter_application/views/log2.dart';
+
 import 'package:http/http.dart' as http;
 
 class Login extends StatelessWidget {
@@ -57,7 +59,7 @@ class Login extends StatelessWidget {
                 // Navigate to the service page as a planner
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => Login1(userType: 'planner'),
+                    builder: (context) => Login2(userType: 'planner'),
                   ),
                 );
               },
