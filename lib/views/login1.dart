@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/views/forgetpass.dart';
-import 'package:flutter_application/views/servicepage.dart';
+import 'package:flutter_application/views/servicepage.dart'; // Import the service page
+import 'package:http/http.dart' as http;
+
 
 class Login1 extends StatefulWidget {
   final String userType;
@@ -15,10 +17,10 @@ class Login1 extends StatefulWidget {
 }
 
 class _Login1State extends State<Login1> {
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  String usernameError = '';
-  String passwordError = '';
+  String username = '';
+  String password = '';
+  String usernameError = ''; // Error message for username
+  String passwordError = ''; // Error message for password
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +30,17 @@ class _Login1State extends State<Login1> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          // Image positioned at the top
           Image.asset(
             'images/monasaba.png',
-            height: 400,
-            width: 400,
+            height: 400, // Adjust the height of the image
+            width: 400, // Adjust the width of the image
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 20), // Adjust the spacing between the image and the input fields
+          // Username input field
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 30.0),
             child: TextFormField(
-              controller: _usernameController,
               decoration: InputDecoration(
                 labelText: 'Username',
                 prefixIcon: Icon(Icons.person),
@@ -45,20 +48,22 @@ class _Login1State extends State<Login1> {
                   borderRadius: BorderRadius.circular(30.0),
                   borderSide: BorderSide(color: Color.fromARGB(255, 91, 165, 129)),
                 ),
-                errorText: usernameError.isNotEmpty ? usernameError : null,
+                errorText: usernameError.isNotEmpty ? usernameError : null, // Display username error message
               ),
               onChanged: (value) {
                 setState(() {
+                  username = value;
+                  // Clear error message when the user enters text
                   usernameError = '';
                 });
               },
             ),
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 20), // Adjust the spacing between the input fields
+          // Password input field
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 30.0),
             child: TextFormField(
-              controller: _passwordController,
               decoration: InputDecoration(
                 labelText: 'Password',
                 prefixIcon: Icon(Icons.lock),
@@ -66,36 +71,42 @@ class _Login1State extends State<Login1> {
                   borderRadius: BorderRadius.circular(30.0),
                   borderSide: BorderSide(color: Color.fromARGB(255, 91, 165, 129)),
                 ),
-                errorText: passwordError.isNotEmpty ? passwordError : null,
-             
-             
+                errorText: passwordError.isNotEmpty ? passwordError : null, // Display password error message
               ),
-              obscureText: true,
+              obscureText: true, // Hide the password
               onChanged: (value) {
                 setState(() {
+                  password = value;
+                  // Clear error message when the user enters text
                   passwordError = '';
                 });
               },
             ),
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 20), // Adjust the spacing between the input fields
+          // Oval-shaped login button
           ElevatedButton(
-            onPressed: () {
-              String username = _usernameController.text.trim();
-              String password = _passwordController.text.trim();
-
+            onPressed: ()  async {
               if (username.isEmpty) {
                 setState(() {
-                  usernameError = 'Please enter your username';
+                  usernameError = '  من فضلك أدخل إسم المستخدم ';
                 });
               }
               if (password.isEmpty) {
                 setState(() {
-                  passwordError = 'Please enter your password';
+                  passwordError = '  من فضلك أدخل كلمة المرور ';
                 });
               }
-              if (username.isNotEmpty && password.isNotEmpty) {
-                if (username == 'hala' && password == '123') {
+
+
+                 if (username.isNotEmpty && password.isNotEmpty) {
+                var url = Uri.parse('http://127.0.0.1:4001/login1'); 
+                var response = await http.post(
+                  url,
+                  body: {'username': username, 'password': password},
+                );
+
+                if (response.statusCode == 200) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => ServicePage(userType: widget.userType),
@@ -103,26 +114,31 @@ class _Login1State extends State<Login1> {
                   );
                 } else {
                   setState(() {
-                    usernameError = 'Invalid username';
-                    passwordError = 'Incorrect password';
+                    usernameError = 'المستخدم غير موجود';
+                    passwordError = 'كلمة المرور غير صحيحة';
                   });
                 }
               }
+           
+           
+           
             },
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 15.0),
-              child: Text('Login as ${widget.userType}'),
+              child: Text('تسجيل الدخول كـ ${widget.userType}'), // Display the user type
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Color.fromARGB(255, 91, 165, 129),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
+                borderRadius: BorderRadius.circular(30.0), // Make the button oval
               ),
             ),
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 10), // Adjust the spacing between the login button and the forget password button
+          // Forget Password button
           TextButton(
             onPressed: () {
+              // Navigate to the forget password page when the button is pressed
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => ForgetPasswordPage(),
@@ -132,17 +148,10 @@ class _Login1State extends State<Login1> {
             style: TextButton.styleFrom(
               primary: Color.fromARGB(255, 91, 165, 129),
             ),
-            child: Text('Forgot your password?'),
+            child: Text('نسيت كلمة المرور؟'),
           ),
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _usernameController.dispose();
-    _passwordController.dispose();
-    super.dispose();
   }
 }

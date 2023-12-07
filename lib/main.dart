@@ -10,50 +10,58 @@ import 'package:flutter_application/views/favorites_provider.dart';
 import 'package:flutter_application/views/CartProvider.dart';
 import 'package:flutter_application/views/plannerpage.dart';
 import 'package:flutter_application/views/calender.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_application/views/serviceadmin.dart';
 import 'package:flutter_application/views/servicepage.dart';
-import 'package:flutter_application/views/try.dart';
-import 'package:flutter_application/views/message.dart';
-import 'package:flutter_application/views/HallServicePage.dart';
-
-
-
-
 import 'package:get/get.dart';
+import 'package:flutter_application/views/review.dart';
+import 'package:flutter_application/views/picDate.dart';
+import 'package:flutter_application/views/HallServicePage.dart';
+import 'package:flutter_application/views/wait.dart';
+
+
 void main() {
+  initializeDateFormatting('ar_SA', null);
   runApp(MyApp());
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    // Initialize ScreenUtil with a design size (width and height)
     ScreenUtil.init(context, designSize: Size(750, 1334));
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => FavoritesProvider()),
         ChangeNotifierProvider(create: (context) => CartProvider()), // Provide your CartProvider
         ChangeNotifierProvider(create: (context) => SalesOffersProvider()), // Provide your CartProvider
+
+
         // You can add more providers if needed
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
-      home: ArWebView(arUrl: 'https://example.com/ar-experience'),
+        // Localizations setup
+        locale: const Locale('ar', 'SA'), // Set the initial locale to Arabic
+        textDirection: TextDirection.rtl, // Set the initial text direction to RTL
+        translations: Messages(), // Custom translation for Arabic
+        fallbackLocale: Locale('ar', 'SA'),
+
+        home:TabBarPage (), // Set your initial page here
       ),
     );
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      // Localizations setup
-      localizationsDelegates: const [
-      ],
-      supportedLocales: const [
-        Locale('en', 'US'), // English
-        Locale('ar', 'SA'), // Arabic (Saudi Arabia)
-      ],
-      locale: const Locale('ar', 'SA'), // Set the initial locale to Arabic
-      textDirection: TextDirection.rtl, // Set the initial text direction to RTL
-
-      home: CalendarPage (),
-    );
   }
+}
+
+// Custom translations for Arabic
+class Messages extends Translations {
+  @override
+  Map<String, Map<String, String>> get keys => {
+        'ar_SA': {
+          'title': 'عنوان',
+          // Add more translations as needed
+        },
+      };
 }

@@ -1,0 +1,143 @@
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_application/views/forgetpass.dart';
+import 'package:flutter_application/views/servicepage.dart';
+
+class Login1 extends StatefulWidget {
+  final String userType;
+
+  const Login1({
+    Key? key,
+    this.userType = 'visitor',
+  }) : super(key: key);
+
+  @override
+  _Login1State createState() => _Login1State();
+}
+
+class _Login1State extends State<Login1> {
+  String username = '';
+  String password = '';
+  String usernameError = '';
+  String passwordError = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset(
+            'images/monasaba.png',
+            height: 400,
+            width: 400,
+          ),
+          SizedBox(height: 20),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30.0),
+            child: TextFormField(
+              decoration: InputDecoration(
+                labelText: 'Username',
+                prefixIcon: Icon(Icons.person),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide: BorderSide(color: Color.fromARGB(255, 91, 165, 129)),
+                ),
+                errorText: usernameError.isNotEmpty ? usernameError : null,
+              ),
+              onChanged: (value) {
+                setState(() {
+                  username = value;
+                  usernameError = '';
+                });
+              },
+            ),
+          ),
+          SizedBox(height: 20),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30.0),
+            child: TextFormField(
+              decoration: InputDecoration(
+                labelText: 'Password',
+                prefixIcon: Icon(Icons.lock),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide: BorderSide(color: Color.fromARGB(255, 91, 165, 129)),
+                ),
+                errorText: passwordError.isNotEmpty ? passwordError : null,
+              ),
+              obscureText: true,
+              onChanged: (value) {
+                setState(() {
+                  password = value;
+                  passwordError = '';
+                });
+              },
+            ),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () async {
+              if (username.isEmpty) {
+                setState(() {
+                  usernameError = '  من فضلك أدخل إسم المستخدم ';
+                });
+              }
+              if (password.isEmpty) {
+                setState(() {
+                  passwordError = '  من فضلك أدخل كلمة المرور ';
+                });
+              }
+              if (username.isNotEmpty && password.isNotEmpty) {
+                var url = Uri.parse('https://your-backend-url.com/login'); // Replace with your API endpoint
+                var response = await http.post(
+                  url,
+                  body: {'username': username, 'password': password},
+                );
+
+                if (response.statusCode == 200) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ServicePage(userType: widget.userType),
+                    ),
+                  );
+                } else {
+                  setState(() {
+                    usernameError = 'المستخدم غير موجود';
+                    passwordError = 'كلمة المرور غير صحيحة';
+                  });
+                }
+              }
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 15.0),
+              child: Text('تسجيل الدخول كـ ${widget.userType}'),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color.fromARGB(255, 91, 165, 129),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+            ),
+          ),
+          SizedBox(height: 10),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ForgetPasswordPage(),
+                ),
+              );
+            },
+            style: TextButton.styleFrom(
+              primary: Color.fromARGB(255, 91, 165, 129),
+            ),
+            child: Text('نسيت كلمة المرور؟'),
+          ),
+        ],
+      ),
+    );
+  }
+}
