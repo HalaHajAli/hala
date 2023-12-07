@@ -22,6 +22,7 @@ class _SignUpPageState extends State<SignUpPage> {
   String _confirmPassword = '';
   String _phoneNumber = '';
   String _userType = 'Client';
+  bool _isDesigner = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -56,6 +57,7 @@ class _SignUpPageState extends State<SignUpPage> {
       print('كلمة المرور: $_password');
       print('رقم الهاتف: $_phoneNumber');
       print('نوع المستخدم: $_userType');
+      print('أنا مصمم: $_isDesigner');
     }
   }
 
@@ -214,6 +216,16 @@ class _SignUpPageState extends State<SignUpPage> {
                       border: InputBorder.none,
                     ),
                   ),
+                ),
+                SizedBox(height: 20),
+                SwitchListTile(
+                  title: Text('أنا مصمم'),
+                  value: _isDesigner,
+                  onChanged: (value) {
+                    setState(() {
+                      _isDesigner = value;
+                    });
+                  },
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(

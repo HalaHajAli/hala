@@ -67,6 +67,8 @@ class _Login1State extends State<Login1> {
                   borderSide: BorderSide(color: Color.fromARGB(255, 91, 165, 129)),
                 ),
                 errorText: passwordError.isNotEmpty ? passwordError : null,
+             
+             
               ),
               obscureText: true,
               onChanged: (value) {

@@ -66,13 +66,13 @@ class FoodManagementPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Food Management'),
+        title: Text('قائمة الطعام'),
         backgroundColor: Color(0xFF5BA581),
       ),
       body: Column(
         children: [
           Text(
-            'Restaurants:',
+            'المطاعم',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF5BA581)),
           ),
           Expanded(
@@ -85,7 +85,7 @@ class FoodManagementPage extends StatelessWidget {
             ),
           ),
           Text(
-            'Sweets Places:',
+            'الحلويات',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF5BA581)),
           ),
           Expanded(
@@ -126,17 +126,32 @@ class RestaurantCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                IconButton(
-                  icon: Image.asset('images/facebook.png'),
-                  onPressed: () {
+                GestureDetector(
+                  onTap: () {
                     launch(restaurant.facebookLink);
                   },
+                  child: Container(
+                    padding: EdgeInsets.all(8.0),
+                    child: Image.asset(
+                      'images/facebook.png',
+                      height: 30, // Adjust the height as needed
+                      width: 30,  // Adjust the width as needed
+                    ),
+                  ),
                 ),
-                IconButton(
-                  icon: Image.asset('images/instagram.png'),
-                  onPressed: () {
+                SizedBox(width: 10), // Add some spacing between the icons
+                GestureDetector(
+                  onTap: () {
                     launch(restaurant.instagramLink);
                   },
+                  child: Container(
+                    padding: EdgeInsets.all(8.0),
+                    child: Image.asset(
+                      'images/instagram.png',
+                      height: 30, // Adjust the height as needed
+                      width: 30,  // Adjust the width as needed
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -170,17 +185,32 @@ class SweetsPlaceCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                IconButton(
-                  icon: Image.asset('images/facebook.png'),
-                  onPressed: () {
+                GestureDetector(
+                  onTap: () {
                     launch(sweetsPlace.facebookLink);
                   },
+                  child: Container(
+                    padding: EdgeInsets.all(8.0),
+                    child: Image.asset(
+                      'images/facebook.png',
+                      height: 30, // Adjust the height as needed
+                      width: 30,  // Adjust the width as needed
+                    ),
+                  ),
                 ),
-                IconButton(
-                  icon: Image.asset('images/instagram.png'),
-                  onPressed: () {
+                SizedBox(width: 10), // Add some spacing between the icons
+                GestureDetector(
+                  onTap: () {
                     launch(sweetsPlace.instagramLink);
                   },
+                  child: Container(
+                    padding: EdgeInsets.all(8.0),
+                    child: Image.asset(
+                      'images/instagram.png',
+                      height: 30, // Adjust the height as needed
+                      width: 30,  // Adjust the width as needed
+                    ),
+                  ),
                 ),
               ],
             ),
