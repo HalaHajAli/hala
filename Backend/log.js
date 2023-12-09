@@ -9,13 +9,10 @@ app.use(express.json());
 console.log("hello");
 const User = require('../DataBase/User'); 
 const { CLOSING } = require('ws');
-console.log("hello");
 
 app.get('/', (req, res) => {
   res.send('Welcome to the server!');
 });
-console.log("hello");
-
 
 
 

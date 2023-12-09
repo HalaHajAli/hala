@@ -10,8 +10,33 @@ class TabBarPage extends StatefulWidget {
 class _TabBarPageState extends State<TabBarPage>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
-  double whiteBoxHeight = 200.0; // Initial height of the white box
-  double whiteBoxWidth = 300.0; // Initial width of the white box
+  double whiteBoxHeight = 500.0; // Initial height of the white box
+  double whiteBoxWidth = 500.0; // Initial width of the white box
+
+  List<Widget> generateContainers(int count) {
+    // Generate a list of containers based on count
+    List<Widget> containers = [];
+    for (int i = 0; i < count; i++) {
+      containers.add(
+        Container(
+          width: double.infinity,
+          height: 120,
+          margin: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 210, 169, 199), // Replace with your desired color
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Center(
+            child: Text(
+              (i + 1).toString(),
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      );
+    }
+    return containers;
+  }
 
   @override
   void initState() {
@@ -28,15 +53,14 @@ class _TabBarPageState extends State<TabBarPage>
   void expandWhiteBox() {
     setState(() {
       // Increase the height and width of the white box upon tab selection
-      whiteBoxHeight = 300.0;
-      whiteBoxWidth = 350.0;
+      whiteBoxHeight = 400.0;
+      whiteBoxWidth = 500.0;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Tab bar Without Appbar'),
         backgroundColor: Color(0xFF5BA581),
@@ -101,98 +125,12 @@ class _TabBarPageState extends State<TabBarPage>
                     child: TabBarView(
                       controller: tabController,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Container(
-                                  width: MediaQuery.of(context).size.width / 3,
-                                  height: 150,
-                                  margin: EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      '1',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  width: MediaQuery.of(context).size.width / 3,
-                                  height: 150,
-                                  margin: EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      '2',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Container(
-                                  width: MediaQuery.of(context).size.width / 4,
-                                  height: 100,
-                                  margin: EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      '3',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  width: MediaQuery.of(context).size.width / 4,
-                                  height: 100,
-                                  margin: EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    color: Colors.orange,
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      '4',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  width: MediaQuery.of(context).size.width / 4,
-                                  height: 100,
-                                  margin: EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    color: Colors.purple,
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      '5',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                        ListView(
+                          children: generateContainers(3), // Create 3 containers
                         ),
-                        // Add the content for the second tab here
+                        ListView(
+                          children: generateContainers(3), // Create 3 containers
+                        ),
                       ],
                     ),
                   ),

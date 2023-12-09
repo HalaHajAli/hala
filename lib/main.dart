@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
         translations: Messages(), // Custom translation for Arabic
         fallbackLocale: Locale('ar', 'SA'),
 
-        home:TabBarPage (), // Set your initial page here
+        home:Welcome (), // Set your initial page here
       ),
     );
   }

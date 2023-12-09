@@ -13,7 +13,7 @@ dependencies:
   get: ^4.1.4
   cupertino_icons: ^1.0.2
   expandable: ^5.0.1
-  font_awesome_flutter: ^10.6.0
+  font_awesome_flutter: ^10.0.0
   flutter_svg: ^2.0.9
   flutter_localizations:
     sdk: flutter
@@ -31,7 +31,7 @@ dependencies:
   convex_bottom_bar: ^3.2.0
   #arkit_plugin: ^1.0.7
   #arcore_flutter_plugin: ^0.1.0
-  ar_flutter_plugin: ^0.7.3
+  #ar_flutter_plugin: ^0.7.3
 
  # ar_flutter_plugin: ^0.7.3
 dev_dependencies:
