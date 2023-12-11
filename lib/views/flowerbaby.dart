@@ -31,20 +31,24 @@ class _FlowerColorPageState extends State<FlowerColorPage2> {
     'images/33_other.jpg',
     'images/44_other.jpg',
   ];
-    List<String> getFilteredFlowerImages(String? color) {
-  if (color == null) {
-    return flowerImages;
-  } else if (color == 'Other') {
-    return flowerImages.where((imagePath) => imagePath.toLowerCase().contains('other')).toList();
-  } else {
-    return flowerImages.where((imagePath) => imagePath.toLowerCase().contains(color.toLowerCase())).toList();
+     List<String> getFilteredFlowerImages(String? color) {
+    if (color == null || color.isEmpty) {
+      return [];
+    } else if (color == 'Other') {
+      return flowerImages
+          .where((imagePath) => imagePath.toLowerCase().contains('other'))
+          .toList();
+    } else {
+      return flowerImages
+          .where((imagePath) => imagePath.toLowerCase().contains(color.toLowerCase()))
+          .toList();
+    }
   }
-}
    @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select decoration Color'),
+        title: Text(''),
         backgroundColor: Color(0xFF5BA581),
         actions: [
           IconButton(
@@ -72,9 +76,11 @@ class _FlowerColorPageState extends State<FlowerColorPage2> {
       body: Column(
         children: [
           SizedBox(height: 20),
-          Text(
-            'Select decoration Color:',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+       Center(
+            child: Text(
+              'أختر لون الزهور:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
           ),
           DropdownButton<String>(
             value: selectedColor,

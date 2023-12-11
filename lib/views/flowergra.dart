@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/views/favorites_provider.dart';
-import 'package:flutter_application/views/servicepage.dart'; 
+import 'package:flutter_application/views/servicepage.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_application/views/CartProvider.dart';
 
@@ -42,20 +42,28 @@ class _FlowerColorPageState extends State<FlowerColorPage1> {
     'images/7c_other.jpeg',
     'images/8c_other.jpeg',
   ];
-    List<String> getFilteredFlowerImages(String? color) {
-  if (color == null) {
-    return flowerImages;
-  } else if (color == 'Other') {
-    return flowerImages.where((imagePath) => imagePath.toLowerCase().contains('other')).toList();
-  } else {
-    return flowerImages.where((imagePath) => imagePath.toLowerCase().contains(color.toLowerCase())).toList();
+
+  List<String> getFilteredFlowerImages(String? color) {
+    if (color == null || color.isEmpty) {
+      return [];
+    } else if (color == 'Other') {
+      return flowerImages
+          .where((imagePath) => imagePath.toLowerCase().contains('other'))
+          .toList();
+    } else {
+      return flowerImages
+          .where((imagePath) => imagePath.toLowerCase().contains(color.toLowerCase()))
+          .toList();
+    }
   }
-}
-   @override
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select decoration Color'),
+        title: Center(
+          child: Text(''),
+        ),
         backgroundColor: Color(0xFF5BA581),
         actions: [
           IconButton(
@@ -83,9 +91,11 @@ class _FlowerColorPageState extends State<FlowerColorPage1> {
       body: Column(
         children: [
           SizedBox(height: 20),
-          Text(
-            'Select decoration Color:',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          Center(
+            child: Text(
+              'أختر لون الزهور:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
           ),
           DropdownButton<String>(
             value: selectedColor,
@@ -171,7 +181,7 @@ class FullScreenImagePage extends StatelessWidget {
                       favoritesProvider.addToFavorites(imagePath);
                       Navigator.pop(context);
                     },
-                    child: Text('Add to Favorites'),
+                    child: Text('إضافة إلى المفضلة'),
                   ),
                   SizedBox(width: 20),
                   ElevatedButton(
@@ -182,7 +192,7 @@ class FullScreenImagePage extends StatelessWidget {
                       cartProvider.addToCart(imagePath);
                       Navigator.pop(context);
                     },
-                    child: Text('Add to Cart'),
+                    child: Text('إضافة إلى الحقيبة'),
                   ),
                 ],
               ),

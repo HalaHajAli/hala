@@ -21,7 +21,7 @@ class _SignUpPageState extends State<SignUpPage> {
   String _password = '';
   String _confirmPassword = '';
   String _phoneNumber = '';
-  String _userType = 'Client';
+  String _userType = 'مستخدم';
   bool _isDesigner = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -199,7 +199,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   child: DropdownButtonFormField(
                     value: _userType,
-                    items: ['Client', 'Admin']
+                    items: ['مستخدم', 'مصمم','مسؤول']
                         .map((userType) => DropdownMenuItem(
                               value: userType,
                               child: Text(userType),
