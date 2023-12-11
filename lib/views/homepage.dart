@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/views/login.dart';
+import 'package:flutter_application/views/login1.dart';
 import 'package:flutter_application/views/servicepage.dart';
+import 'package:flutter_application/views/signup.dart';
 
 class SelectionPage extends StatelessWidget {
   @override
@@ -9,7 +10,7 @@ class SelectionPage extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.white, Colors.green],
+            colors: [Colors.white, Color.fromARGB(255, 141, 230, 187)],
             stops: [0.0, 1.0],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -27,7 +28,8 @@ class SelectionPage extends StatelessWidget {
               ),
               SizedBox(height: 20),
               Padding(
-                padding: EdgeInsets.only(top: 20), // Adjust the top padding as needed
+                padding: EdgeInsets.only(
+                    top: 20), // Adjust the top padding as needed
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -35,17 +37,24 @@ class SelectionPage extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => ServicePage(userType: 'Your User Type'),
+                            builder: (context) =>
+                               Login1 (),
                           ),
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.white,
-                        onPrimary: Color(0xFF5BA581),
+                        onPrimary: Colors.white,
+                        primary: Color(0xFF5BA581), // Color of the gradient
                       ),
                       child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
-                        child: Text('إكتشف'),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 15.0, horizontal: 30.0),
+                        child: Text(
+                          'تسجيل دخول ',
+                          style: TextStyle(
+                              fontWeight:
+                                  FontWeight.bold), // Making the text bold
+                        ),
                       ),
                     ),
                     SizedBox(height: 10),
@@ -53,17 +62,23 @@ class SelectionPage extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => Login(),
+                            builder: (context) => SignUpPage(),
                           ),
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Color(0xFF5BA581),
-                        onPrimary: Colors.white,
+                        onPrimary: Color(0xFF5BA581), // Color of the gradient
+                        primary: Colors.white, // White background
                       ),
                       child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
-                        child: Text('تسجيل دخول'),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 15.0, horizontal: 30.0),
+                        child: Text(
+                          ' إنشاء حساب',
+                          style: TextStyle(
+                              fontWeight:
+                                  FontWeight.bold), // Making the text bold
+                        ),
                       ),
                     ),
                   ],

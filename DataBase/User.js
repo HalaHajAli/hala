@@ -16,8 +16,9 @@ userSchema.pre('save', async function (next) {
 });
 
 const User = mongoose.model('User', userSchema);
+let uri= 'mongodb+srv://shahdismail529:sz23112001@app.lvckeux.mongodb.net/?retryWrites=true&w=majority';
 
-mongoose.connect('mongodb://127.0.0.1:27017/App', {
+mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -26,11 +27,11 @@ mongoose.connect('mongodb://127.0.0.1:27017/App', {
   module.exports = User;
 
 
-//async function createUser() {
+// async function createUser() {
 //   try {
 //     const user = new User({
-//       username: 'hala',
-//       password: '123', // Password will be hashed automatically due to the pre-save hook
+//       username: 'amr',
+//       password: '111', // Password will be hashed automatically due to the pre-save hook
 //       email: 'user@example.com',
 //       UserType: 'user',
 //     });
@@ -39,6 +40,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/App', {
 //   } catch (error) {
 //     console.error('Error creating user:', error);
 //   }
-//}
-//createUser();
+// }
+// createUser();
 

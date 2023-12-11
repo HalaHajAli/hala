@@ -51,7 +51,7 @@ class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
         child: LayoutBuilder(
           builder: (context, constraints) {
             // Determine the image size based on screen width
-            double imageSize = constraints.maxWidth * 0.6;
+            double imageSize = constraints.maxWidth * 0.8;
 
             return SlideTransition(
               position: _imageOffset,

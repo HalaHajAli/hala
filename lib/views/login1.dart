@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/views/forgetpass.dart';
 import 'package:flutter_application/views/servicepage.dart'; // Import the service page
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 
 class Login1 extends StatefulWidget {
@@ -9,7 +11,7 @@ class Login1 extends StatefulWidget {
 
   const Login1({
     Key? key,
-    this.userType = 'visitor', // Set a default value
+    this.userType = 'زائر',
   }) : super(key: key);
 
   @override
@@ -19,139 +21,140 @@ class Login1 extends StatefulWidget {
 class _Login1State extends State<Login1> {
   String username = '';
   String password = '';
-  String usernameError = ''; // Error message for username
-  String passwordError = ''; // Error message for password
+  String usernameError = '';
+  String passwordError = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // Image positioned at the top
-          Image.asset(
-            'images/monasaba.png',
-            height: 400, // Adjust the height of the image
-            width: 400, // Adjust the width of the image
-          ),
-          SizedBox(height: 20), // Adjust the spacing between the image and the input fields
-          // Username input field
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30.0),
-            child: TextFormField(
-              decoration: InputDecoration(
-                labelText: 'Username',
-                prefixIcon: Icon(Icons.person),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  borderSide: BorderSide(color: Color.fromARGB(255, 91, 165, 129)),
-                ),
-                errorText: usernameError.isNotEmpty ? usernameError : null, // Display username error message
-              ),
-              onChanged: (value) {
-                setState(() {
-                  username = value;
-                  // Clear error message when the user enters text
-                  usernameError = '';
-                });
-              },
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              'images/monasaba.png',
+              height: 400,
+              width: 400,
             ),
-          ),
-          SizedBox(height: 20), // Adjust the spacing between the input fields
-          // Password input field
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30.0),
-            child: TextFormField(
-              decoration: InputDecoration(
-                labelText: 'Password',
-                prefixIcon: Icon(Icons.lock),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  borderSide: BorderSide(color: Color.fromARGB(255, 91, 165, 129)),
+            SizedBox(height: 20),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30.0),
+              child: TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'اسم المستخدم',
+                  prefixIcon: Icon(Icons.person),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    borderSide: BorderSide(color: usernameError.isNotEmpty ? Colors.red : Color.fromARGB(255, 91, 165, 129)),
+                  ),
+                  errorText: usernameError.isNotEmpty ? usernameError : null,
                 ),
-                errorText: passwordError.isNotEmpty ? passwordError : null, // Display password error message
-              ),
-              obscureText: true, // Hide the password
-              onChanged: (value) {
-                setState(() {
-                  password = value;
-                  // Clear error message when the user enters text
-                  passwordError = '';
-                });
-              },
-            ),
-          ),
-          SizedBox(height: 20), // Adjust the spacing between the input fields
-          // Oval-shaped login button
-          ElevatedButton(
-            onPressed: ()  async {
-              if (username.isEmpty) {
-                setState(() {
-                  usernameError = '  من فضلك أدخل إسم المستخدم ';
-                });
-              }
-              if (password.isEmpty) {
-                setState(() {
-                  passwordError = '  من فضلك أدخل كلمة المرور ';
-                });
-              }
-
-
-                 if (username.isNotEmpty && password.isNotEmpty) {
-                var url = Uri.parse('http://127.0.0.1:4001/login1'); 
-                var response = await http.post(
-                  url,
-                  body: {'username': username, 'password': password},
-                );
-
-                if (response.statusCode == 200) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ServicePage(userType: widget.userType),
-                    ),
-                  );
-                } else {
+                onChanged: (value) {
                   setState(() {
-                    usernameError = 'المستخدم غير موجود';
-                    passwordError = 'كلمة المرور غير صحيحة';
+                    username = value;
+                    usernameError = '';
                   });
-                }
-              }
-           
-           
-           
-            },
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 15.0),
-              child: Text('تسجيل الدخول كـ ${widget.userType}'), // Display the user type
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color.fromARGB(255, 91, 165, 129),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0), // Make the button oval
+                },
               ),
             ),
-          ),
-          SizedBox(height: 10), // Adjust the spacing between the login button and the forget password button
-          // Forget Password button
-          TextButton(
-            onPressed: () {
-              // Navigate to the forget password page when the button is pressed
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => ForgetPasswordPage(),
+            SizedBox(height: 20),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30.0),
+              child: TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'كلمة المرور',
+                  prefixIcon: Icon(Icons.lock),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    borderSide: BorderSide(color: passwordError.isNotEmpty ? Colors.red : Color.fromARGB(255, 91, 165, 129)),
+                  ),
+                  errorText: passwordError.isNotEmpty ? passwordError : null,
                 ),
-              );
-            },
-            style: TextButton.styleFrom(
-              primary: Color.fromARGB(255, 91, 165, 129),
+                obscureText: true,
+                onChanged: (value) {
+                  setState(() {
+                    password = value;
+                    passwordError = '';
+                  });
+                },
+              ),
             ),
-            child: Text('نسيت كلمة المرور؟'),
-          ),
-        ],
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                if (username.isEmpty) {
+                  setState(() {
+                    usernameError = 'من فضلك أدخل اسم المستخدم';
+                  });
+                } else {
+                  // Check username separately here if needed
+                  usernameError = ''; // Reset error message if username is not empty
+                }
+                if (password.isEmpty) {
+                  setState(() {
+                    passwordError = 'من فضلك أدخل كلمة المرور';
+                  });
+                } else {
+                  // Check password separately here if needed
+                  passwordError = ''; // Reset error message if password is not empty
+                }
+
+                if (username.isNotEmpty && password.isNotEmpty) {
+                  var url = Uri.parse('http://127.0.0.1:4001/login1');
+                  var response = await http.post(
+                    url,
+                    body: {'username': username, 'password': password},
+                  );
+
+                  if (response.statusCode == 200) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ServicePage(userType: widget.userType),
+                      ),
+                    );
+                  } else {
+                    // Set error messages based on server response if needed
+                    setState(() {
+                      usernameError = 'المستخدم غير موجود';
+                      passwordError = 'كلمة المرور غير صحيحة';
+                    });
+                  }
+                }
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 15.0),
+                child: Text(
+                  'تسجيل الدخول',
+                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 91, 165, 129),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ForgetPasswordPage(),
+                  ),
+                );
+              },
+              style: TextButton.styleFrom(
+                primary: Color.fromARGB(255, 91, 165, 129),
+              ),
+              child: Text('نسيت كلمة المرور؟'),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
+

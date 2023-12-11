@@ -34,7 +34,7 @@ class Login extends StatelessWidget {
                 // Navigate to the service page as a visitor
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => Login1(userType: 'visitor'),
+                    builder: (context) => Login1(),
                   ),
                 );
               },
@@ -84,7 +84,7 @@ class Login extends StatelessWidget {
                 // Navigate to the service page as an admin
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => Login1(userType: 'admin'),
+                    builder: (context) => Login1(),
                   ),
                 );
               },

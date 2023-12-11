@@ -45,7 +45,8 @@ class MyApp extends StatelessWidget {
         textDirection: TextDirection.rtl, // Set the initial text direction to RTL
         translations: Messages(), // Custom translation for Arabic
         fallbackLocale: Locale('ar', 'SA'),
-        home:WelcomePage (), // Set your initial page here
+
+        home:TabBarPage (), // Set your initial page here
       ),
     );
   }
