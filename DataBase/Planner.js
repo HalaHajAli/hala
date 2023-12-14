@@ -1,37 +1,45 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
   username: String,
   password: String,
   email: String,
-  UserType: String, // admin, user, planner.
+  mobile: String,
 });
 
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
 
-mongoose.connect('mongodb://127.0.0.1:27017/App', { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("Connected to MongoDB"))
-  .catch(err => console.error("Connection error:", err));
-  const Planner = mongoose.model('Planner', userSchema);// class 
+const planner = mongoose.model('planner', userSchema);
+let uri= 'mongodb+srv://shahdismail529:sz23112001@app.lvckeux.mongodb.net/?retryWrites=true&w=majority';
 
-async function creatuser(){
-   
-    const planner = new Planner({
-        username: 'shahd',
-        password: '111',
+mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log('Connected to MongoDB'))
+  .catch((err) => console.error('Connection error:', err));
+  module.exports = planner;
+
+
+  async function createUser() {
+    try {
+      const planner = new planner({
+        username: 'ali',
+        password: '222', // Password will be hashed automatically due to the pre-save hook
         email: 'planner@example.com',
-        UserType: 'planner',
+        mobile: '1234567890',
       });
-        
-  const result= await planner.save();
-  console.log(result);
-}
-creatuser();
-
-
-
-module.exports = Planner; 
-
-
-
-
-
+      const result = await user.save();
+      console.log('User created:', result);
+    } catch (error) {
+      console.error('Error creating user:', error);
+    }
+  }
+  // createUser();
+  

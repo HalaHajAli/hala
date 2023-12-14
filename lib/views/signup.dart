@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/views/login.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert'; // For handling JSON data
 
 class MyApp extends StatelessWidget {
   @override
@@ -50,6 +52,14 @@ class _SignUpPageState extends State<SignUpPage> {
         );
         return;
       }
+      final userData = {
+        'email': _email,
+        'username': _username,
+        'password': _password,
+        'phoneNumber': _phoneNumber,
+        'userType': _userType,
+        //'isDesigner': _isDesigner,
+      };
 
       // Perform registration logic here
       print('إيميل: $_email');
@@ -57,17 +67,36 @@ class _SignUpPageState extends State<SignUpPage> {
       print('كلمة المرور: $_password');
       print('رقم الهاتف: $_phoneNumber');
       print('نوع المستخدم: $_userType');
-      print('أنا مصمم: $_isDesigner');
+     // print('أنا مصمم: $_isDesigner');
+    }
+
+    Future<void> _sendUserData(Map<String, dynamic> userData) async {
+      final url =
+          'http://127.0.0.1:4001/register'; // Replace with your backend URL
+      try {
+        final response = await http.post(
+          Uri.parse(url),
+          body: json.encode(userData),
+          headers: {'Content-Type': 'application/json'},
+        );
+
+        if (response.statusCode == 200) {
+          // Registration successful, handle the response if needed
+          print('Registration successful');
+        } else {
+          // Registration failed, handle errors if needed
+          print('Registration failed - ${response.statusCode}');
+        }
+      } catch (error) {
+        // Handle connection errors
+        print('Error occurred: $error');
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('التسجيل'),
-        backgroundColor: Color(0xFF5BA581), // Set the AppBar color to green
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -104,7 +133,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       borderRadius: BorderRadius.circular(30.0),
                       borderSide: BorderSide(color: Color(0xFF5BA581)),
                     ),
-                    errorText: _password.isEmpty ? null : (_password.length < 6 ? 'كلمة المرور يجب أن تتكون من 6 أحرف على الأقل' : null),
+                    errorText: _password.isEmpty
+                        ? null
+                        : (_password.length < 6
+                            ? 'كلمة المرور يجب أن تتكون من 6 أحرف على الأقل'
+                            : null),
                   ),
                   obscureText: true,
                   validator: (value) {
@@ -126,7 +159,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       borderRadius: BorderRadius.circular(30.0),
                       borderSide: BorderSide(color: Color(0xFF5BA581)),
                     ),
-                    errorText: _confirmPassword.isEmpty ? null : (_confirmPassword != _password ? 'كلمات المرور غير متطابقة' : null),
+                    errorText: _confirmPassword.isEmpty
+                        ? null
+                        : (_confirmPassword != _password
+                            ? 'كلمات المرور غير متطابقة'
+                            : null),
                   ),
                   obscureText: true,
                   validator: (value) {
@@ -148,11 +185,17 @@ class _SignUpPageState extends State<SignUpPage> {
                       borderRadius: BorderRadius.circular(30.0),
                       borderSide: BorderSide(color: Color(0xFF5BA581)),
                     ),
-                    errorText: _email.isEmpty ? null : (!_email.contains('@') ? 'عنوان إيميل غير صالح' : null),
+                    errorText: _email.isEmpty
+                        ? null
+                        : (!_email.contains('@')
+                            ? 'عنوان إيميل غير صالح'
+                            : null),
                   ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
-                    if (value == null || value.isEmpty || !value.contains('@')) {
+                    if (value == null ||
+                        value.isEmpty ||
+                        !value.contains('@')) {
                       return 'من فضلك أدخل عنوان إيميل صالح';
                     }
                     return null;
@@ -188,33 +231,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30.0),
                     color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 2,
-                        blurRadius: 4,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: DropdownButtonFormField(
-                    value: _userType,
-                    items: ['Client', 'Admin']
-                        .map((userType) => DropdownMenuItem(
-                              value: userType,
-                              child: Text(userType),
-                            ))
-                        .toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _userType = value.toString();
-                      });
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'نوع المستخدم',
-                      prefixIcon: Icon(Icons.person),
-                      border: InputBorder.none,
-                    ),
+                    boxShadow: [],
                   ),
                 ),
                 SizedBox(height: 20),
@@ -232,8 +249,18 @@ class _SignUpPageState extends State<SignUpPage> {
                   onPressed: _submitForm,
                   style: ElevatedButton.styleFrom(
                     primary: Color(0xFF5BA581),
+                    textStyle: TextStyle(
+                      color: Colors.white, // Set text color to white
+                      fontWeight: FontWeight.bold, // Make the text bold
+                    ),
                   ),
-                  child: Text('تسجيل'),
+                  child: Text(
+                    'تسجيل',
+                    style: TextStyle(
+                      color: Colors.white, // Set text color to white
+                      fontWeight: FontWeight.bold, // Make text bold
+                    ),
+                  ),
                 ),
                 SizedBox(height: 20),
                 Row(

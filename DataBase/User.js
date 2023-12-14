@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
   username: String,
   password: String,
   email: String,
-  UserType: String,
+  mobile: String,
 });
 
 userSchema.pre('save', async function (next) {
@@ -27,19 +27,19 @@ mongoose.connect(uri, {
   module.exports = User;
 
 
-// async function createUser() {
-//   try {
-//     const user = new User({
-//       username: 'amr',
-//       password: '111', // Password will be hashed automatically due to the pre-save hook
-//       email: 'user@example.com',
-//       UserType: 'user',
-//     });
-//     const result = await user.save();
-// console.log('User created:', result);
-//   } catch (error) {
-//     console.error('Error creating user:', error);
-//   }
-// }
-// createUser();
-
+  async function createUser() {
+    try {
+      const user = new User({
+        username: 'amr',
+        password: '111', // Password will be hashed automatically due to the pre-save hook
+        email: 'user@example.com',
+        mobile: '1234567890',
+      });
+      const result = await user.save();
+      console.log('User created:', result);
+    } catch (error) {
+      console.error('Error creating user:', error);
+    }
+  }
+  // createUser();
+  

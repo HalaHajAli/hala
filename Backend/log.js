@@ -2,12 +2,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const User = require('../DataBase/User'); 
+
+const Planner = require('../DataBase/Planner'); 
 
 const app = express();
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 console.log("hello");
-const User = require('../DataBase/User'); 
+
 const { CLOSING } = require('ws');
 
 app.get('/', (req, res) => {
@@ -46,6 +49,40 @@ console.log(password);
     res.status(200).json({ message: 'Login successful', user });
   } catch (error) {
     console.error('Login error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+app.post('/register', async (req, res) => {
+  const { username, password, email, mobile } = req.body;
+
+  try {
+    // Check if the username already exists
+    const existingUser = await Planner.findOne({ username });
+
+    if (existingUser) {
+      return res.status(400).json({ message: 'Username already exists' });
+    }
+
+    // Hash the password before storing it in the database
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create a new user based on the AnotherUser schema
+    const planner = new Planner({
+      username,
+      password: hashedPassword,
+      email,
+      mobile
+      // Add other user properties as needed for AnotherUser schema
+    });
+
+    // Save the new user to the database
+    await planner.save();
+
+    res.status(201).json({ message: 'Registration successful', planner });
+  } catch (error) {
+    console.error('Registration error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
