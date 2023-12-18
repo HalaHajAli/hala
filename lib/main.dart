@@ -18,27 +18,25 @@ import 'package:flutter_application/views/review.dart';
 import 'package:flutter_application/views/picDate.dart';
 import 'package:flutter_application/views/HallServicePage.dart';
 import 'package:flutter_application/views/wait.dart';
-
+import 'package:flutter_application/views/try.dart';
+import 'package:flutter_application/views/guestlist.dart';
+import 'package:flutter_application/views/flower.dart';
 
 void main() {
   initializeDateFormatting('ar_SA', null);
   runApp(MyApp());
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, designSize: Size(750, 1334));
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => FavoritesProvider()),
         ChangeNotifierProvider(create: (context) => CartProvider()), // Provide your CartProvider
         ChangeNotifierProvider(create: (context) => SalesOffersProvider()), // Provide your CartProvider
-
-
         // You can add more providers if needed
       ],
       child: GetMaterialApp(
@@ -49,12 +47,11 @@ class MyApp extends StatelessWidget {
         translations: Messages(), // Custom translation for Arabic
         fallbackLocale: Locale('ar', 'SA'),
 
-        home:Welcome (), // Set your initial page here
+        home: ServicePage(userType: 'Your User Type'), // Set your initial page here
       ),
     );
   }
 }
-
 // Custom translations for Arabic
 class Messages extends Translations {
   @override

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_application/views/homepage.dart';
-
 class WelcomePage extends StatelessWidget {
   // Dummy data for descriptions
   final List<String> descriptions = [

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/views/favorites_provider.dart';
-import 'package:flutter_application/views/servicepage.dart'; 
+import 'package:flutter_application/views/servicepage.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_application/views/CartProvider.dart';
-
 
 class FlowerColorPage extends StatefulWidget {
   @override
@@ -13,9 +12,13 @@ class FlowerColorPage extends StatefulWidget {
 class _FlowerColorPageState extends State<FlowerColorPage> {
   bool isAdmin = true; // Set to true for demonstration purposes
   String? selectedColor;
+  String? selectedType;
 
-  List<String> flowerColors = ['White', 'Pink', 'Green', 'Red', 'Other'];
+  List<String> flowerColors = ['white', 'pink', 'green', 'red', 'other'];
+  List<String> flowerTypes = ['Normal', 'Artificial'];
   List<String> flowerImages = [
+    'images/normal_pink.jpeg',
+    'images/normal_pink.jpeg',
     'images/1_white.jpeg',
     'images/2_white.jpeg',
     'images/3_white.jpeg',
@@ -48,20 +51,34 @@ class _FlowerColorPageState extends State<FlowerColorPage> {
     'images/9_other.jpeg',
     'images/10_other.jpeg',
   ];
-    List<String> getFilteredFlowerImages(String? color) {
-  if (color == null) {
-    return flowerImages;
-  } else if (color == 'Other') {
-    return flowerImages.where((imagePath) => imagePath.toLowerCase().contains('other')).toList();
-  } else {
-    return flowerImages.where((imagePath) => imagePath.toLowerCase().contains(color.toLowerCase())).toList();
+
+  List<String> getFilteredFlowerImages(String? color, String? type) {
+    if (color == null && type == null) {
+      return [];
+    } else if (color == 'آخر') {
+      return flowerImages
+          .where((imagePath) => imagePath.toLowerCase().contains('other'))
+          .toList();
+    } else {
+      var normalizedColor = color != null ? normalizeArabic(color) : null;
+      return flowerImages
+          .where((imagePath) =>
+              (color == null || imagePath.toLowerCase().contains(normalizedColor!)) &&
+              (type == null || imagePath.toLowerCase().contains(type.toLowerCase())))
+          .toList();
+    }
   }
-}
-   @override
+
+  String normalizeArabic(String input) {
+    final pattern = RegExp('[ء-ي]');
+    return input.replaceAllMapped(pattern, (match) => String.fromCharCode(match.group(0)!.codeUnitAt(0)));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select decoration Color'),
+        title: Text(''),
         backgroundColor: Color(0xFF5BA581),
         actions: [
           IconButton(
@@ -89,9 +106,11 @@ class _FlowerColorPageState extends State<FlowerColorPage> {
       body: Column(
         children: [
           SizedBox(height: 20),
-          Text(
-            'Select decoration Color:',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          Center(
+            child: Text(
+              'أختر لون الزهور:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
           ),
           DropdownButton<String>(
             value: selectedColor,
@@ -107,29 +126,52 @@ class _FlowerColorPageState extends State<FlowerColorPage> {
               );
             }).toList(),
           ),
-          Wrap(
-            children: getFilteredFlowerImages(selectedColor)
-                .map((imagePath) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FullScreenImagePage(imagePath: imagePath),
-                    ),
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.asset(
-                    imagePath,
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+          Center(
+            child: Text(
+              'اختر نوع الزهور:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
+          DropdownButton<String>(
+            value: selectedType,
+            onChanged: (newType) {
+              setState(() {
+                selectedType = newType;
+              });
+            },
+            items: flowerTypes.map((type) {
+              return DropdownMenuItem<String>(
+                value: type,
+                child: Text(type),
               );
             }).toList(),
+          ),
+          Wrap(
+            children: (selectedColor == null && selectedType == null)
+                ? [] // Display an empty list when no filter is selected
+                : getFilteredFlowerImages(selectedColor, selectedType)
+                    .map((imagePath) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                FullScreenImagePage(imagePath: imagePath),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.asset(
+                          imagePath,
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  }).toList(),
           ),
           SizedBox(height: 20), // Add some spacing
         ],
@@ -137,6 +179,7 @@ class _FlowerColorPageState extends State<FlowerColorPage> {
     );
   }
 }
+
 class FullScreenImagePage extends StatelessWidget {
   final String imagePath;
 
@@ -176,7 +219,7 @@ class FullScreenImagePage extends StatelessWidget {
                       favoritesProvider.addToFavorites(imagePath);
                       Navigator.pop(context);
                     },
-                    child: Text('Add to Favorites'),
+                    child: Text('إضافة إلى المفضلة'),
                   ),
                   SizedBox(width: 20),
                   ElevatedButton(
@@ -187,7 +230,7 @@ class FullScreenImagePage extends StatelessWidget {
                       cartProvider.addToCart(imagePath);
                       Navigator.pop(context);
                     },
-                    child: Text('Add to Cart'),
+                    child: Text('إضافة إلى الحقيبة'),
                   ),
                 ],
               ),
