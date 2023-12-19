@@ -18,13 +18,12 @@ import 'package:flutter_application/views/saleprovider.dart';
 import 'package:flutter_application/views/serviceadmin.dart';
 import 'package:flutter_application/views/guestlist.dart';
 
-
-class WeddingServicePage extends StatefulWidget {
+class graduateServicePage extends StatefulWidget {
   @override
-  _WeddingServicePageState createState() => _WeddingServicePageState();
+  _graduateServicePageState createState() => _graduateServicePageState();
 }
-class _WeddingServicePageState extends State<WeddingServicePage> {
-   String selectedService = '';
+class _graduateServicePageState extends State<graduateServicePage> {
+  String selectedService = '';
 
   List<Map<String, dynamic>> serviceOptions = [
     {'text': 'تنسيق الزهور', 'icon': Icons.local_florist},
@@ -45,7 +44,7 @@ class _WeddingServicePageState extends State<WeddingServicePage> {
   void navigateToFlowerPage() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => FlowerColorPage(),
+        builder: (context) => FlowerColorPage1(),
       ),
     );
   }
@@ -71,7 +70,7 @@ class _WeddingServicePageState extends State<WeddingServicePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF5BA581),
-        title: Text(' الأعراس'),
+        title: Text(' حفلات التخرج'),
         centerTitle: true,
       ),
       body: Container(

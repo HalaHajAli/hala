@@ -22,6 +22,7 @@ import 'package:flutter_application/views/try.dart';
 import 'package:flutter_application/views/guestlist.dart';
 import 'package:flutter_application/views/chatt.dart';
 //import 'package:flutter_application/views/profile.dart';
+import 'package:flutter_application/views/flower.dart';
 
 
 
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
         translations: Messages(), // Custom translation for Arabic
         fallbackLocale: Locale('ar', 'SA'),
 
-        home: ServicePage(userType: 'someUserType'),
+        home: ServicePage(userType: 'Your User Type'), // Set your initial page here
       ),
     );
   }

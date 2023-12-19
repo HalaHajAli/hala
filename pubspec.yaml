@@ -13,7 +13,7 @@ dependencies:
   get: ^4.1.4
   cupertino_icons: ^1.0.2
   expandable: ^5.0.1
-  font_awesome_flutter: ^10.0.0
+  font_awesome_flutter: ^10.6.0
   flutter_svg: ^2.0.9
   firebase_core: ^2.24.2
   firebase_auth: ^4.15.3
@@ -40,7 +40,6 @@ dependencies:
 
  # ar_flutter_plugin: ^0.7.3
  # easy_camera_plus: ^0.0.19
-
 
 dev_dependencies:
   flutter_test:
