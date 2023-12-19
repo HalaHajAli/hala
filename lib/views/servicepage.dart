@@ -319,17 +319,59 @@ List<ServiceItem> services = [
     }
   }
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('أختر مناسبتك'),
-        backgroundColor: Color(0xFF5BA581),
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      centerTitle: true,
+      title: Text('أختر مناسبتك',
+      style: TextStyle(color: Colors.white),
       ),
-      drawer: Drawer(
-        child: ListView(
-          // Your existing drawer code...
-        ),
+      backgroundColor: Color(0xFF5BA581),
+    ),
+    endDrawer: Drawer(
+      child: Column(
+        children: [
+          // Drawer Header with User Profile
+          UserAccountsDrawerHeader(
+            accountName: Text(
+              'User Name',
+              style: TextStyle(color: Colors.white),
+            ),
+            accountEmail: Text(
+              'user@example.com',
+              style: TextStyle(color: Colors.white),
+            ),
+            currentAccountPicture: CircleAvatar(
+              backgroundImage: AssetImage('path/to/profile_image.jpg'),
+            ),
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 91, 165, 129),
+            ),
+          ),
+          // Drawer Body
+          Expanded(
+            child: ListView(
+              children: [
+                ListTile(
+                  title: Text(
+                    'تسجيل الخروج ',
+                    style: TextStyle(color: Color.fromARGB(255, 91, 165, 129)),
+                  ),
+                  onTap: () {
+                    // Implement logout logic here
+                    // For example, navigate to the login page
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => Login1()),
+                    );
+                  },
+                ),
+                // Add other drawer items as needed
+              ],
+            ),
+          ),
+        ],
       ),
+    ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -399,6 +441,7 @@ List<ServiceItem> services = [
           }
         },
       ),
+
     );
   }
 }

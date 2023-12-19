@@ -20,8 +20,12 @@ import 'package:flutter_application/views/HallServicePage.dart';
 import 'package:flutter_application/views/wait.dart';
 import 'package:flutter_application/views/try.dart';
 import 'package:flutter_application/views/guestlist.dart';
+import 'package:flutter_application/views/chatt.dart';
+//import 'package:flutter_application/views/profile.dart';
 
-void main() {
+
+
+void main()  async {
   initializeDateFormatting('ar_SA', null);
   runApp(MyApp());
 }
@@ -46,7 +50,7 @@ class MyApp extends StatelessWidget {
         translations: Messages(), // Custom translation for Arabic
         fallbackLocale: Locale('ar', 'SA'),
 
-        home:TabBarPage (), // Set your initial page here
+        home: ServicePage(userType: 'someUserType'),
       ),
     );
   }
