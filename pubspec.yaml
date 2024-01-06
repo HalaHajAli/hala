@@ -18,14 +18,14 @@ dependencies:
   firebase_core: ^2.24.2
   firebase_auth: ^4.15.3
   cloud_firestore: ^4.13.6
-
-
+  table_calendar: ^3.0.9
+  clay_containers: ^0.3.2
   flutter_localizations:
     sdk: flutter
   intl: ^0.18.1
   flutter_calendar_carousel: ^2.0.0
   jiffy: ^6.2.1 # Replace with the desired version
-  table_calendar: ^3.0.1 # Replace with the desired version
+  #table_calendar: ^3.0.1 # Replace with the desired version
   provider: ^6.0.5
   webview_flutter: ^2.0.13
   carousel_slider: ^4.0.0
@@ -45,6 +45,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.3
+
+
   #arkit_plugin: ^1.0.7
   http: ^1.1.0
   cupertino_icons: ^1.0.2  # Add Cupertino icons if not already included 
@@ -52,6 +54,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - images/person2.png
     - images/monasaba.png
     - images/download.png
     - images/999.jpg
@@ -156,7 +159,34 @@ flutter:
     - images/4s_green.jpg
     - images/welcome1.jpg
     - images/welcome2.jpg
-    - images/welcome3.jpg
     - images/normal_pink.jpeg
     - images/natural_white.jpeg
-    - images/
+    - images/nadi2.png
+    - images/garden1.png
+    - images/roz.png
+    - images/tazyeen.png
+    - images/hals.png
+    - images/food.jpg
+    - images/cam.jpg
+    - images/dj.jpg
+    - images/w2.png
+    - images/e.png
+    - images/l.png
+    - images/wa.png
+    - images/a.png
+    - images/s.png
+    - images/abo.png
+    - images/leb.png
+    - images/garden2.png
+    - images/peaple2.png
+    - images/brandOne.jpg
+    - images/brandTow.jpg
+    - images/brandThree.jpg
+    - images/brandFour.jpg
+    - images/brandFive.jpg
+    - images/brandSix.jpg
+    - images/brandSeven.jpg
+
+
+
+

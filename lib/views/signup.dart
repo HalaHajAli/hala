@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_application/views/login1.dart';
+import 'package:flutter_application/views/servicepage.dart';
+import 'package:flutter_application/views/plannerpage.dart';
+import 'package:flutter_application/views/login.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -20,37 +23,91 @@ class _SignUpPageState extends State<SignUpPage> {
   bool _isDesigner = false;
   bool _showErrors = false;
 
+
+
+
   void _submitForm() async {
-    setState(() {
-      _showErrors = true;
-    });
+  setState(() {
+    _showErrors = true;
+  });
 
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
+  if (_formKey.currentState!.validate()) {
+    _formKey.currentState!.save();
 
-      final bool isValid = await registerUser();
-      if (isValid) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('تم التسجيل بنجاح'),
-            duration: Duration(seconds: 2),
-            behavior: SnackBarBehavior.fixed,
-          ),
-        );
+    final bool isUserRegistered = await registerUser();
+    if (isUserRegistered) {
+      if (_isDesigner) {
+        final bool isPlannerSaved = await registerPlanner();
+        if (isPlannerSaved) {
+          // Navigator code to move to the next page after successful registration
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Login(
+                email: _email,
+               usern: _username,
+            )),
+          );
+        } else {
+          print('Planner registration failed');
+        }
+      } else {
+        
+ if (isUserRegistered) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Login1()),
+      );
+    }
 
+
+        
+      }
+    } else {
+      print('User registration failed');
+    }
+  }
+}
+
+  Future<bool> registerPlanner() async {
+    final url = 'http://127.0.0.1:4001/regplanner';
+    final Map<String, dynamic> userData = {
+      'username': _username,
+      'password': _password,
+      'email': _email,
+      'mobile': _mobile,
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: json.encode(userData),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 201) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('Error: $e');
+      return false;
+    }
+  }
+
+  void handleIsDesignerToggle() async {
+    if (_isDesigner) {
+      final bool isPlannerSaved = await registerPlanner();
+      if (isPlannerSaved) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Login1()),
+          MaterialPageRoute(builder: (context) =>HomePage()),
         );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('   يرجى اعادة التسجيل هذا الايميل مسجل من قبل '),
-            duration: Duration(seconds: 2),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+        print('Planner registration failed');
       }
+    } else {
+      // For regular users, nothing specific on switch toggle
     }
   }
 
@@ -139,7 +196,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   prefixIcon: Icons.person,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                    //  return 'الرجاء إدخال اسم المستخدم';
+                      //  return 'الرجاء إدخال اسم المستخدم';
                     }
                     return null;
                   },
@@ -154,7 +211,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                     // return 'الرجاء إدخال كلمة المرور';
+                      // return 'الرجاء إدخال كلمة المرور';
                     } else if (value.length < 6) {
                       return 'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل';
                     }
@@ -171,7 +228,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                     // return 'الرجاء تأكيد كلمة المرور';
+                      // return 'الرجاء تأكيد كلمة المرور';
                     } else if (value != _password) {
                       return 'كلمات المرور غير متطابقة';
                     }
@@ -187,7 +244,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   prefixIcon: Icons.email,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                     // return 'الرجاء إدخال البريد الإلكتروني';
+                      // return 'الرجاء إدخال البريد الإلكتروني';
                     } else if (!value.contains('@')) {
                       return 'بريد إلكتروني غير صحيح';
                     }
@@ -217,13 +274,18 @@ class _SignUpPageState extends State<SignUpPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('أنا مصمم'),
+                    Text(
+                      'أنا مصمم',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     Switch(
                       value: _isDesigner,
                       onChanged: (value) {
                         setState(() {
                           _isDesigner = value;
                         });
+
+                       // handleIsDesignerToggle();
                       },
                     ),
                   ],
@@ -232,8 +294,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 ElevatedButton(
                   onPressed: _submitForm,
                   style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Color.fromARGB(255, 91, 165, 129)),
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        Color.fromARGB(255, 91, 165, 129)),
                     minimumSize: MaterialStateProperty.all<Size>(Size(70, 50)),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
@@ -255,7 +317,11 @@ class _SignUpPageState extends State<SignUpPage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Login1()),
+                      MaterialPageRoute(
+                          builder: (context) => Login1(
+                                email: _email,
+                                usern: _username,
+                              )),
                     );
                   },
                   child: Text(

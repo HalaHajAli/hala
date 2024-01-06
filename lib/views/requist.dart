@@ -25,8 +25,10 @@ class _EventRequestPageState extends State<EventRequestPage> {
       appBar: AppBar(
         title: Text(
           'الطلبات',
-          style: TextStyle(color: Colors.white), // Change title color to white
+          style: TextStyle(color: Colors.white), 
         ),
+            iconTheme: IconThemeData(color: Colors.white),
+
         backgroundColor: Color(0xFF5BA581),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),

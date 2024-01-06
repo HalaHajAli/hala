@@ -4,14 +4,18 @@ import 'package:flutter_application/views/servicepage.dart'; // Import the servi
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:flutter_application/views/signup.dart';
 
 class Login1 extends StatefulWidget {
   final String userType;
-
+  final String usern;
+  final String email;
   const Login1({
     Key? key,
     this.userType = 'زائر',
+    this.usern = '',
+       this.email = '',
+
   }) : super(key: key);
 
   @override
@@ -21,6 +25,8 @@ class Login1 extends StatefulWidget {
 class _Login1State extends State<Login1> {
   String username = '';
   String password = '';
+    String email = '';
+
   String usernameError = '';
   String passwordError = '';
 
@@ -47,7 +53,10 @@ class _Login1State extends State<Login1> {
                   prefixIcon: Icon(Icons.person),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30.0),
-                    borderSide: BorderSide(color: usernameError.isNotEmpty ? Colors.red : Color.fromARGB(255, 91, 165, 129)),
+                    borderSide: BorderSide(
+                        color: usernameError.isNotEmpty
+                            ? Colors.red
+                            : Color.fromARGB(255, 91, 165, 129)),
                   ),
                   errorText: usernameError.isNotEmpty ? usernameError : null,
                 ),
@@ -68,7 +77,10 @@ class _Login1State extends State<Login1> {
                   prefixIcon: Icon(Icons.lock),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30.0),
-                    borderSide: BorderSide(color: passwordError.isNotEmpty ? Colors.red : Color.fromARGB(255, 91, 165, 129)),
+                    borderSide: BorderSide(
+                        color: passwordError.isNotEmpty
+                            ? Colors.red
+                            : Color.fromARGB(255, 91, 165, 129)),
                   ),
                   errorText: passwordError.isNotEmpty ? passwordError : null,
                 ),
@@ -90,7 +102,8 @@ class _Login1State extends State<Login1> {
                   });
                 } else {
                   // Check username separately here if needed
-                  usernameError = ''; // Reset error message if username is not empty
+                  usernameError =
+                      ''; // Reset error message if username is not empty
                 }
                 if (password.isEmpty) {
                   setState(() {
@@ -98,20 +111,28 @@ class _Login1State extends State<Login1> {
                   });
                 } else {
                   // Check password separately here if needed
-                  passwordError = ''; // Reset error message if password is not empty
+                  passwordError =
+                      ''; // Reset error message if password is not empty
                 }
 
                 if (username.isNotEmpty && password.isNotEmpty) {
                   var url = Uri.parse('http://127.0.0.1:4001/login1');
                   var response = await http.post(
                     url,
-                    body: {'username': username, 'password': password},
+                    body: {
+                      'username': username,
+                      'password': password,
+                    },
                   );
 
                   if (response.statusCode == 200) {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => ServicePage(userType: widget.userType),
+                        builder: (context) => ServicePage(
+                          userType: widget.userType,
+                          usern: username,
+                          ema:email,
+                        ),
                       ),
                     );
                   } else {
@@ -127,7 +148,8 @@ class _Login1State extends State<Login1> {
                 padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 15.0),
                 child: Text(
                   'تسجيل الدخول',
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white),
                 ),
               ),
               style: ElevatedButton.styleFrom(
@@ -157,4 +179,3 @@ class _Login1State extends State<Login1> {
     );
   }
 }
-

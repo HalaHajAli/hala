@@ -62,9 +62,13 @@ class _TabBarPageState extends State<TabBarPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tab bar Without Appbar'),
+        title: Text('المهام ',
+        style: TextStyle(          color: Colors.white, fontWeight: FontWeight.bold,                                      ),),
         backgroundColor: Color(0xFF5BA581),
         elevation: 0,
+    iconTheme: IconThemeData(color: Colors.white), // Set the icon color to white
+
+        
       ),
       body: SingleChildScrollView(
         child: Padding(

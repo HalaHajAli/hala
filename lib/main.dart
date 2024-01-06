@@ -21,9 +21,14 @@ import 'package:flutter_application/views/wait.dart';
 import 'package:flutter_application/views/try.dart';
 import 'package:flutter_application/views/guestlist.dart';
 import 'package:flutter_application/views/chatt.dart';
-//import 'package:flutter_application/views/profile.dart';
+import 'package:flutter_application/views/newser.dart';
 import 'package:flutter_application/views/flower.dart';
+import 'package:flutter_application/views/food.dart';
 
+import 'package:flutter_application/views/book.dart';
+import 'package:flutter_application/views/priceList.dart';
+import 'package:flutter_application/views/imagePlace.dart';
+import 'package:flutter_application/views/addOffer.dart';
 
 
 void main()  async {
@@ -39,19 +44,19 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => FavoritesProvider()),
-        ChangeNotifierProvider(create: (context) => CartProvider()), // Provide your CartProvider
-        ChangeNotifierProvider(create: (context) => SalesOffersProvider()), // Provide your CartProvider
+        ChangeNotifierProvider(create: (context) => CartProvider()), 
+        ChangeNotifierProvider(create: (context) => SalesOffersProvider()), 
         // You can add more providers if needed
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         // Localizations setup
-        locale: const Locale('ar', 'SA'), // Set the initial locale to Arabic
-        textDirection: TextDirection.rtl, // Set the initial text direction to RTL
-        translations: Messages(), // Custom translation for Arabic
+        locale: const Locale('ar', 'SA'), 
+        textDirection: TextDirection.rtl, 
+        translations: Messages(), 
         fallbackLocale: Locale('ar', 'SA'),
 
-        home: ServicePage(userType: 'Your User Type'), // Set your initial page here
+        home:PackageEntryForm(), 
       ),
     );
   }
@@ -62,7 +67,8 @@ class Messages extends Translations {
   Map<String, Map<String, String>> get keys => {
         'ar_SA': {
           'title': 'عنوان',
-          // Add more translations as needed
         },
       };
+
+
 }

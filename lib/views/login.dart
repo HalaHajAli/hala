@@ -1,122 +1,179 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/views/signup.dart';
-import 'package:flutter_application/views/login1.dart';
-import 'package:flutter_application/views/log2.dart';
-
+import 'package:flutter_application/views/forgetpass.dart';
+import 'package:flutter_application/views/servicepage.dart'; // Import the service page
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_application/views/signup.dart';
+import 'package:flutter_application/views/plannerpage.dart';
 
-class Login extends StatelessWidget {
-  const Login({Key? key}) : super(key: key);
+class Login extends StatefulWidget {
+  final String userType;
+  final String usern;
+  final String email;
+  const Login({
+    Key? key,
+    this.userType = 'زائر',
+    this.usern = '',
+       this.email = '',
+
+  }) : super(key: key);
+
+  @override
+  _Login1State createState() => _Login1State();
+}
+
+class _Login1State extends State<Login> {
+  String username = '';
+  String password = '';
+    String email = '';
+
+  String usernameError = '';
+  String passwordError = '';
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Image positioned at the top
             Image.asset(
               'images/monasaba.png',
-              height: screenHeight * 0.3, // Responsive height
-              width: screenWidth * 0.6, // Responsive width
+              height: 400,
+              width: 400,
             ),
-            SizedBox(height: screenHeight * 0.05), // Responsive spacing
-
-            // Buttons for different user types
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to the service page as a visitor
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => Login1(),
+            SizedBox(height: 20),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30.0),
+              child: TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'اسم المستخدم',
+                  prefixIcon: Icon(Icons.person),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    borderSide: BorderSide(
+                        color: usernameError.isNotEmpty
+                            ? Colors.red
+                            : Color.fromARGB(255, 91, 165, 129)),
                   ),
-                );
+                  errorText: usernameError.isNotEmpty ? usernameError : null,
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    username = value;
+                    usernameError = '';
+                  });
+                },
+              ),
+            ),
+            SizedBox(height: 20),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30.0),
+              child: TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'كلمة المرور',
+                  prefixIcon: Icon(Icons.lock),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    borderSide: BorderSide(
+                        color: passwordError.isNotEmpty
+                            ? Colors.red
+                            : Color.fromARGB(255, 91, 165, 129)),
+                  ),
+                  errorText: passwordError.isNotEmpty ? passwordError : null,
+                ),
+                obscureText: true,
+                onChanged: (value) {
+                  setState(() {
+                    password = value;
+                    passwordError = '';
+                  });
+                },
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                if (username.isEmpty) {
+                  setState(() {
+                    usernameError = 'من فضلك أدخل اسم المستخدم';
+                  });
+                } else {
+                  // Check username separately here if needed
+                  usernameError =
+                      ''; // Reset error message if username is not empty
+                }
+                if (password.isEmpty) {
+                  setState(() {
+                    passwordError = 'من فضلك أدخل كلمة المرور';
+                  });
+                } else {
+                  // Check password separately here if needed
+                  passwordError =
+                      ''; // Reset error message if password is not empty
+                }
+
+                if (username.isNotEmpty && password.isNotEmpty) {
+                  var url = Uri.parse('http://127.0.0.1:4001/login2');
+                  var response = await http.post(
+                    url,
+                    body: {
+                      'username': username,
+                      'password': password,
+                    },
+                  );
+                  print(response.statusCode); // Print HTTP status code
+      print(response.body); // Print response body
+
+                  if (response.statusCode == 200) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(
+                         email: email,
+                           usern: username,
+                        ),
+                      ),
+                    );
+                  } else {
+                    // Set error messages based on server response if needed
+                    setState(() {
+                      usernameError = 'المستخدم غير موجود';
+                      passwordError = 'كلمة المرور غير صحيحة';
+                    });
+                  }
+                }
               },
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.2, // Responsive width
-                  vertical: screenHeight * 0.02, // Responsive height
+                padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 15.0),
+                child: Text(
+                  'تسجيل الدخول',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white),
                 ),
-                child: Text('تسجيل الدخول كمستخدم'),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 91, 165, 129),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(screenHeight * 0.05), // Responsive shape
+                  borderRadius: BorderRadius.circular(30.0),
                 ),
               ),
             ),
-            SizedBox(height: screenHeight * 0.02), // Responsive spacing
-
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to the service page as a planner
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => Login2(userType: 'planner'),
-                  ),
-                );
-              },
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.2, // Responsive width
-                  vertical: screenHeight * 0.02, // Responsive height
-                ),
-                child: Text('تسجيل الدخول كمصمم'),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 91, 165, 129),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(screenHeight * 0.05), // Responsive shape
-                ),
-              ),
-            ),
-            SizedBox(height: screenHeight * 0.02), // Responsive spacing
-
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to the service page as an admin
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => Login1(),
-                  ),
-                );
-              },
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.2, // Responsive width
-                  vertical: screenHeight * 0.02, // Responsive height
-                ),
-                child: Text('تسجيل الدخول كمسؤول'),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 91, 165, 129),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(screenHeight * 0.05), // Responsive shape
-                ),
-              ),
-            ),
-            SizedBox(height: screenHeight * 0.02), // Responsive spacing
-
+            SizedBox(height: 10),
             TextButton(
               onPressed: () {
-                // Navigate to the sign-up page when the button is pressed
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => SignUpPage(),
+                    builder: (context) => ForgetPasswordPage(),
                   ),
                 );
               },
               style: TextButton.styleFrom(
                 primary: Color.fromARGB(255, 91, 165, 129),
               ),
-              child: Text('ليس لديك حساب؟ إنشاء حساب'),
+              child: Text('نسيت كلمة المرور؟'),
             ),
           ],
         ),

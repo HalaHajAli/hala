@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/views/login.dart';
 import 'package:flutter_application/views/login1.dart';
 import 'package:flutter_application/views/servicepage.dart';
 import 'package:flutter_application/views/signup.dart';
@@ -81,6 +82,24 @@ class SelectionPage extends StatelessWidget {
                         ),
                       ),
                     ),
+                    SizedBox(height:90),
+  GestureDetector(
+        onTap: () {
+          // Navigation logic when the icon is tapped
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => Login(),
+            ),
+          );
+        },
+        child: Icon(
+          Icons.arrow_downward,
+          size: 20,
+          color: Color(0xFF5BA581),
+        ),
+      ),
+
+
                   ],
                 ),
               ),

@@ -53,7 +53,7 @@ class OffersAndSalesPage extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => ServicePage(userType: 'visitor'),
+                    builder: (context) => ServicePage(userType: 'visitor',usern:"" ,ema:""),
                   ),
                 );
               },

@@ -22,6 +22,7 @@ import 'package:flutter_application/views/birthday.dart';
 import 'package:flutter_application/views/visitor.dart';
 import 'package:flutter_application/views/grad.dart';
 import 'package:flutter_application/views/wedding.dart';
+import 'package:flutter_application/views/newser.dart';
 
 class ServiceItem {
   final String name;
@@ -31,6 +32,7 @@ class ServiceItem {
 
   ServiceItem({
     String name = '',
+   
     String description = '',
     AssetImage? image,
     Widget? servicePageRoute,
@@ -111,12 +113,16 @@ class CircularServiceButton extends StatelessWidget {
 
 class ServicePage extends StatefulWidget {
   final String userType;
+  final String usern; // Keep the usern parameter
+  final String ema;
 
-  ServicePage({required this.userType});
+  ServicePage({required this.userType, required this.usern, required this.ema});
 
   @override
   _ServicePageState createState() => _ServicePageState();
 }
+
+
 
 class OfferItem {
   final String title;
@@ -145,6 +151,7 @@ class SaleItem {
     required this.imagePath,
   });
 }
+
 class SquareServiceButton extends StatelessWidget {
   final AssetImage image;
   final String name;
@@ -197,7 +204,6 @@ class SquareServiceButton extends StatelessWidget {
   }
 }
 
-
 class WaveBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -246,7 +252,6 @@ class VerticalWaveClipper extends CustomClipper<Path> {
   }
 }
 
-
 class WaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
@@ -262,7 +267,8 @@ class WaveClipper extends CustomClipper<Path> {
       firstEndPoint.dy,
     );
 
-    final secondControlPoint = Offset(size.width - (size.width / 3.25), size.height * 0.6);
+    final secondControlPoint =
+        Offset(size.width - (size.width / 3.25), size.height * 0.6);
     final secondEndPoint = Offset(size.width, size.height * 0.75);
     path.quadraticBezierTo(
       secondControlPoint.dx,
@@ -282,14 +288,17 @@ class WaveClipper extends CustomClipper<Path> {
     return false;
   }
 }
+
 class _ServicePageState extends State<ServicePage> {
-List<ServiceItem> services = [
+  List<ServiceItem> services = [
     ServiceItem(
       name: 'الأعراس',
       description: 'Have a nice wedding',
       image: AssetImage('images/rings.png'),
-      servicePageRoute: WeddingServicePage(),
-    ),
+      servicePageRoute: newser( ),
+
+      ),
+    
     ServiceItem(
       name: 'التخرج',
       description: 'Description for Service 2',
@@ -322,60 +331,79 @@ List<ServiceItem> services = [
       });
     }
   }
+
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      centerTitle: true,
-      title: Text('أختر مناسبتك',
-      style: TextStyle(color: Colors.white),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white, // Change the color of the icons in the app bar
+        ),
+        centerTitle: true,
+        title: Text(
+          'أختر مناسبتك - ${widget.usern}', // Display username in the app bar title
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Color(0xFF5BA581),
       ),
-      backgroundColor: Color(0xFF5BA581),
-    ),
-    endDrawer: Drawer(
-      child: Column(
-        children: [
-          // Drawer Header with User Profile
-          UserAccountsDrawerHeader(
-            accountName: Text(
-              'User Name',
-              style: TextStyle(color: Colors.white),
+      endDrawer: Drawer(
+        child: Column(
+          children: [
+            // Drawer Header with User Profile
+            UserAccountsDrawerHeader(
+              accountName: Text(
+                widget.usern,
+                style: TextStyle(color: Colors.white),
+              ),
+              accountEmail: Text(
+                "${widget.usern}@gmail.com",
+                style: TextStyle(color: Colors.white),
+              ),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: AssetImage('hala/images/person2.png'),
+              ),
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 91, 165, 129),
+              ),
             ),
-            accountEmail: Text(
-              'user@example.com',
-              style: TextStyle(color: Colors.white),
-            ),
-            currentAccountPicture: CircleAvatar(
-              backgroundImage: AssetImage('path/to/profile_image.jpg'),
-            ),
-            decoration: BoxDecoration(
-              color: Color.fromARGB(255, 91, 165, 129),
-            ),
-          ),
-          // Drawer Body
-          Expanded(
-            child: ListView(
-              children: [
-                ListTile(
-                  title: Text(
-                    'تسجيل الخروج ',
-                    style: TextStyle(color: Color.fromARGB(255, 91, 165, 129)),
+            // Drawer Body
+            Expanded(
+              child: ListView(
+                children: [
+                  ListTile(
+                    leading: Icon(Icons.message), // Icon for الرسائل
+                    title: Text(
+                      'الرسائل',
+                      style:
+                          TextStyle(color: Color.fromARGB(255, 91, 165, 129)),
+                    ),
+                    onTap: () {
+                      // Handle messages action
+                      // For example, navigate to messages page
+                    },
                   ),
-                  onTap: () {
-                    // Implement logout logic here
-                    // For example, navigate to the login page
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => Login1()),
-                    );
-                  },
-                ),
-                // Add other drawer items as needed
-              ],
+                  ListTile(
+                    leading: Icon(Icons.logout), // Icon for تسجيل الخروج
+                    title: Text(
+                      'تسجيل الخروج ',
+                      style:
+                          TextStyle(color: Color.fromARGB(255, 91, 165, 129)),
+                    ),
+                    onTap: () {
+                      // Implement logout logic here
+                      // For example, navigate to the login page
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => Login1()),
+                      );
+                    },
+                  ),
+                  // Add other drawer items as needed
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -425,19 +453,24 @@ Widget build(BuildContext context) {
         onTap: (int index) {
           switch (index) {
             case 0:
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => SelectionPage()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => SelectionPage()));
               break;
             case 1:
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage()));
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => ProfilePage()));
               break;
             case 2:
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => FavoritesPage()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => FavoritesPage()));
               break;
             case 3:
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => AboutUsPage()));
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => AboutUsPage()));
               break;
             case 4:
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyBagPage()));
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => MyBagPage()));
               break;
             default:
               // Handle other cases if needed
@@ -445,7 +478,6 @@ Widget build(BuildContext context) {
           }
         },
       ),
-
     );
   }
 }
@@ -465,7 +497,6 @@ class UserProfilePage extends StatelessWidget {
     );
   }
 }
-
 
 class FavoritesPage extends StatelessWidget {
   @override
@@ -532,7 +563,10 @@ class AboutUsPage extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [Colors.white, Colors.green],
-            stops: [0.5, 1.0], // Adjust the stops to control the gradient transition
+            stops: [
+              0.5,
+              1.0
+            ], // Adjust the stops to control the gradient transition
           ),
         ),
         child: Padding(
@@ -546,7 +580,8 @@ class AboutUsPage extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black, // Adjust text color to be visible on the gradient background
+                  color: Colors
+                      .black, // Adjust text color to be visible on the gradient background
                 ),
               ),
               SizedBox(height: 20),
@@ -575,8 +610,7 @@ class AboutUsPage extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Text(
-                'تصميم مناسبتك بأقل الأسعار وبمساعدة أفضل المصممين '
-                ,
+                'تصميم مناسبتك بأقل الأسعار وبمساعدة أفضل المصممين ',
                 style: TextStyle(fontSize: 16, color: Colors.black),
                 textAlign: TextAlign.justify,
               ),
@@ -591,7 +625,8 @@ class AboutUsPage extends StatelessWidget {
 class MyBagPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<CartProvider>(context); // Access the CartProvider
+    final cartProvider =
+        Provider.of<CartProvider>(context); // Access the CartProvider
 
     // Get the list of images from the cart
     List<String> cartImages = cartProvider.cartImages;
@@ -607,7 +642,8 @@ class MyBagPage extends StatelessWidget {
           Expanded(
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // You can adjust the number of columns as needed
+                crossAxisCount:
+                    2, // You can adjust the number of columns as needed
               ),
               itemCount: cartImages.length,
               itemBuilder: (context, index) {
@@ -620,7 +656,7 @@ class MyBagPage extends StatelessWidget {
               },
             ),
           ),
-         SizedBox(height: 20),
+          SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
               // Send a request to the planner with all items in the cart
@@ -633,7 +669,6 @@ class MyBagPage extends StatelessWidget {
     );
   }
 }
-
 
 class OffersListView extends StatelessWidget {
   @override
@@ -714,7 +749,6 @@ List<SaleItem> getSales() {
     // Add more sale items as needed
   ];
 }
-
 
 class OfferCard extends StatelessWidget {
   final OfferItem offer;
@@ -815,17 +849,32 @@ class SaleCard extends StatelessWidget {
 }
 
 class MyApp extends StatelessWidget {
-    static List<String> favoriteImages = [];
+  static List<String> favoriteImages = [];
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      builder: (BuildContext context, Widget? child) {
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: child!,
+        );
+      },
       initialRoute: '/',
       routes: {
-        '/': (context) => ServicePage(userType: 'Your User Type'),
+        '/': (context) => ServicePage(
+              userType: '',
+              usern: "",
+              ema: "",
+            ),
         UserProfilePage.routeName: (context) => UserProfilePage(),
       },
+      theme: ThemeData(
+        primaryIconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+      ),
     );
   }
 }
