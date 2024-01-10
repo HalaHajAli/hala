@@ -3,6 +3,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_application/views/homepage.dart';
 
 class WelcomePage extends StatelessWidget {
+  static const String screenRoute = 'welcome_screen';
+
   final List<String> descriptions = [
     'أهلاً بك في مُناسبة',
     'صمم مناسبتك معنا',
@@ -24,17 +26,17 @@ class WelcomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(""),
       ),
-      body: Container(
-        height: screenHeight,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.white, Color.fromARGB(255, 91, 165, 129)],
-            stops: [0.0, 1.0],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+      body: SingleChildScrollView(
+        child: Container(
+          height: screenHeight,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.white, Color.fromARGB(255, 91, 165, 129)],
+              stops: [0.0, 1.0],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
           ),
-        ),
-        child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               CarouselSlider.builder(
@@ -43,6 +45,8 @@ class WelcomePage extends StatelessWidget {
                   return WelcomeImage(
                     imageAsset: imageAssets[index],
                     description: descriptions[index],
+                    width: 300.0, // Adjust width as needed
+                    height: 200.0, // Adjust height as needed
                   );
                 },
                 options: CarouselOptions(
@@ -62,15 +66,21 @@ class WelcomePage extends StatelessWidget {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.white, // Set button background color to green
+                    primary: Colors.white,
                     padding: EdgeInsets.symmetric(
                       horizontal: screenWidth * 0.2,
                       vertical: 16.0,
                     ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
                   ),
                   child: Text(
                     'أنطلق',
-                    style: TextStyle(fontSize: 18.0, color: Color.fromARGB(255, 91, 165, 129)), // Set text color to white
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      color: Color.fromARGB(255, 91, 165, 129),
+                    ),
                   ),
                 ),
               ),
@@ -85,28 +95,37 @@ class WelcomePage extends StatelessWidget {
 class WelcomeImage extends StatelessWidget {
   final String imageAsset;
   final String description;
+  final double width;
+  final double height;
 
   WelcomeImage({
     required this.imageAsset,
     required this.description,
+    required this.width,
+    required this.height,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        CustomImage(
-          imageAsset: imageAsset,
-          width: 300.0,
-          height: 200.0,
-        ),
-        SizedBox(height: 16),
-        Text(
-          description,
-          style: TextStyle(fontSize: 16),
-        ),
-      ],
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          CustomImage(
+            imageAsset: imageAsset,
+            width: width,
+            height: height,
+          ),
+          SizedBox(height: 16),
+          Text(
+            description,
+            style: TextStyle(
+              fontSize: 16,
+              color: Color.fromARGB(255, 91, 165, 129),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

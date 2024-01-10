@@ -83,9 +83,10 @@ class _NewserState extends State<newser> {
             },
           ),
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+       body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
                 onTap: () => _selectDate(context),
@@ -294,6 +295,7 @@ class _NewserState extends State<newser> {
           ),
         ),
       ),
+    ),
     );
   }
 }

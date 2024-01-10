@@ -24,6 +24,7 @@ import 'package:flutter_application/views/chatt.dart';
 import 'package:flutter_application/views/newser.dart';
 import 'package:flutter_application/views/flower.dart';
 import 'package:flutter_application/views/food.dart';
+import 'package:flutter_application/views/login1.dart';
 
 import 'package:flutter_application/views/book.dart';
 import 'package:flutter_application/views/priceList.dart';
@@ -56,7 +57,7 @@ class MyApp extends StatelessWidget {
         translations: Messages(), 
         fallbackLocale: Locale('ar', 'SA'),
 
-        home:PackageEntryForm(), 
+        home:WelcomePage(), 
       ),
     );
   }

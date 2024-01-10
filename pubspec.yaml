@@ -20,6 +20,8 @@ dependencies:
   cloud_firestore: ^4.13.6
   table_calendar: ^3.0.9
   clay_containers: ^0.3.2
+  another_flushbar: ^1.12.30
+
   flutter_localizations:
     sdk: flutter
   intl: ^0.18.1

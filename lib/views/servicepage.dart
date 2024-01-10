@@ -112,6 +112,8 @@ class CircularServiceButton extends StatelessWidget {
 }
 
 class ServicePage extends StatefulWidget {
+  static const String screenRoute = 'Service_screen';
+
   final String userType;
   final String usern; // Keep the usern parameter
   final String ema;
@@ -153,6 +155,8 @@ class SaleItem {
 }
 
 class SquareServiceButton extends StatelessWidget {
+  static const String screenRoute = 'Service_screen';
+
   final AssetImage image;
   final String name;
   final VoidCallback onTap;

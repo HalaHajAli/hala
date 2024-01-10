@@ -5,6 +5,8 @@ import 'package:flutter_application/views/login1.dart';
 import 'package:flutter_application/views/servicepage.dart';
 import 'package:flutter_application/views/plannerpage.dart';
 import 'package:flutter_application/views/login.dart';
+import 'package:another_flushbar/flushbar.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -23,50 +25,41 @@ class _SignUpPageState extends State<SignUpPage> {
   bool _isDesigner = false;
   bool _showErrors = false;
 
-
-
-
   void _submitForm() async {
-  setState(() {
-    _showErrors = true;
-  });
+    setState(() {
+      _showErrors = true;
+    });
 
-  if (_formKey.currentState!.validate()) {
-    _formKey.currentState!.save();
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
 
-    final bool isUserRegistered = await registerUser();
-    if (isUserRegistered) {
-      if (_isDesigner) {
-        final bool isPlannerSaved = await registerPlanner();
-        if (isPlannerSaved) {
-          // Navigator code to move to the next page after successful registration
+      final bool isUserRegistered = await registerUser();
+      if (isUserRegistered) {
+        if (_isDesigner) {
+          final bool isPlannerSaved = await registerPlanner();
+          if (isPlannerSaved) {
+            _showWelcomeNotification();
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          } else {
+            print('Planner registration failed');
+          }
+        } else {
+          _showWelcomeNotification();
+
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Login(
-                email: _email,
-               usern: _username,
-            )),
+            MaterialPageRoute(builder: (context) => Login1()),
           );
-        } else {
-          print('Planner registration failed');
         }
       } else {
-        
- if (isUserRegistered) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Login1()),
-      );
-    }
-
-
-        
+        print('User registration failed');
       }
-    } else {
-      print('User registration failed');
     }
   }
-}
 
   Future<bool> registerPlanner() async {
     final url = 'http://127.0.0.1:4001/regplanner';
@@ -101,7 +94,7 @@ class _SignUpPageState extends State<SignUpPage> {
       if (isPlannerSaved) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) =>HomePage()),
+          MaterialPageRoute(builder: (context) => HomePage()),
         );
       } else {
         print('Planner registration failed');
@@ -136,6 +129,14 @@ class _SignUpPageState extends State<SignUpPage> {
       print('Error: $e');
       return false;
     }
+  }
+
+  void _showWelcomeNotification() {
+    Flushbar(
+      title: 'مرحبًا!',
+      message: 'تم تسجيلك بنجاح، مرحبًا بك في التطبيق!',
+      duration: Duration(seconds: 5),
+    )..show(context);
   }
 
   Widget _buildRoundedField({
@@ -181,165 +182,173 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('التسجيل'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildRoundedField(
-                  labelText: 'اسم المستخدم',
-                  prefixIcon: Icons.person,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      //  return 'الرجاء إدخال اسم المستخدم';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _username = value!;
-                  },
-                ),
-                SizedBox(height: 10),
-                _buildRoundedField(
-                  labelText: 'كلمة المرور',
-                  prefixIcon: Icons.lock,
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      // return 'الرجاء إدخال كلمة المرور';
-                    } else if (value.length < 6) {
-                      return 'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _password = value!;
-                  },
-                ),
-                SizedBox(height: 10),
-                _buildRoundedField(
-                  labelText: 'تأكيد كلمة المرور',
-                  prefixIcon: Icons.lock,
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      // return 'الرجاء تأكيد كلمة المرور';
-                    } else if (value != _password) {
-                      return 'كلمات المرور غير متطابقة';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _confirmPassword = value!;
-                  },
-                ),
-                SizedBox(height: 10),
-                _buildRoundedField(
-                  labelText: 'البريد الإلكتروني',
-                  prefixIcon: Icons.email,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      // return 'الرجاء إدخال البريد الإلكتروني';
-                    } else if (!value.contains('@')) {
-                      return 'بريد إلكتروني غير صحيح';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _email = value!;
-                  },
-                ),
-                SizedBox(height: 10),
-                _buildRoundedField(
-                  labelText: 'رقم الجوال',
-                  prefixIcon: Icons.phone,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      //return 'الرجاء إدخال رقم الجوال';
-                    } else if (value.length < 10) {
-                      return 'يجب أن يحتوي رقم الجوال على 10 أرقام على الأقل';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _mobile = value!;
-                  },
-                ),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'أنا مصمم',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Switch(
-                      value: _isDesigner,
-                      onChanged: (value) {
-                        setState(() {
-                          _isDesigner = value;
-                        });
+      body: kIsWeb
+          ? Center(
+              child: Container(
+                width: 400, // Adjust the width as needed
+                child: _buildForm(),
+              ),
+            )
+          : _buildForm(),
+    );
+  }
 
-                       // handleIsDesignerToggle();
-                      },
+  Widget _buildForm() {
+    return Padding(
+      padding: EdgeInsets.all(16.0),
+      child: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildRoundedField(
+                labelText: 'اسم المستخدم',
+                prefixIcon: Icons.person,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء إدخال اسم المستخدم';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _username = value!;
+                },
+              ),
+              SizedBox(height: 10),
+              _buildRoundedField(
+                labelText: 'كلمة المرور',
+                prefixIcon: Icons.lock,
+                obscureText: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء إدخال كلمة المرور';
+                  } else if (value.length < 6) {
+                    return 'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _password = value!;
+                },
+              ),
+              SizedBox(height: 10),
+              _buildRoundedField(
+                labelText: 'تأكيد كلمة المرور',
+                prefixIcon: Icons.lock,
+                obscureText: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء تأكيد كلمة المرور';
+                  } else if (value != _password) {
+                    return 'كلمات المرور غير متطابقة';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _confirmPassword = value!;
+                },
+              ),
+              SizedBox(height: 10),
+              _buildRoundedField(
+                labelText: 'البريد الإلكتروني',
+                prefixIcon: Icons.email,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء إدخال البريد الإلكتروني';
+                  } else if (!value.contains('@')) {
+                    return 'بريد إلكتروني غير صحيح';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _email = value!;
+                },
+              ),
+              SizedBox(height: 10),
+              _buildRoundedField(
+                labelText: 'رقم الجوال',
+                prefixIcon: Icons.phone,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء إدخال رقم الجوال';
+                  } else if (value.length < 10) {
+                    return 'يجب أن يحتوي رقم الجوال على 10 أرقام على الأقل';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _mobile = value!;
+                },
+              ),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'أنا مصمم',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Switch(
+                    value: _isDesigner,
+                    onChanged: (value) {
+                      setState(() {
+                        _isDesigner = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: _submitForm,
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                      Color.fromARGB(255, 91, 165, 129)),
+                  minimumSize: MaterialStateProperty.all<Size>(Size(70, 50)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
                     ),
-                  ],
+                  ),
                 ),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: _submitForm,
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        Color.fromARGB(255, 91, 165, 129)),
-                    minimumSize: MaterialStateProperty.all<Size>(Size(70, 50)),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                    ),
-                  ),
-                  child: Text(
-                    'تسجيل',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                child: Text(
+                  'تسجيل',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
-                SizedBox(height: 15),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Login1(
-                                email: _email,
-                                usern: _username,
-                              )),
-                    );
-                  },
-                  child: Text(
-                    'هل لديك حساب؟ تسجيل الدخول',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
+              ),
+              SizedBox(height: 15),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Login1(),
                     ),
+                  );
+                },
+                child: Text(
+                  'هل لديك حساب؟ تسجيل الدخول',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey,
                   ),
                 ),
-                if (_showErrors && !_formKey.currentState!.validate())
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    // Show an error message here if needed
-                  ),
-              ],
-            ),
+              ),
+              if (_showErrors && !_formKey.currentState!.validate())
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  // Show an error message here if needed
+                ),
+            ],
           ),
         ),
       ),
