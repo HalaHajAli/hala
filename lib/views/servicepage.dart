@@ -22,7 +22,7 @@ import 'package:flutter_application/views/birthday.dart';
 import 'package:flutter_application/views/visitor.dart';
 import 'package:flutter_application/views/grad.dart';
 import 'package:flutter_application/views/wedding.dart';
-import 'package:flutter_application/views/newser.dart';
+import 'package:flutter_application/views/newser2.dart';
 
 class ServiceItem {
   final String name;
@@ -295,7 +295,7 @@ class _ServicePageState extends State<ServicePage> {
       name: 'الأعراس',
       description: 'Have a nice wedding',
       image: AssetImage('images/rings.png'),
-      servicePageRoute: newser( ),
+      servicePageRoute: newser2( ),
 
       ),
     

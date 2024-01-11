@@ -5,19 +5,17 @@ import 'package:flutter_application/views/login1.dart';
 import 'package:flutter_application/views/food.dart';
 import 'package:flutter_application/views/book.dart';
 import 'package:flutter_application/views/servicepage.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class newser extends StatefulWidget {
+class newser2 extends StatefulWidget {
   @override
-  //final String username; // Add a parameter to accept the username
-
-  //const newser({Key? key, required this.username}) : super(key: key);
-
   _NewserState createState() => _NewserState();
 }
 
-class _NewserState extends State<newser> {
-  
+class _NewserState extends State<newser2> {
   late DateTime selectedDate;
+  bool isButtonClicked = false;
 
   @override
   void initState() {
@@ -52,6 +50,64 @@ class _NewserState extends State<newser> {
 
   String getRemainingWords() {
     return "شهر , أسبوع , يوم";
+  }
+
+  List<Map<String, dynamic>> packages = []; // Array to store the response data
+
+  Future<void> fetchData() async {
+    try {
+      setState(() {
+        // Disable the button on click
+        isButtonClicked = true;
+      });
+
+      final response = await http
+          .get(Uri.parse('http://192.168.1.4:4001/login1/offer/shahd'));
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        if (jsonData is Map<String, dynamic>) {
+          setState(() {
+            packages.clear(); // Clear the list before adding new data
+
+            packages.add(jsonData);
+          });
+
+          String packageName = packages.isNotEmpty
+              ? packages[0]['packages'][0]['name'] ?? 'Name not found'
+              : 'No packages available';
+
+          print('Package Name: $packageName');
+
+          String imageUrl = packages.isNotEmpty &&
+                  packages[0]['packages'].isNotEmpty &&
+                  packages[0]['packages'][0]['imagePage']['images'].isNotEmpty
+              ? packages[0]['packages'][0]['imagePage']['images'][0]
+              : 'No image found';
+
+          // print('Image URL: $imageUrl');
+
+          // print('************************************************************');
+
+          // print('Package fetched successfully: $jsonData');
+
+          // print('************************************************************');
+          // print('Packages list: $packages'); // Add this line to print packages list
+        } else {
+          throw Exception('Invalid data format');
+        }
+      } else {
+        throw Exception('Failed to load packages');
+      }
+    } catch (error) {
+      print('Error fetching package: $error');
+      // Handle error scenario
+    } finally {
+      setState(() {
+        // Enable the button
+        isButtonClicked = false;
+      });
+    }
   }
 
   @override
@@ -90,7 +146,7 @@ class _NewserState extends State<newser> {
               GestureDetector(
                 onTap: () => _selectDate(context),
                 child: Transform.translate(
-                  offset: Offset(0, -20),
+                  offset: Offset(0, -0),
                   child: Container(
                     width: 200,
                     height: 240,
@@ -211,60 +267,86 @@ class _NewserState extends State<newser> {
                   ),
                 ),
               ),
-              SizedBox(height: 1),
+              // SizedBox(height: 1),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     fetchData();
+              //   },
+              //   child: Text(
+              //     'Your Button Text',
+              //     style: TextStyle(
+              //       fontSize: 16,
+              //       fontWeight: FontWeight.bold,
+              //       color: Colors.white,
+              //     ),
+              //   ),
+              //   style: ElevatedButton.styleFrom(
+              //     primary: Color(0xFF5BA581),
+              //     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(8),
+              //     ),
+              //   ),
+              // ),
+              //
+              SizedBox(height: 0), // Adjust the height as needed
+              if (!isButtonClicked)
+                GestureDetector(
+                  onTap: fetchData,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+                    // decoration: BoxDecoration(
+                    //   color: Color(0xFF5BA581),
+                    //   borderRadius: BorderRadius.circular(8),
+                    // ),
+                    child: Text(
+                      ' اكتشف العروض والخدمات->',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
 
-  //  ElevatedButton(
-  //     onPressed: () {
-  //       // Implement button functionality here
-  //     },
-  //     child: Text(
-  //       'Your Button Text',
-  //       style: TextStyle(
-  //         fontSize: 16,
-  //         fontWeight: FontWeight.bold,
-  //         color: Colors.white,
-  //       ),
-  //     ),
-  //     style: ElevatedButton.styleFrom(
-  //       primary: Color(0xFF5BA581),
-  //       padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-  //       shape: RoundedRectangleBorder(
-
-
-
+              //     SizedBox(height: 1),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Transform.translate(
-                  offset: Offset(0, -50),
+                  offset: Offset(0, -70),
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        PackageCard(
-                            image: 'images/garden1.png',
-                            title: 'عروض الأعراس',
-                            description: 'Package 1 Description',
-                            price: '\$999',
-                            id: 1),
-                        PackageCard(
-                            image: 'images/nadi2.png',
-                            title: '',
-                            description: 'Package 2 Description',
-                            price: '\$1499',
-                            id: 2),
-                        PackageCard(
-                            image: 'images/roz.png',
-                            title: '',
-                            description: 'Package 3 Description',
-                            price: '\$1999',
-                            id: 3),
+                      children: List.generate(packages.length, (index) {
+                        final packageData = packages[index]['packages'][0];
+                        //  String packageName = packageData['name'] ?? 'No Name';
+                        String packageDescription = packageData['detailsPage']
+                                ['details'] ??
+                            'No Description';
+                        int packagePrice =
+                            int.tryParse(packageData['price'] ?? '0') ?? 0;
 
-                      ],
+                        String imageUrl =
+                            packageData['imagePage']['images'].isNotEmpty
+                                ? packageData['imagePage']['images'][0]
+                                : 'No Image URL';
+
+                        return PackageCard(
+                          image: imageUrl,
+                          title: "",
+                          description: packageDescription,
+                          price: packagePrice.toString(),
+                          id: index + 1,
+                        );
+                      }),
                     ),
                   ),
                 ),
               ),
+
               SizedBox(height: 1),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -325,25 +407,27 @@ class PackageCard extends StatelessWidget {
   final String price;
   final int id;
 
-  const PackageCard({
+  PackageCard({
     required this.image,
     required this.title,
     required this.description,
     required this.price,
-    required this.id,
+    this.id = 0,
   });
 
   @override
   Widget build(BuildContext context) {
+    final imageUrl = image.isNotEmpty ? image : 'images/nadi2.png';
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: Text(
-              title,
+              title ?? 'No Title',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -357,18 +441,20 @@ class PackageCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Image.asset(
-                    image,
-                    height: 150,
-                    fit: BoxFit.cover,
-                  ),
+                  imageUrl.isNotEmpty
+                      ? Image.asset(
+                          imageUrl,
+                          height: 150,
+                          fit: BoxFit.cover,
+                        )
+                      : Placeholder(),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          description,
+                          description ?? 'No Description',
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey.shade600,
@@ -379,7 +465,7 @@ class PackageCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              price,
+                              price ?? 'No Price',
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -388,7 +474,8 @@ class PackageCard extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                _navigateToPackageDetails(context);
+                                // Perform action when tapped
+                                // Navigate to package details, for instance
                               },
                               child: Icon(
                                 Icons.arrow_forward,
@@ -408,71 +495,5 @@ class PackageCard extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  void _navigateToPackageDetails(BuildContext context) {
-    switch (id) {
-      case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => WeddingView(),
-          ),
-        );
-        break;
-      case 2:
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Login1(),
-          ),
-        );
-        break;
-
-      case 3:
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Login1(),
-          ),
-        );
-        break;
-      case 4:
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => FoodManagementPage(),
-          ),
-        );
-        break;
-      case 5:
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Login1(),
-          ),
-        );
-        break;
-      case 6:
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Login1(),
-          ),
-        );
-        break;
-      case 7:
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Login1(),
-          ),
-        );
-        break;
-
-      default:
-        // Handle default case or do nothing
-        break;
-    }
   }
 }

@@ -29,6 +29,7 @@ import 'package:flutter_application/views/book.dart';
 import 'package:flutter_application/views/priceList.dart';
 import 'package:flutter_application/views/imagePlace.dart';
 import 'package:flutter_application/views/addOffer.dart';
+import 'package:flutter_application/views/newser2.dart';
 
 
 void main()  async {
@@ -56,7 +57,7 @@ class MyApp extends StatelessWidget {
         translations: Messages(), 
         fallbackLocale: Locale('ar', 'SA'),
 
-        home:PackageEntryForm(), 
+        home:Welcome(), 
       ),
     );
   }

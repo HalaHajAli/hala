@@ -69,7 +69,7 @@ class _SignUpPageState extends State<SignUpPage> {
 }
 
   Future<bool> registerPlanner() async {
-    final url = 'http://127.0.0.1:4001/regplanner';
+    final url = 'http://192.168.1.4:4001/regplanner';
     final Map<String, dynamic> userData = {
       'username': _username,
       'password': _password,
@@ -112,7 +112,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<bool> registerUser() async {
-    final url = 'http://127.0.0.1:4001/register';
+    final url = 'http://192.168.1.4:4001/register';
     final Map<String, dynamic> userData = {
       'username': _username,
       'password': _password,

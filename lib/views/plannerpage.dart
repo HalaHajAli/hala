@@ -4,7 +4,8 @@ import 'package:flutter_application/views/login.dart';
 import 'package:flutter_application/views/requist.dart';
 import 'package:flutter_application/views/wait.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert'; // Import the dart:convert library
+import 'dart:convert'; 
+import 'package:flutter_application/views/addOffer.dart';
 
 class HomePage extends StatefulWidget {
   final String usern;
@@ -85,7 +86,7 @@ class _HomePageState extends State<HomePage> {
       String jsonPackageDetails = jsonEncode(packageDetails);
     print('Request Body: $jsonPackageDetails'); 
 
-      var url = Uri.parse('http://127.0.0.1:4001/login2/package');
+      var url = Uri.parse('http://192.168.1.4:4001/login2/package');
 
       final response = await http.post(
         url,
@@ -193,7 +194,8 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               onTap: () {
-                sendPackageOffer();
+        Navigator.push(context, MaterialPageRoute(builder: (context) => PackageEntryForm()));
+
               },
             ),
             ListTile(
