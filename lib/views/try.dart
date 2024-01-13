@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_application/views/homepage.dart';
+import 'package:flutter_application/views/Responsive .dart';
 
 class WelcomePage extends StatelessWidget {
   static const String screenRoute = 'welcome_screen';
@@ -19,24 +20,28 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    return Responsive(
+      mobile: WelcomePageMobile(descriptions: descriptions, imageAssets: imageAssets),
+      desktop: WelcomePageDesktop(descriptions: descriptions, imageAssets: imageAssets),
+    );
+  }
+}
 
+class WelcomePageMobile extends StatelessWidget {
+  final List<String> descriptions;
+  final List<String> imageAssets;
+
+  WelcomePageMobile({required this.descriptions, required this.imageAssets});
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(""),
       ),
       body: SingleChildScrollView(
-        child: Container(
-          height: screenHeight,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.white, Color.fromARGB(255, 91, 165, 129)],
-              stops: [0.0, 1.0],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
+        child: Padding(
+          padding: EdgeInsets.only(top: 20.0), // Adjust top padding as needed
           child: Column(
             children: <Widget>[
               CarouselSlider.builder(
@@ -45,8 +50,8 @@ class WelcomePage extends StatelessWidget {
                   return WelcomeImage(
                     imageAsset: imageAssets[index],
                     description: descriptions[index],
-                    width: 300.0, // Adjust width as needed
-                    height: 200.0, // Adjust height as needed
+                    width: 300.0,
+                    height: 200.0,
                   );
                 },
                 options: CarouselOptions(
@@ -68,7 +73,7 @@ class WelcomePage extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     primary: Colors.white,
                     padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.2,
+                      horizontal: 200.0,
                       vertical: 16.0,
                     ),
                     shape: RoundedRectangleBorder(
@@ -86,6 +91,73 @@ class WelcomePage extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class WelcomePageDesktop extends StatelessWidget {
+  final List<String> descriptions;
+  final List<String> imageAssets;
+
+  WelcomePageDesktop({required this.descriptions, required this.imageAssets});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(""),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            CarouselSlider.builder(
+              itemCount: 3,
+              itemBuilder: (context, index, realIndex) {
+                return WelcomeImage(
+                  imageAsset: imageAssets[index],
+                  description: descriptions[index],
+                  width: 600.0,
+                  height: 400.0,
+                );
+              },
+              options: CarouselOptions(
+                height: 600.0,
+                enlargeCenterPage: false,
+                enableInfiniteScroll: false,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 20.0), // Adjust top padding as needed
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => SelectionPage(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 300.0,
+                    vertical: 16.0,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                ),
+                child: Text(
+                  'أنطلق',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    color: Color.fromARGB(255, 91, 165, 129),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

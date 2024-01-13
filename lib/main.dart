@@ -13,6 +13,8 @@ import 'package:flutter_application/views/calender.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_application/views/serviceadmin.dart';
 import 'package:flutter_application/views/servicepage.dart';
+import 'package:flutter_application/views/AdminDashboard.dart';
+
 import 'package:get/get.dart';
 import 'package:flutter_application/views/review.dart';
 import 'package:flutter_application/views/picDate.dart';
@@ -57,7 +59,7 @@ class MyApp extends StatelessWidget {
         translations: Messages(), 
         fallbackLocale: Locale('ar', 'SA'),
 
-        home:WelcomePage(), 
+        home:AdminDashboard(), 
       ),
     );
   }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_application/views/Responsive .dart';
+
 import 'dart:io';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter_application/views/homepage.dart';
@@ -27,19 +29,15 @@ import 'package:flutter_application/views/newser.dart';
 class ServiceItem {
   final String name;
   final String description;
-  final AssetImage image;
+  final ImageProvider image;
   final Widget servicePageRoute;
 
   ServiceItem({
-    String name = '',
-   
-    String description = '',
-    AssetImage? image,
-    Widget? servicePageRoute,
-  })  : name = name,
-        description = description,
-        image = image ?? AssetImage('default_image.png'),
-        servicePageRoute = servicePageRoute ?? Placeholder();
+    required this.name,
+    required this.description,
+    required this.image,
+    required this.servicePageRoute,
+  });
 }
 
 class Item {
@@ -126,38 +124,10 @@ class ServicePage extends StatefulWidget {
 
 
 
-class OfferItem {
-  final String title;
-  final String description;
-  final String imagePath;
 
-  OfferItem({
-    String title = '',
-    String description = '',
-    String imagePath = '',
-  })  : title = title,
-        description = description,
-        imagePath = imagePath;
-}
-
-class SaleItem {
-  final String productName;
-  final double salePrice;
-  final double originalPrice;
-  final String imagePath;
-
-  SaleItem({
-    required this.productName,
-    required this.salePrice,
-    required this.originalPrice,
-    required this.imagePath,
-  });
-}
 
 class SquareServiceButton extends StatelessWidget {
-  static const String screenRoute = 'Service_screen';
-
-  final AssetImage image;
+  final ImageProvider image; // Specify ImageProvider type
   final String name;
   final VoidCallback onTap;
 
@@ -172,9 +142,9 @@ class SquareServiceButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 50,
-        height: 100,
-        padding: EdgeInsets.all(10), // Add padding to the outer square
+        width: 80,
+        height: 120,
+        padding: EdgeInsets.all(10),
 
         decoration: BoxDecoration(
           color: Colors.white,
@@ -192,9 +162,9 @@ class SquareServiceButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image(
-              image: image,
-              width: 80,
-              height: 80,
+              image: image, // No need to cast, it should work with any ImageProvider
+              width: 60,
+              height: 60,
             ),
             SizedBox(height: 5),
             Text(
@@ -208,24 +178,6 @@ class SquareServiceButton extends StatelessWidget {
   }
 }
 
-class WaveBackground extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ClipPath(
-      clipper: VerticalWaveClipper(),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.white, Color(0xFF5BA581)],
-            stops: [0.0, 1.0],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class VerticalWaveClipper extends CustomClipper<Path> {
   @override
@@ -294,15 +246,14 @@ class WaveClipper extends CustomClipper<Path> {
 }
 
 class _ServicePageState extends State<ServicePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<ServiceItem> services = [
     ServiceItem(
       name: 'الأعراس',
       description: 'Have a nice wedding',
       image: AssetImage('images/rings.png'),
-      servicePageRoute: newser( ),
-
-      ),
-    
+      servicePageRoute: WeddingServicePage(),
+    ),
     ServiceItem(
       name: 'التخرج',
       description: 'Description for Service 2',
@@ -326,166 +277,146 @@ class _ServicePageState extends State<ServicePage> {
   File? imageFile;
 
   Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        imageFile = File(pickedFile.path);
-      });
-    }
+    // Your _pickImage method implementation
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.white, // Change the color of the icons in the app bar
-        ),
-        centerTitle: true,
-        title: Text(
-          'أختر مناسبتك - ${widget.usern}', // Display username in the app bar title
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Color(0xFF5BA581),
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      centerTitle: true,
+      title: Text(
+        'أختر مناسبتك',
+        style: TextStyle(color: Colors.white),
       ),
-      endDrawer: Drawer(
-        child: Column(
-          children: [
-            // Drawer Header with User Profile
-            UserAccountsDrawerHeader(
-              accountName: Text(
-                widget.usern,
-                style: TextStyle(color: Colors.white),
-              ),
-              accountEmail: Text(
-                "${widget.usern}@gmail.com",
-                style: TextStyle(color: Colors.white),
-              ),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('hala/images/person2.png'),
-              ),
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 91, 165, 129),
-              ),
-            ),
-            // Drawer Body
-            Expanded(
-              child: ListView(
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.message), // Icon for الرسائل
-                    title: Text(
-                      'الرسائل',
-                      style:
-                          TextStyle(color: Color.fromARGB(255, 91, 165, 129)),
-                    ),
-                    onTap: () {
-                      // Handle messages action
-                      // For example, navigate to messages page
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.logout), // Icon for تسجيل الخروج
-                    title: Text(
-                      'تسجيل الخروج ',
-                      style:
-                          TextStyle(color: Color.fromARGB(255, 91, 165, 129)),
-                    ),
-                    onTap: () {
-                      // Implement logout logic here
-                      // For example, navigate to the login page
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => Login1()),
-                      );
-                    },
-                  ),
-                  // Add other drawer items as needed
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            WaveBackground(), // Add the wavy background at the top
-            SizedBox(height: 2),
-            Text(
-              '',
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 2),
-            GridView.builder(
-              shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // Two columns
-                crossAxisSpacing: 25.0, // Adjust the spacing between columns
-                mainAxisSpacing: 25.0, // Adjust the spacing between rows
-              ),
-              itemCount: services.length,
-              itemBuilder: (context, index) {
-                return SquareServiceButton(
-                  image: services[index].image,
-                  name: services[index].name,
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => services[index].servicePageRoute,
-                      ),
-                    );
-                  },
-                );
+      backgroundColor: Color(0xFF5BA581),
+      leading: Responsive.isMobile(context)
+          ? IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {
+                _scaffoldKey.currentState!.openDrawer();
               },
+            )
+          : null,
+    ),
+    endDrawer: Responsive.isDesktop(context)
+        ? Drawer(
+            child: Column(
+              children: [
+                // Drawer Header with User Profile
+                UserAccountsDrawerHeader(
+                  accountName: Text(
+                    'User Name',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  accountEmail: Text(
+                    'user@example.com',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  currentAccountPicture: CircleAvatar(
+                    backgroundImage: AssetImage('path/to/profile_image.jpg'),
+                  ),
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 91, 165, 129),
+                  ),
+                ),
+                // Drawer Body
+                Expanded(
+                  child: ListView(
+                    children: [
+                      ListTile(
+                        title: Text(
+                          'تسجيل الخروج ',
+                          style: TextStyle(color: Color.fromARGB(255, 91, 165, 129)),
+                        ),
+                        onTap: () {
+                          // Implement logout logic here
+                          // For example, navigate to the login page
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (context) => Login1()),
+                          );
+                        },
+                      ),
+                      // Add other drawer items as needed
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: ConvexAppBar(
-        style: TabStyle.reactCircle,
-        backgroundColor: Color(0xFF5BA581),
-        items: [
-          TabItem(icon: Icons.home, title: 'الرئيسية'),
-          TabItem(icon: Icons.person, title: 'صفحتك الشخصية'),
-          TabItem(icon: Icons.favorite, title: 'الفضلة'),
-          TabItem(icon: Icons.info, title: ' من نحن'),
-          TabItem(icon: Icons.shopping_cart, title: 'حقيبتي'),
+          )
+        : null,
+    body: SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          WaveBackground(), // Add the wavy background at the top
+          SizedBox(height: 2),
+          Text(
+            '',
+            style: TextStyle(fontSize: 18),
+          ),
+          SizedBox(height: 2),
+          GridView.builder(
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, // Two columns
+              crossAxisSpacing: 25.0, // Adjust the spacing between columns
+              mainAxisSpacing: 25.0, // Adjust the spacing between rows
+            ),
+            itemCount: services.length,
+            itemBuilder: (context, index) {
+              return SquareServiceButton(
+                image: services[index].image,
+                name: services[index].name,
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => services[index].servicePageRoute,
+                    ),
+                  );
+                },
+              );
+            },
+          ),
         ],
-        onTap: (int index) {
-          switch (index) {
-            case 0:
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => SelectionPage()));
-              break;
-            case 1:
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => ProfilePage()));
-              break;
-            case 2:
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => FavoritesPage()));
-              break;
-            case 3:
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => AboutUsPage()));
-              break;
-            case 4:
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => MyBagPage()));
-              break;
-            default:
-              // Handle other cases if needed
-              break;
-          }
-        },
       ),
-    );
-  }
+    ),
+    bottomNavigationBar: ConvexAppBar(
+      style: TabStyle.reactCircle,
+      backgroundColor: Color(0xFF5BA581),
+      items: [
+        TabItem(icon: Icons.home, title: 'الرئيسية'),
+        TabItem(icon: Icons.person, title: 'صفحتك الشخصية'),
+        TabItem(icon: Icons.favorite, title: 'الفضلة'),
+        TabItem(icon: Icons.info, title: ' من نحن'),
+        TabItem(icon: Icons.shopping_cart, title: 'حقيبتي'),
+      ],
+      onTap: (int index) {
+        switch (index) {
+          case 0:
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => SelectionPage()));
+            break;
+          case 1:
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage()));
+            break;
+          case 2:
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => FavoritesPage()));
+            break;
+          case 3:
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => AboutUsPage()));
+            break;
+          case 4:
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyBagPage()));
+            break;
+          default:
+            // Handle other cases if needed
+            break;
+        }
+      },
+    ),
+  );
 }
-
+}
 class UserProfilePage extends StatelessWidget {
   static const routeName = '/userProfile';
 
@@ -663,8 +594,6 @@ class MyBagPage extends StatelessWidget {
           SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
-              // Send a request to the planner with all items in the cart
-              // You can implement this functionality here
             },
             child: Text('إرسال طلب إلى المخطط'),
           ),
@@ -674,183 +603,8 @@ class MyBagPage extends StatelessWidget {
   }
 }
 
-class OffersListView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // Replace with your list of offer items
-    List<OfferItem> offers = [
-      OfferItem(
-        title: '50% Off',
-        description: 'Get a discount on all our services.',
-        imagePath: 'images/s1.jpeg',
-      ),
-      OfferItem(
-        title: 'Summer Sale',
-        description: 'Enjoy our summer sale with great discounts.',
-        imagePath: 'images/s.jpeg',
-      ),
-      // Add more offers as needed
-    ];
 
-    return ListView.builder(
-      scrollDirection: Axis.horizontal,
-      itemCount: offers.length,
-      itemBuilder: (context, index) {
-        OfferItem offer = offers[index];
-        return OfferCard(offer: offer);
-      },
-    );
-  }
-}
 
-class SalesListView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // Replace with your list of sale items
-    List<SaleItem> sales = [
-      SaleItem(
-        productName: 'الأعراس',
-        salePrice: 299.99,
-        originalPrice: 399.99,
-        imagePath: 'images/ت.jpeg',
-      ),
-      SaleItem(
-        productName: 'فلات التخرج',
-        salePrice: 199.99,
-        originalPrice: 399.99,
-        imagePath: 'images/w.jpeg',
-      ),
-      // Add more sale items as needed
-    ];
-
-    return ListView.builder(
-      scrollDirection: Axis.horizontal,
-      itemCount: sales.length,
-      itemBuilder: (context, index) {
-        SaleItem sale = sales[index];
-        return SaleCard(sale: sale);
-      },
-    );
-  }
-}
-
-// Rename SalesListView to getSales
-List<SaleItem> getSales() {
-  // Replace with your actual sales data or logic
-  return [
-    SaleItem(
-      productName: 'wedding',
-      salePrice: 299.99,
-      originalPrice: 399.99,
-      imagePath: 'images/ت.jpeg',
-    ),
-    SaleItem(
-      productName: 'graduation party',
-      salePrice: 199.99,
-      originalPrice: 399.99,
-      imagePath: 'images/w.jpeg',
-    ),
-    // Add more sale items as needed
-  ];
-}
-
-class OfferCard extends StatelessWidget {
-  final OfferItem offer;
-
-  OfferCard({required this.offer});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        children: [
-          Image.asset(
-            offer.imagePath,
-            height: 120.0,
-            width: 200.0,
-            fit: BoxFit.cover,
-          ),
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  offer.title,
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 8.0),
-                Text(
-                  offer.description,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class SaleCard extends StatelessWidget {
-  final SaleItem sale;
-
-  SaleCard({required this.sale});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        children: [
-          Image.asset(
-            sale.imagePath,
-            height: 120.0,
-            width: 200.0,
-            fit: BoxFit.cover,
-          ),
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  sale.productName,
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 8.0),
-                Text(
-                  'Sale Price: \$${sale.salePrice.toStringAsFixed(2)}',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                  ),
-                ),
-                Text(
-                  'Original Price: \$${sale.originalPrice.toStringAsFixed(2)}',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    decoration: TextDecoration.lineThrough,
-                    color: Colors.green,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class MyApp extends StatelessWidget {
   static List<String> favoriteImages = [];
