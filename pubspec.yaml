@@ -20,6 +20,8 @@ dependencies:
   cloud_firestore: ^4.13.6
   table_calendar: ^3.0.9
   clay_containers: ^0.3.2
+  another_flushbar: ^1.12.30
+
   flutter_localizations:
     sdk: flutter
   intl: ^0.18.1
@@ -179,12 +181,12 @@ flutter:
     - images/leb.png
     - images/garden2.png
     - images/peaple2.png
-    - images/brandOne.jpg
-    - images/brandTow.jpg
-    - images/brandThree.jpg
-    - images/brandFour.jpg
-    - images/brandFive.jpg
-    - images/brandSix.jpg
+    - images/g1.png
+    - images/g2.png
+    - images/g33.png
+    - images/g4.png
+    - images/g44.png
+    - images/g5.png
     - images/brandSeven.jpg
 
 

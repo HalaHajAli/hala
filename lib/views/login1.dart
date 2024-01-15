@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/views/forgetpass.dart';
-import 'package:flutter_application/views/servicepage.dart'; // Import the service page
-import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
+import 'package:flutter_application/views/servicepage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_application/views/signup.dart';
+import 'package:another_flushbar/flushbar.dart'; // Import Flushbar
+import 'package:provider/provider.dart';
 
+import 'package:flutter_application/views/offerProvider.dart';
 class Login1 extends StatefulWidget {
   final String userType;
   final String usern;
   final String email;
+
   const Login1({
     Key? key,
     this.userType = 'زائر',
     this.usern = '',
-       this.email = '',
-
+    this.email = '',
   }) : super(key: key);
 
   @override
@@ -25,7 +26,7 @@ class Login1 extends StatefulWidget {
 class _Login1State extends State<Login1> {
   String username = '';
   String password = '';
-    String email = '';
+  String email = '';
 
   String usernameError = '';
   String passwordError = '';
@@ -101,18 +102,14 @@ class _Login1State extends State<Login1> {
                     usernameError = 'من فضلك أدخل اسم المستخدم';
                   });
                 } else {
-                  // Check username separately here if needed
-                  usernameError =
-                      ''; // Reset error message if username is not empty
+                  usernameError = '';
                 }
                 if (password.isEmpty) {
                   setState(() {
                     passwordError = 'من فضلك أدخل كلمة المرور';
                   });
                 } else {
-                  // Check password separately here if needed
-                  passwordError =
-                      ''; // Reset error message if password is not empty
+                  passwordError = '';
                 }
 
                 if (username.isNotEmpty && password.isNotEmpty) {
@@ -126,17 +123,32 @@ class _Login1State extends State<Login1> {
                   );
 
                   if (response.statusCode == 200) {
+
+                        final offerProvider = Provider.of<OfferProvider>(context, listen: false);
+                         offerProvider.addToCart("Hala");// planner name
+                             offerProvider.addToCart(username.toString());
+                    Flushbar(
+                      title: 'تسجيل الدخول',
+                      message: 'تم تسجيل الدخول بنجاح!',
+                      duration: Duration(seconds: 5),
+                    )..show(context);
+
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => ServicePage(
                           userType: widget.userType,
                           usern: username,
-                          ema:email,
+                          ema: email,
                         ),
                       ),
                     );
                   } else {
-                    // Set error messages based on server response if needed
+                    Flushbar(
+                      title: 'خطأ',
+                      message: 'المستخدم غير موجود أو كلمة المرور غير صحيحة',
+                      duration: Duration(seconds: 5),
+                    )..show(context);
+
                     setState(() {
                       usernameError = 'المستخدم غير موجود';
                       passwordError = 'كلمة المرور غير صحيحة';

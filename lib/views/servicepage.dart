@@ -112,6 +112,8 @@ class CircularServiceButton extends StatelessWidget {
 }
 
 class ServicePage extends StatefulWidget {
+  static const String screenRoute = 'Service_screen';
+
   final String userType;
   final String usern; // Keep the usern parameter
   final String ema;
@@ -153,6 +155,8 @@ class SaleItem {
 }
 
 class SquareServiceButton extends StatelessWidget {
+  static const String screenRoute = 'Service_screen';
+
   final AssetImage image;
   final String name;
   final VoidCallback onTap;
@@ -343,6 +347,8 @@ class _ServicePageState extends State<ServicePage> {
         title: Text(
           'أختر مناسبتك - ${widget.usern}', // Display username in the app bar title
           style: TextStyle(color: Colors.white),
+              textAlign: TextAlign.center, // Add this line
+
         ),
         backgroundColor: Color(0xFF5BA581),
       ),
@@ -415,13 +421,19 @@ class _ServicePageState extends State<ServicePage> {
               style: TextStyle(fontSize: 18),
             ),
             SizedBox(height: 2),
-            GridView.builder(
+
+
+          Directionality(
+  textDirection: TextDirection.rtl,  
+           child:GridView.builder(
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, // Two columns
                 crossAxisSpacing: 25.0, // Adjust the spacing between columns
                 mainAxisSpacing: 25.0, // Adjust the spacing between rows
+
               ),
+              
               itemCount: services.length,
               itemBuilder: (context, index) {
                 return SquareServiceButton(
@@ -437,6 +449,7 @@ class _ServicePageState extends State<ServicePage> {
                 );
               },
             ),
+          )
           ],
         ),
       ),
@@ -852,29 +865,26 @@ class MyApp extends StatelessWidget {
   static List<String> favoriteImages = [];
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      builder: (BuildContext context, Widget? child) {
-        return Directionality(
-          textDirection: TextDirection.rtl,
-          child: child!,
-        );
-      },
-      initialRoute: '/',
-      routes: {
-        '/': (context) => ServicePage(
-              userType: '',
-              usern: "",
-              ema: "",
-            ),
-        UserProfilePage.routeName: (context) => UserProfilePage(),
-      },
-      theme: ThemeData(
-        primaryIconTheme: IconThemeData(
-          color: Colors.white,
-        ),
+ Widget build(BuildContext context) {
+  return MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: Directionality(
+      textDirection: TextDirection.rtl,
+      child: ServicePage(
+        userType: '',
+        usern: "",
+        ema: "",
       ),
-    );
-  }
+    ),
+    routes: {
+      UserProfilePage.routeName: (context) => UserProfilePage(),
+    },
+    theme: ThemeData(
+      primaryIconTheme: IconThemeData(
+        color: Colors.white,
+      ),
+    ),
+  );
+}
+
 }

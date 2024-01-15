@@ -3,15 +3,21 @@ import 'package:flutter_application/views/favorites_provider.dart';
 import 'package:flutter_application/views/servicepage.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_application/views/CartProvider.dart';
+import 'package:flutter_application/views/servicepage.dart';
+import 'package:flutter_application/views/priceList.dart';
+import 'package:flutter_application/views/offerProvider.dart';
 
 class FlowerColorPage extends StatefulWidget {
   @override
   _FlowerColorPageState createState() => _FlowerColorPageState();
 }
 
+String? selectedColor;
+
+// String? selectedColorr; // Declare selectedColor at the class level
+
 class _FlowerColorPageState extends State<FlowerColorPage> {
   bool isAdmin = true; // Set to true for demonstration purposes
-  String? selectedColor;
   String? selectedType;
 
   List<String> flowerColors = ['white', 'pink', 'green', 'red', 'other'];
@@ -63,19 +69,22 @@ class _FlowerColorPageState extends State<FlowerColorPage> {
       var normalizedColor = color != null ? normalizeArabic(color) : null;
       return flowerImages
           .where((imagePath) =>
-              (color == null || imagePath.toLowerCase().contains(normalizedColor!)) &&
-              (type == null || imagePath.toLowerCase().contains(type.toLowerCase())))
+              (color == null ||
+                  imagePath.toLowerCase().contains(normalizedColor!)) &&
+              (type == null ||
+                  imagePath.toLowerCase().contains(type.toLowerCase())))
           .toList();
     }
   }
 
   String normalizeArabic(String input) {
     final pattern = RegExp('[ء-ي]');
-    return input.replaceAllMapped(pattern, (match) => String.fromCharCode(match.group(0)!.codeUnitAt(0)));
+    return input.replaceAllMapped(
+        pattern, (match) => String.fromCharCode(match.group(0)!.codeUnitAt(0)));
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)  {
     return Scaffold(
       appBar: AppBar(
         title: Text(''),
@@ -118,6 +127,15 @@ class _FlowerColorPageState extends State<FlowerColorPage> {
               setState(() {
                 selectedColor = newColor;
               });
+
+// Use the OfferProvider to add the selected color to the offers
+                final offerProvider = Provider.of<OfferProvider>(context, listen: false);
+               offerProvider.addToCart(selectedColor ?? "");
+              //  Future.delayed(Duration(seconds: 10), () {
+              //          Navigator.pop(context);
+              //        });
+         
+              //print(selectedColor);
             },
             items: flowerColors.map((color) {
               return DropdownMenuItem<String>(
@@ -208,31 +226,75 @@ class FullScreenImagePage extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        // Add the image to favorites
+                        final favoritesProvider =
+                            Provider.of<FavoritesProvider>(context,
+                                listen: false);
+                        favoritesProvider.addToFavorites(imagePath);
+                        Navigator.pop(context);
+                      },
+                      child: Text('إضافة إلى المفضلة'),
+                    ),
+                    SizedBox(width: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Add the image to the cart
+                        final cartProvider =
+                            Provider.of<CartProvider>(context, listen: false);
+                        cartProvider.addToCart(imagePath);
+                        Navigator.pop(context);
+                      },
+                      child: Text('إضافة إلى الحقيبة'),
+                    ),
+                    SizedBox(width: 20),
+                    ElevatedButton(
                     onPressed: () {
-                      // Add the image to favorites
-                      final favoritesProvider =
-                          Provider.of<FavoritesProvider>(context, listen: false);
-                      favoritesProvider.addToFavorites(imagePath);
-                      Navigator.pop(context);
-                    },
-                    child: Text('إضافة إلى المفضلة'),
-                  ),
-                  SizedBox(width: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Add the image to the cart
-                      final cartProvider =
-                          Provider.of<CartProvider>(context, listen: false);
-                      cartProvider.addToCart(imagePath);
-                      Navigator.pop(context);
-                    },
-                    child: Text('إضافة إلى الحقيبة'),
-                  ),
-                ],
+                        // Show message dialog
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+title: Text(
+  'اختيار اللون',
+  style: TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 20, // Set your desired font size
+  ),
+),
+                            content: Text(
+  'لقد تم اختيار اللون بنجاح',
+  style: TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 16, // Set your desired font size
+  ),
+),
+
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context); // Close dialog
+                                   // Navigator.pop(context); // Go to previous page
+                                  },
+                                  child: Text('موافق'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                       Navigator.pop(context); // Close dialog
+
+                      },
+                        child: Text('اختر اللون')
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -14,22 +14,22 @@ class brandView extends StatefulWidget {
 
 class brandViewTest extends State<brandView> {
   List<List> banderImages = [
-    ["images/brandOne.jpg", "Brand One"],
-    ["images/brandEight.jpg", "Brand Tow"],
-    ["images/brandThree.jpg", "Brand Three"],
-    ["images/brandFour.jpg", "Brand Four"],
-    ["images/brandFive.jpg", "Brand Five"],
-    ["images/brandSix.jpg", "Brand Six"],
-    ["images/brandSeven.jpg", "Brand Seven"],
-    ["images/brandEight.jpg", "Brand Eight"],
-    ["images/brandNine.jpg", "Brand Nine"]
+    ["images/g1.png", ""],
+    ["images/g2.png", ""],
+    ["images/g33.png", ""],
+    ["images/g4.png", ""],
+    ["images/g44.png", ""],
+    ["images/g5.png", ""],
+    ["images/brandSeven.jpg", ""],
+    //["images/brandEight.jpg", ""],
+  //  ["images/brandNine.jpg", ""]
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
             color: Colors.white,
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(5),
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: ListView.builder(
@@ -65,7 +65,7 @@ class brandViewTest extends State<brandView> {
                                                 .pop(); // Close the dialog
                                           },
                                           child: Text(
-                                            'Close',
+                                            'موافق',
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 15,
@@ -95,7 +95,7 @@ class brandViewTest extends State<brandView> {
                                               255, 213, 212, 212),
                                           height: 195,
                                           width: 275,
-                                          depth: -20,
+                                          depth: -10,
                                           spread: 0,
                                           child: Container(
                                               color: Colors.white,
@@ -168,7 +168,7 @@ class brandViewTest extends State<brandView> {
                                                                 .pop(); // Close the dialog
                                                           },
                                                           child: Text(
-                                                            'Close',
+                                                            'موافق',
                                                             style: TextStyle(
                                                               color:
                                                                   Colors.black,
@@ -221,7 +221,7 @@ class brandViewTest extends State<brandView> {
                                                                       children: [
                                                                         Container(
                                                                             margin:
-                                                                                EdgeInsets.only(top: 5),
+                                                                                EdgeInsets.only(top: 0),
                                                                             color: Colors.white,
                                                                             child: Text(
                                                                               "${banderImages[i][1]}",
@@ -232,7 +232,7 @@ class brandViewTest extends State<brandView> {
                                                                             )),
                                                                         Container(
                                                                             margin:
-                                                                                EdgeInsets.only(top: 5),
+                                                                                EdgeInsets.only(top: 0),
                                                                             child: Image.asset(
                                                                               "${banderImages[i][0]}",
                                                                               width: 120,
@@ -270,7 +270,7 @@ class brandViewTest extends State<brandView> {
                                                                 .pop(); // Close the dialog
                                                           },
                                                           child: Text(
-                                                            'Close',
+                                                            'موافق',
                                                             style: TextStyle(
                                                               color:
                                                                   Colors.black,
@@ -296,7 +296,7 @@ class brandViewTest extends State<brandView> {
                                                           255, 213, 212, 212),
                                                       height: 150,
                                                       width: 165,
-                                                      depth: 20,
+                                                      depth: 40,
                                                       curveType:
                                                           CurveType.convex,
                                                       spread: 0,
@@ -330,7 +330,7 @@ class brandViewTest extends State<brandView> {
                                                                             )),
                                                                         Container(
                                                                             margin:
-                                                                                EdgeInsets.only(top: 5),
+                                                                                EdgeInsets.only(top: 0),
                                                                             color: Colors.white,
                                                                             child: Text(
                                                                               "${banderImages[i - 1][1]}",

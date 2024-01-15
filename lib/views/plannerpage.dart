@@ -6,6 +6,7 @@ import 'package:flutter_application/views/wait.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; 
 import 'package:flutter_application/views/addOffer.dart';
+import 'package:flutter_application/views/homepage.dart';
 
 class HomePage extends StatefulWidget {
   final String usern;
@@ -209,7 +210,7 @@ class _HomePageState extends State<HomePage> {
               ),
               onTap: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Login()));
+                    context, MaterialPageRoute(builder: (context) => SelectionPage()));
               },
             ),
           ],

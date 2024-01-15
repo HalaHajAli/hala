@@ -24,12 +24,15 @@ import 'package:flutter_application/views/chatt.dart';
 import 'package:flutter_application/views/newser.dart';
 import 'package:flutter_application/views/flower.dart';
 import 'package:flutter_application/views/food.dart';
+import 'package:flutter_application/views/login1.dart';
 
 import 'package:flutter_application/views/book.dart';
 import 'package:flutter_application/views/priceList.dart';
 import 'package:flutter_application/views/imagePlace.dart';
 import 'package:flutter_application/views/addOffer.dart';
 import 'package:flutter_application/views/newser2.dart';
+import 'package:flutter_application/views/offerProvider.dart';
+import 'package:flutter_application/views/PackProvider.dart';
 
 
 void main()  async {
@@ -47,6 +50,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => FavoritesProvider()),
         ChangeNotifierProvider(create: (context) => CartProvider()), 
         ChangeNotifierProvider(create: (context) => SalesOffersProvider()), 
+        ChangeNotifierProvider(create: (context) => OfferProvider()), 
+        ChangeNotifierProvider(create: (context) =>PackageProvider()), 
+
         // You can add more providers if needed
       ],
       child: GetMaterialApp(

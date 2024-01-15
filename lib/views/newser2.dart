@@ -13,6 +13,8 @@ class newser2 extends StatefulWidget {
   _NewserState createState() => _NewserState();
 }
 
+String PlannerName="";
+
 class _NewserState extends State<newser2> {
   late DateTime selectedDate;
   bool isButtonClicked = false;
@@ -36,6 +38,8 @@ class _NewserState extends State<newser2> {
       });
     }
   }
+
+  int currentId = 0;
 
   String calculateRemainingTime() {
     DateTime currentDate = DateTime.now();
@@ -66,35 +70,28 @@ class _NewserState extends State<newser2> {
 
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
+        print('Server Response: $jsonData');
+
         if (jsonData is Map<String, dynamic>) {
           setState(() {
-            packages.clear(); // Clear the list before adding new data
+            packages.clear();
 
             packages.add(jsonData);
           });
 
           String packageName = packages.isNotEmpty
-              ? packages[0]['packages'][0]['name'] ?? 'Name not found'
+              ? packages[1]['packages'][1]['name'] ?? 'Name not found'
               : 'No packages available';
 
-          print('Package Name: $packageName');
+          //    print('Package Name: $packageName');
 
           String imageUrl = packages.isNotEmpty &&
-                  packages[0]['packages'].isNotEmpty &&
-                  packages[0]['packages'][0]['imagePage']['images'].isNotEmpty
-              ? packages[0]['packages'][0]['imagePage']['images'][0]
+                  packages[1]['packages'].isNotEmpty &&
+                  packages[1]['packages'][1]['imagePage']['images'].isNotEmpty
+              ? packages[1]['packages'][1]['imagePage']['images'][1]
               : 'No image found';
-
-          // print('Image URL: $imageUrl');
-
-          // print('************************************************************');
-
-          // print('Package fetched successfully: $jsonData');
-
-          // print('************************************************************');
-          // print('Packages list: $packages'); // Add this line to print packages list
         } else {
-          throw Exception('Invalid data format');
+          throw Exception('Invalid data format${response.statusCode}');
         }
       } else {
         throw Exception('Failed to load packages');
@@ -304,44 +301,72 @@ class _NewserState extends State<newser2> {
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline,
+                        decoration: TextDecoration.underline,
                         color: Colors.black,
                       ),
                     ),
                   ),
                 ),
 
-              //     SizedBox(height: 1),
+              // SizedBox(height: 1), // This line is commented out, as it might not be needed
+
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Transform.translate(
-                  offset: Offset(0, -70),
+                  offset: Offset(0, -50),
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(packages.length, (index) {
-                        final packageData = packages[index]['packages'][0];
-                        //  String packageName = packageData['name'] ?? 'No Name';
-                        String packageDescription = packageData['detailsPage']
-                                ['details'] ??
-                            'No Description';
-                        int packagePrice =
-                            int.tryParse(packageData['price'] ?? '0') ?? 0;
+                      children: packages.expand((packageData) {
+                        // Check if 'packages' key is present and contains a list
+                        if (packageData != null &&
+                            packageData.containsKey('packages') &&
+                            packageData['packages'] is List) {
+                          List<dynamic> packageList = packageData['packages'];
 
-                        String imageUrl =
-                            packageData['imagePage']['images'].isNotEmpty
-                                ? packageData['imagePage']['images'][0]
-                                : 'No Image URL';
+                          return packageList.map((packageItem) {
+                            if (packageItem != null) {
+                              // Extract package details for each package item
+                              String packageName =
+                                  packageItem['name'] ?? 'No Name';
+                              String packageDescription =
+                                  packageItem['detailsPage']?['details'] ??
+                                      'No Description';
+                              int packagePrice =
+                                  int.tryParse(packageItem['price'] ?? '0') ??
+                                      0;
 
-                        return PackageCard(
-                          image: imageUrl,
-                          title: "",
-                          description: packageDescription,
-                          price: packagePrice.toString(),
-                          id: index + 1,
-                        );
-                      }),
+                              String imageUrl = packageItem['imagePage']
+                                              ?['images']
+                                          ?.isNotEmpty ==
+                                      true
+                                  ? packageItem['imagePage']['images'][0]
+                                  : 'No Image URL';
+                              currentId = currentId + 1;
+                              print('Current ID: $currentId');
+
+                              return PackageCard(
+                                image: imageUrl,
+                                title: packageName,
+                                description: packageDescription,
+                                price: packagePrice.toString(),
+                                packages: packages,
+
+                                // Ensure 'id' is unique for each package
+                                id: currentId,
+                              );
+                            }
+
+                            // Return a default widget if the data structure is not as expected
+                            return Container();
+                            // or any other fallback widget
+                          }).toList();
+                        }
+
+                        // Return a default widget if the data structure is not as expected
+                        return [Container()]; // or any other fallback widget
+                      }).toList(),
                     ),
                   ),
                 ),
@@ -358,35 +383,45 @@ class _NewserState extends State<newser2> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         PackageCard(
-                            image: 'images/food.jpg',
-                            title: 'الخدمات المتوفرة',
-                            description: 'بوفيه مفتوح ',
-                            price: '\$1999',
-                            id: 4),
+                          image: 'images/food.jpg',
+                          title: 'الخدمات المتوفرة',
+                          description: 'بوفيه مفتوح ',
+                          price: '\$1999',
+                          id: 4,
+                          packages: packages,
+                        ),
                         PackageCard(
-                            image: 'images/hals.png',
-                            title: '',
-                            description: 'حجز قاعات',
-                            price: '\$999',
-                            id: 5),
+                          image: 'images/hals.png',
+                          title: '',
+                          description: 'حجز قاعات',
+                          price: '\$999',
+                          id: 5,
+                          packages: packages,
+                        ),
                         PackageCard(
-                            image: 'images/tazyeen.png',
-                            title: '',
-                            description: 'التزيين',
-                            price: '\$1499',
-                            id: 6),
+                          image: 'images/tazyeen.png',
+                          title: '',
+                          description: 'التزيين',
+                          price: '\$1499',
+                          id: 6,
+                          packages: packages,
+                        ),
                         PackageCard(
-                            image: 'images/cam.jpg',
-                            title: '',
-                            description: 'جلسات تصوير ',
-                            price: '\$1999',
-                            id: 7),
+                          image: 'images/cam.jpg',
+                          title: '',
+                          description: 'جلسات تصوير ',
+                          price: '\$1999',
+                          id: 7,
+                          packages: packages,
+                        ),
                         PackageCard(
-                            image: 'images/dj.jpg',
-                            title: '',
-                            description: 'دي جي ',
-                            price: '\$1999',
-                            id: 7),
+                          image: 'images/dj.jpg',
+                          title: '',
+                          description: 'دي جي ',
+                          price: '\$1999',
+                          id: 7,
+                          packages: packages,
+                        ),
                       ],
                     ),
                   ),
@@ -406,6 +441,7 @@ class PackageCard extends StatelessWidget {
   final String description;
   final String price;
   final int id;
+  final List<Map<String, dynamic>> packages;
 
   PackageCard({
     required this.image,
@@ -413,6 +449,7 @@ class PackageCard extends StatelessWidget {
     required this.description,
     required this.price,
     this.id = 0,
+    required this.packages,
   });
 
   @override
@@ -474,8 +511,7 @@ class PackageCard extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                // Perform action when tapped
-                                // Navigate to package details, for instance
+                                _navigateToPackageDetails(context, packages);
                               },
                               child: Icon(
                                 Icons.arrow_forward,
@@ -495,5 +531,74 @@ class PackageCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _navigateToPackageDetails(
+      BuildContext context, List<Map<String, dynamic>> packages) {
+    print('Navigating to package with id: $id');
+
+    switch (id) {
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => WeddingView(packages: packages),
+          ),
+        );
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Login1(),
+          ),
+        );
+        break;
+
+      case 3:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Login1(),
+          ),
+        );
+        break;
+      case 4:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FoodManagementPage(),
+          ),
+        );
+        break;
+      case 5:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Login1(),
+          ),
+        );
+        break;
+      case 6:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Login1(),
+          ),
+        );
+        break;
+      case 7:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Login1(),
+          ),
+        );
+        break;
+
+      default:
+        // Handle default case or do nothing
+        break;
+    }
   }
 }
