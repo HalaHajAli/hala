@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/views/forgetpass.dart';
 import 'package:flutter_application/views/servicepage.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_application/views/signup.dart';
-import 'package:another_flushbar/flushbar.dart'; // Import Flushbar
+import 'package:another_flushbar/flushbar.dart';
+import 'package:flutter_application/views/Responsive .dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_application/views/service2.dart';
 
 import 'package:flutter_application/views/offerProvider.dart';
 class Login1 extends StatefulWidget {
@@ -127,6 +128,8 @@ class _Login1State extends State<Login1> {
                         final offerProvider = Provider.of<OfferProvider>(context, listen: false);
                          offerProvider.addToCart("Hala");// planner name
                              offerProvider.addToCart(username.toString());
+                           offerProvider.addToCart("Lemon w n3n3");// planner name
+
                     Flushbar(
                       title: 'تسجيل الدخول',
                       message: 'تم تسجيل الدخول بنجاح!',

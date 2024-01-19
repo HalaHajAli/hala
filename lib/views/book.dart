@@ -12,6 +12,7 @@ import 'package:flutter_application/views/offerProvider.dart';
 import 'package:flutter_application/views/pricList2.dart';
 import 'package:flutter_application/views/PackProvider.dart';
 import 'package:provider/provider.dart'; // Import the Provider package
+import 'package:http/http.dart' as http;
 
 class WeddingView extends StatefulWidget {
   final List<dynamic> packages; // Change the type to dynamic
@@ -38,6 +39,8 @@ class WeddingView extends StatefulWidget {
 //     required this.detailsPage,
 //   });
 // }
+
+
 
 class _WeddingViewState extends State<WeddingView> {
   List<Package> packageList = [];
@@ -226,6 +229,8 @@ class _WeddingViewState extends State<WeddingView> {
 //   }
 
     // ... other code
+final offerProvider = Provider.of<OfferProvider>(context);
+
 
     return Scaffold(
       body: Directionality(
@@ -500,7 +505,7 @@ class _WeddingViewState extends State<WeddingView> {
                             );
                           },
                           child: Text(
-                            "قائمة الخدمات",
+                            "اختر الخدمات",
                             style: TextStyle(
                               fontSize: 16,
                               color: Color(0xFF5BA581),
@@ -625,9 +630,49 @@ class _WeddingViewState extends State<WeddingView> {
                         borderRadius: BorderRadius.all(Radius.circular(25)),
                       ),
                       child: TextButton(
-                        onPressed: () {
-                          setState(() {});
-                        },
+                      onPressed: () {
+              // Access the OfferProvider using Provider.of
+              OfferProvider offerProvider = Provider.of<OfferProvider>(context, listen: false);
+
+              List<String> offerList = offerProvider.offer;
+
+              List<String> anotherList = [];
+
+              if (offerList.isNotEmpty) {
+                for (String offer in offerList) {
+                  anotherList.add(offer);
+                }
+              } else {
+                print('The offer list is empty.');
+              }
+
+              // Now anotherList contains the values from offerList
+              print('Values in anotherList:');
+              for (String value in anotherList) {
+                print(value);
+              }
+                                    
+              if (anotherList.isNotEmpty) {
+                  var url = Uri.parse('http://192.168.1.4:4001/bookedOffers');
+                  var response =  http.post(
+                    url,
+                    body: {
+                      'plannername': anotherList[0],
+                      'username': anotherList[1],
+                         'packagename':anotherList[2],
+                         'color':anotherList[3],
+                         'food':anotherList[4],
+                         'date':anotherList[5],
+                         'time':anotherList[6],
+
+                    },
+                  );
+  
+                                    
+                                    
+                                    
+              }
+                                      },
                         child: Text(
                           "احجز العرض",
                           style: TextStyle(

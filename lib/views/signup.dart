@@ -88,22 +88,6 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-  void handleIsDesignerToggle() async {
-    if (_isDesigner) {
-      final bool isPlannerSaved = await registerPlanner();
-      if (isPlannerSaved) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-        );
-      } else {
-        print('Planner registration failed');
-      }
-    } else {
-      // For regular users, nothing specific on switch toggle
-    }
-  }
-
   Future<bool> registerUser() async {
     final url = 'http://192.168.1.4:4001/register';
     final Map<String, dynamic> userData = {
@@ -187,9 +171,22 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       body: kIsWeb
           ? Center(
-              child: Container(
-                width: 400, // Adjust the width as needed
-                child: _buildForm(),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 400, // Adjust the width as needed
+                    child: _buildForm(),
+                  ),
+                  SizedBox(width: 20), // Adjust the spacing between the form and image
+                  Container(
+                    width: 400, // Adjust the width as needed
+                    child: Image.asset(
+                      'images/your_image.png', // Replace with the path to your image
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
               ),
             )
           : _buildForm(),

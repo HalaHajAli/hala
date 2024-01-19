@@ -347,8 +347,6 @@ class _ServicePageState extends State<ServicePage> {
         title: Text(
           'أختر مناسبتك - ${widget.usern}', // Display username in the app bar title
           style: TextStyle(color: Colors.white),
-              textAlign: TextAlign.center, // Add this line
-
         ),
         backgroundColor: Color(0xFF5BA581),
       ),
@@ -421,19 +419,13 @@ class _ServicePageState extends State<ServicePage> {
               style: TextStyle(fontSize: 18),
             ),
             SizedBox(height: 2),
-
-
-          Directionality(
-  textDirection: TextDirection.rtl,  
-           child:GridView.builder(
+            GridView.builder(
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, // Two columns
                 crossAxisSpacing: 25.0, // Adjust the spacing between columns
                 mainAxisSpacing: 25.0, // Adjust the spacing between rows
-
               ),
-              
               itemCount: services.length,
               itemBuilder: (context, index) {
                 return SquareServiceButton(
@@ -449,7 +441,6 @@ class _ServicePageState extends State<ServicePage> {
                 );
               },
             ),
-          )
           ],
         ),
       ),
@@ -865,26 +856,29 @@ class MyApp extends StatelessWidget {
   static List<String> favoriteImages = [];
 
   @override
- Widget build(BuildContext context) {
-  return MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: Directionality(
-      textDirection: TextDirection.rtl,
-      child: ServicePage(
-        userType: '',
-        usern: "",
-        ema: "",
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      builder: (BuildContext context, Widget? child) {
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: child!,
+        );
+      },
+      initialRoute: '/',
+      routes: {
+        '/': (context) => ServicePage(
+              userType: '',
+              usern: "",
+              ema: "",
+            ),
+        UserProfilePage.routeName: (context) => UserProfilePage(),
+      },
+      theme: ThemeData(
+        primaryIconTheme: IconThemeData(
+          color: Colors.white,
+        ),
       ),
-    ),
-    routes: {
-      UserProfilePage.routeName: (context) => UserProfilePage(),
-    },
-    theme: ThemeData(
-      primaryIconTheme: IconThemeData(
-        color: Colors.white,
-      ),
-    ),
-  );
-}
-
+    );
+  }
 }

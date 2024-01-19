@@ -14,7 +14,15 @@ console.log("hello");
 app.get('/', (req, res) => {
   res.send('Welcome to the server!');
 });
-
+// the planner display (admin)
+app.get('/planners', async (req, res) => {
+  try {
+    const planners = await Plan.find();
+    res.json(planners);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 
 

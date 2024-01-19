@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/views/offerProvider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_application/views/book.dart';
 
 class Reservation extends StatefulWidget {
   @override
@@ -9,10 +10,12 @@ class Reservation extends StatefulWidget {
   }
 }
 
+List<dynamic> packages =[];
+
 class ReservationTest extends State<Reservation> {
   List<List> reservationPlace = [
     ["", "1000", "4-6 PM", "6-8 PM", "8-10 PM"],
-   ["", "2000", "4-7 PM", "8-11 PM"],
+    ["", "2000", "4-7 PM", "8-11 PM"],
     ["", "3000", "5-8 PM", "12-3 AM"],
   ];
 
@@ -22,11 +25,11 @@ class ReservationTest extends State<Reservation> {
 
   @override
   Widget build(BuildContext context) {
-     locale: Locale('ar'); // Set the locale to Arabic
+    locale:
+    Locale('ar'); // Set the locale to Arabic
 
     return Directionality(
       textDirection: TextDirection.rtl,
-      
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Color(0xFF5BA581),
@@ -72,13 +75,13 @@ class ReservationTest extends State<Reservation> {
                           Spacer(),
                           Row(
                             children: [
-                        //       Text(
-                        // //    "Hall Price: ",
-                        //         style: TextStyle(
-                        //           color: Color.fromARGB(255, 119, 119, 119),
-                        //           fontSize: 13,
-                        //         ),
-                        //       ),
+                              //       Text(
+                              // //    "Hall Price: ",
+                              //         style: TextStyle(
+                              //           color: Color.fromARGB(255, 119, 119, 119),
+                              //           fontSize: 13,
+                              //         ),
+                              //       ),
                               Text(
                                 "${reservationPlace[index][1]}",
                                 style: TextStyle(
@@ -140,19 +143,24 @@ class ReservationTest extends State<Reservation> {
                               fontSize: 16,
                             ),
                           ),
-                          
                           onPressed: () {
-                              final offerProvider = Provider.of<OfferProvider>(context, listen: false);
-                         // offerProvider.addToCart(selectedHallName.toString());
+                            final offerProvider = Provider.of<OfferProvider>(
+                                context,
+                                listen: false);
+                            // offerProvider.addToCart(selectedHallName.toString());
                             offerProvider.addToCart(selectedTime.toString());
 
-                           // print(" Selected Time: $selectedTime");
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => WeddingView(packages:packages),
+                              ),
+                            );
+
+                            // print(" Selected Time: $selectedTime");
                           },
                         ),
-                      ),                    
-
-                    ],  
-
+                      ),
+                    ],
                   ),
                 ),
               );

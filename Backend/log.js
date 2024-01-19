@@ -6,6 +6,9 @@ const User = require('../DataBase/User');
 const User1 = require('../DataBase/User'); 
 
 const Plan = require('../DataBase/Planner'); 
+const BookedOffer = require('../DataBase/bookedOffer'); 
+const Book = require('../DataBase/bookedOffer'); 
+
 const Planner= require('../DataBase/Planner');
 const Package = require('../DataBase/package'); // Assuming the Package model is exported as 'Package'
 const cors = require("cors");
@@ -157,6 +160,71 @@ app.get('/login1/offer/:username', async (req, res) => {
     res.status(500).json({ message: 'Error fetching user packages', error: error.message });
   }
 });
+
+
+
+app.post('/bookedOffers', async (req, res) => {
+  try {
+    const {
+      plannername,
+      username,
+      packagename,
+      color,
+      food,
+      date,
+      time,
+    } = req.body;
+
+    const newBooking = new BookedOffer({
+      plannername,
+      username,
+      packagename,
+      color,
+      food,
+      date,
+      time,
+    });
+
+    const result = await newBooking.save();
+    res.status(201).json(result);
+  } catch (error) {
+    console.error('Error creating booking:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+
+app.get('/login2/request/', async (req, res) => {
+  const { plannername } = req.query;
+  console.log('Received request for planner:', plannername);
+
+  try {
+    const planner = await Planner.find({ plannername });
+
+    if (!planner) {
+      console.error('Planner not found');
+      return res.status(404).json({ message: 'Planner not found' });
+    }
+
+    const bookings = await BookedOffer.find({ plannername });
+
+    if (!bookings || bookings.length === 0) {
+      console.error('No bookings found for this planner');
+      return res.status(404).json({ message: 'No bookings found for this planner' });
+    }
+
+    res.status(200).json({ bookings });
+  } catch (error) {
+    console.error('Error fetching bookings:', error.message);
+    res.status(500).json({ message: 'Error fetching bookings', error: error.message });
+  }
+});
+
+
+
+
+
 
 
 

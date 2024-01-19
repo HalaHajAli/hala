@@ -7,13 +7,15 @@ import 'package:flutter_application/views/book.dart';
 import 'package:flutter_application/views/servicepage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:provider/provider.dart';
+import 'package:flutter_application/views/offerProvider.dart';
 
 class newser2 extends StatefulWidget {
   @override
   _NewserState createState() => _NewserState();
 }
 
-String PlannerName="";
+String PlannerName = "";
 
 class _NewserState extends State<newser2> {
   late DateTime selectedDate;
@@ -80,10 +82,15 @@ class _NewserState extends State<newser2> {
           });
 
           String packageName = packages.isNotEmpty
-              ? packages[1]['packages'][1]['name'] ?? 'Name not found'
+              ? packages[0]['packages'][0]['name'] ?? 'Name not found'
               : 'No packages available';
 
-          //    print('Package Name: $packageName');
+          final offerProvider =
+              Provider.of<OfferProvider>(context, listen: false);
+          offerProvider.addToCart(' $packageName');
+          //   print("###################################################################################################");
+          // print('Package Name: $packageName');
+          // print("###################################################################################################");
 
           String imageUrl = packages.isNotEmpty &&
                   packages[1]['packages'].isNotEmpty &&
@@ -328,7 +335,7 @@ class _NewserState extends State<newser2> {
                           return packageList.map((packageItem) {
                             if (packageItem != null) {
                               // Extract package details for each package item
-                              String packageName =
+                              String packageNamee =
                                   packageItem['name'] ?? 'No Name';
                               String packageDescription =
                                   packageItem['detailsPage']?['details'] ??
@@ -348,7 +355,7 @@ class _NewserState extends State<newser2> {
 
                               return PackageCard(
                                 image: imageUrl,
-                                title: packageName,
+                                title: packageNamee,
                                 description: packageDescription,
                                 price: packagePrice.toString(),
                                 packages: packages,
