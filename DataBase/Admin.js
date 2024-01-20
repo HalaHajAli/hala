@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const userSchema = new mongoose.Schema({
   username: String,
   password: String,
@@ -6,27 +7,31 @@ const userSchema = new mongoose.Schema({
   UserType: String, // admin, user, planner.
 });
 
+// Replace the connection URI with your own MongoDB URI
+const uri = 'mongodb+srv://shahdismail529:sz23112001@app.lvckeux.mongodb.net/?retryWrites=true&w=majority';
 
-mongoose.connect('mongodb://127.0.0.1:27017/App', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Connected to MongoDB"))
   .catch(err => console.error("Connection error:", err));
-  const User = mongoose.model('Admin', userSchema);// class 
 
-async function creatuser(){
+const Admin = mongoose.model('Admin', userSchema);
+
+async function createUser() {
   const admin = new Admin({
     username: 'admin',
     password: 'adminpassword',
     email: 'admin@example.com',
     UserType: 'admin',
   });
-  const result= await admin.save();
-  console.log(result);
+
+  try {
+    const result = await admin.save();
+    console.log(result);
+  } catch (error) {
+    console.error("Error creating user:", error);
+  }
 }
- 
-creatuser();
 
+createUser();
 
-
-
-
- module.exports = Admin; // Export the User model
+module.exports = Admin;
