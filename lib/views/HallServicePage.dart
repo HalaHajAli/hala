@@ -5,11 +5,18 @@ import 'package:provider/provider.dart';
 import 'package:flutter_application/views/CartProvider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter_application/views/ReqProvider.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
+import 'package:flutter_application/views/map.dart';
+import 'package:flutter_application/views/picDate2.dart';
+import 'package:flutter_application/views/gradProvider.dart';
 
 class HallServicePage extends StatefulWidget {
   @override
   _HallServicePageState createState() => _HallServicePageState();
 }
+LatLng? selectedLocation;
 
 class _HallServicePageState extends State<HallServicePage> {
   bool hasOwnPlace = false;
@@ -25,6 +32,19 @@ class _HallServicePageState extends State<HallServicePage> {
         hasOwnPlace = true; // Set hasOwnPlace to true when an image is picked
       });
     }
+  }
+    void _setLocation() {
+    
+   Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddLocationPage()),
+    );
+
+    
+  }
+
+  void _takeInitialImage() {
+    // TODO: Implement the function to take an initial image
   }
 
   @override
@@ -87,51 +107,26 @@ class _HallServicePageState extends State<HallServicePage> {
                 child: Column(
                   children: [
                     SizedBox(height: 20),
-                    Text(
-                      'حمل صورة المكان الخاص بك ',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    GestureDetector(
-                      onTap: _pickPlaceImage,
-                      child: placeImage == null
-                          ? Container(
-                              width: 200,
-                              height: 200,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  Icons.camera_alt,
-                                  size: 60,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            )
-                          : Container(
-                              width: 200,
-                              height: 200,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: kIsWeb
-                                  ? Image.network(
-                                      placeImage!.path,
-                                      width: 200,
-                                      height: 200,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.file(
-                                        placeImage!,
-                                        width: 200,
-                                        height: 200,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                            ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          onPressed: _setLocation,
+                          style: ElevatedButton.styleFrom(
+                            primary: Color(0xFF5BA581),
+                            onPrimary: Colors.white,
+                          ),
+                          child: Text('تحديد الموقع', style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
+                        ),
+                        ElevatedButton(
+                          onPressed: _takeInitialImage,
+                          style: ElevatedButton.styleFrom(
+                            primary: Color(0xFF5BA581),
+                            onPrimary: Colors.white,
+                          ),
+                          child: Text('التقاط صورة ابتدائية', style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
+                        ),
+                      ],
                     ),
                     if (placeImage != null)
                       ElevatedButton(
@@ -146,35 +141,42 @@ class _HallServicePageState extends State<HallServicePage> {
                 ),
               )
             else
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 20),
-                  Text(
-                    'أختر من الأماكن المتاحة لدينا ',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 300,
-                    child: ListView(
-                      scrollDirection: Axis.vertical,
-                      children: [
-                        PlaceItemCard(
-                          placeName: 'قاعات الجاردنز',
-                          placeDescription: 'من القاعات التي تحتوي على قاعة خارجية بأجمل التصاميم ومناسبة لمختلف المناسبات بمختلف عدد الحضور ',
-                          placeImage: 'images/ج.jpeg',
-                          facebookLink: 'https://www.facebook.com/Gardens.WeddingHall?mibextid=ZbWKwL',
-                        ),
-                        PlaceItemCard(
-                          placeName: 'قاعات الكريستال',
-                          placeDescription: ' من أجمل القاعات في المنطقة ومناسبة للمناسبات التي تحتوي على عدد كبير من الحضور ',
-                          placeImage: 'images/golden.jpeg',
-                          facebookLink: 'https://www.facebook.com/profile.php?id=100070299068832&mibextid=ZbWKwL',
-                        ),
-                      ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 20),
+                    Text(
+                      'أختر من الأماكن المتاحة لدينا ',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: ListView(
+                        scrollDirection: Axis.vertical,
+                        children: [
+                          PlaceItemCard(
+                            placeName: 'Gardens',
+                            placeDescription: 'من القاعات التي تحتوي على قاعة خارجية بأجمل التصاميم ومناسبة لمختلف المناسبات بمختلف عدد الحضور ',
+                            placeImage: 'images/ج.jpeg',
+                            facebookLink: 'https://www.facebook.com/Gardens.WeddingHall?mibextid=ZbWKwL',
+                          ),
+                          PlaceItemCard(
+                            placeName: 'Crestal',
+                            placeDescription: ' من أجمل القاعات في المنطقة ومناسبة للمناسبات التي تحتوي على عدد كبير من الحضور ',
+                            placeImage: 'images/golden.jpeg',
+                            facebookLink: 'https://www.facebook.com/profile.php?id=100070299068832&mibextid=ZbWKwL',
+                          ),
+                          PlaceItemCard(
+                            placeName: 'Hayat Nablus',
+                            placeDescription: ' من أجمل القاعات في المنطقة ومناسبة للمناسبات التي تحتوي على عدد كبير من الحضور ',
+                            placeImage: 'images/cer.png',
+                            facebookLink: 'https://www.facebook.com/profile.php?id=100070299068832&mibextid=ZbWKwL',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
           ],
         ),
@@ -198,6 +200,9 @@ class PlaceItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final reqProvider = Provider.of<ReqProvider>(context, listen: false);
+    final gradProvider = Provider.of<GradProvider>(context, listen: false);
+
     return GestureDetector(
       onTap: () {
         showDialog(
@@ -217,15 +222,17 @@ class PlaceItemCard extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton.icon(
                       onPressed: () async {
-                        if (await canLaunch(facebookLink)) {
-                          await launch(facebookLink);
-                        } else {
-                          // Handle error
-                        }
+                         Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) =>  CupertinoDatePickerPage2()),
+  );
+                        Provider.of<GradProvider>(context, listen: false);
+            gradProvider.addToGradList(' القاعة:$placeName'); // Add the text label when storing in GradProvider
+                        print('$placeName');
                       },
                       style: ElevatedButton.styleFrom(primary: Color(0xFF5BA581)),
-                      icon: Icon(Icons.facebook, size: 24),
-                      label: Text('للتواصل ', style: TextStyle(fontSize: 16)),
+                      icon: Icon(Icons.radio_button_checked, size: 24 ,color: Colors.white,),
+                      label: Text('احجز', style: TextStyle(fontSize: 16,color: Colors.white),),
                     ),
                   ),
                   SizedBox(width: 8),
@@ -240,9 +247,9 @@ class PlaceItemCard extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.add_shopping_cart, size: 24),
+                          Icon(Icons.favorite_outline, size: 24,color:Colors.white),
                           SizedBox(width: 8),
-                          Text('إضافة للحقيية', style: TextStyle(fontSize: 16)),
+                          Text('إضافة للمفضلة', style: TextStyle(fontSize: 12, color:Colors.white)),
                         ],
                       ),
                     ),

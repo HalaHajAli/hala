@@ -1,4 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_application/views/EventProvider.dart';
+import 'package:flutter_application/views/exc.dart';
+import 'package:flutter_application/views/watingList.dart';
+
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_application/views/EventProvider.dart';
 
 class TabBarPage extends StatefulWidget {
   const TabBarPage({Key? key}) : super(key: key);
@@ -7,36 +15,10 @@ class TabBarPage extends StatefulWidget {
   _TabBarPageState createState() => _TabBarPageState();
 }
 
-class _TabBarPageState extends State<TabBarPage>
-    with SingleTickerProviderStateMixin {
+class _TabBarPageState extends State<TabBarPage> with SingleTickerProviderStateMixin {
   late TabController tabController;
-  double whiteBoxHeight = 500.0; // Initial height of the white box
-  double whiteBoxWidth = 500.0; // Initial width of the white box
-
-  List<Widget> generateContainers(int count) {
-    // Generate a list of containers based on count
-    List<Widget> containers = [];
-    for (int i = 0; i < count; i++) {
-      containers.add(
-        Container(
-          width: double.infinity,
-          height: 120,
-          margin: EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Color.fromARGB(255, 210, 169, 199), // Replace with your desired color
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Center(
-            child: Text(
-              (i + 1).toString(),
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
-      );
-    }
-    return containers;
-  }
+  double whiteBoxHeight = 600.0;
+  double whiteBoxWidth = 500.0;
 
   @override
   void initState() {
@@ -52,23 +34,162 @@ class _TabBarPageState extends State<TabBarPage>
 
   void expandWhiteBox() {
     setState(() {
-      // Increase the height and width of the white box upon tab selection
-      whiteBoxHeight = 400.0;
+      whiteBoxHeight = 600.0;
       whiteBoxWidth = 500.0;
     });
+  }
+
+  void clearWaitingList(BuildContext context) {
+    Provider.of<WaitingListProvider>(context, listen: false).clearWaitingList();
+  }
+
+  void clearExecutionList(BuildContext context) {
+    Provider.of<ExecutionListProvider>(context, listen: false).clearExecutionList();
+  }
+
+  Widget generateContainerForWaitingList(EventRequest request) {
+    return Container(
+      width: double.infinity,
+      height: 210,
+      margin: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Color.fromARGB(255, 194, 17, 17),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+
+            Text(
+            'المخطط: ${request.plannername}',
+            style: TextStyle(color: Colors.white,
+            fontWeight: FontWeight.bold, // Bold text
+              fontSize: 18, // Larger font size),
+            )),
+          Text(
+            'اسم العرض: ${request.package}',
+            style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold, // Bold text
+              fontSize: 18, // Larger font size),
+           ) ),
+        
+            Text(
+            'المستخدم: ${request.username}',
+            style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold, // Bold text
+              fontSize: 18, // Larger font size    ),
+              )  ),
+
+ Text(
+            'لون الزينة: ${request.color}',
+            style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold, // Bold text
+              fontSize: 18, // Larger font size)),
+    )   ),
+
+
+
+          Text(
+
+            'المطعم: ${request.food}',
+            style: TextStyle(color: Colors.white ,fontWeight: FontWeight.bold, // Bold text
+              fontSize: 18, // Larger font size 
+            ),
+          ),
+          Text(
+            'تاريخ: ${request.date}',
+            style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold, // Bold text
+              fontSize: 18, // Larger font size
+            ),
+          ),
+          Text(
+            'الوقت: ${request.time}',
+            style: TextStyle(color: Colors.white ,fontWeight: FontWeight.bold, // Bold text
+              fontSize: 18, // Larger font size
+            ),
+          ),
+         
+        ],
+      ),
+    );
+  }
+
+  Widget generateContainerForExecutionList(EventRequest request) {
+    return Container(
+      width: double.infinity,
+      height: 210,
+      margin: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Color.fromARGB(255, 39, 78, 138),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+            Text(
+            'المخطط: ${request.plannername}',
+            style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold, // Bold text
+              fontSize: 18, // Larger font size
+            ),
+          ),
+          Text(
+            'اسم العرض: ${request.package}',
+            style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold, // Bold text
+              fontSize: 18, // Larger font size
+            ),
+          ),
+        
+            Text(
+            'المستخدم: ${request.username}',
+            style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold, // Bold text
+              fontSize: 18, // Larger font size
+            ),
+          ),
+
+ Text(
+            'لون الزينة: ${request.color}',
+            style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold, // Bold text
+              fontSize: 18, // Larger font size
+            ),
+          ),
+
+
+
+          Text(
+
+            'المطعم: ${request.food}',
+            style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold, // Bold text
+              fontSize: 18, // Larger font size
+            ),
+          ),
+          Text(
+            'تاريخ: ${request.date}',
+            style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold, // Bold text
+              fontSize: 18, // Larger font size
+            ),
+          ),
+          Text(
+            'الوقت: ${request.time}',
+            style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold, // Bold text
+              fontSize: 18, // Larger font size)
+            )
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('المهام ',
-        style: TextStyle(          color: Colors.white, fontWeight: FontWeight.bold,                                      ),),
+        title: Text(
+          'المهام ',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         backgroundColor: Color(0xFF5BA581),
         elevation: 0,
-    iconTheme: IconThemeData(color: Colors.white), // Set the icon color to white
-
-        
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -95,7 +216,7 @@ class _TabBarPageState extends State<TabBarPage>
                     ),
                     controller: tabController,
                     onTap: (index) {
-                      expandWhiteBox(); // Call function to expand the white box
+                      expandWhiteBox();
                     },
                     tabs: [
                       Tab(
@@ -119,21 +240,57 @@ class _TabBarPageState extends State<TabBarPage>
                     ],
                   ),
                 ),
-                SizedBox(height: 10), // Space between tab bar and white box
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => clearWaitingList(context),
+                      child: Text('مسح قائمة الانتظار'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => clearExecutionList(context),
+                      child: Text('مسح قائمة التنفيذ'),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
                 AnimatedContainer(
                   duration: Duration(milliseconds: 300),
-                  height: whiteBoxHeight, // Dynamic height for the white box
+                  height: whiteBoxHeight,
                   color: Colors.white,
                   child: SizedBox(
-                    width: whiteBoxWidth, // Set the width here
+                    width: whiteBoxWidth,
                     child: TabBarView(
                       controller: tabController,
                       children: [
-                        ListView(
-                          children: generateContainers(3), // Create 3 containers
+                        Consumer<WaitingListProvider>(
+                          builder: (context, waitingListProvider, child) {
+                            List<EventRequest> waitingList =
+                                waitingListProvider.getWaitingList;
+                            return ListView.builder(
+                              itemCount: waitingList.length,
+                              itemBuilder: (context, index) {
+                                final EventRequest request =
+                                    waitingList[index];
+                                return generateContainerForWaitingList(request);
+                              },
+                            );
+                          },
                         ),
-                        ListView(
-                          children: generateContainers(3), // Create 3 containers
+                        Consumer<ExecutionListProvider>(
+                          builder: (context, executionListProvider, child) {
+                            List<EventRequest> executionList =
+                                executionListProvider.getExecutionList;
+                            return ListView.builder(
+                              itemCount: executionList.length,
+                              itemBuilder: (context, index) {
+                                final EventRequest request =
+                                    executionList[index];
+                                return generateContainerForExecutionList(request);
+                              },
+                            );
+                          },
                         ),
                       ],
                     ),

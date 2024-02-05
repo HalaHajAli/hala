@@ -4,6 +4,7 @@ const plannerSchema = new mongoose.Schema({
   password: String,
   email: String,
   mobile: String,
+  salary:String,
 });
 const Planner = mongoose.model('Planner', plannerSchema);
 let uri= 'mongodb+srv://shahdismail529:sz23112001@app.lvckeux.mongodb.net/?retryWrites=true&w=majority';
@@ -21,6 +22,7 @@ mongoose.connect(uri, {
         password: '111', // Password will be hashed automatically due to the pre-save hook
         email: 'user@example.com',
         mobile: '1234567890',
+        salary:'16200'
       });
       const result = await user.save();
       console.log('User created:', result);
@@ -28,3 +30,4 @@ mongoose.connect(uri, {
       console.error('Error creating user:', error);
     }
   }
+  createUser();

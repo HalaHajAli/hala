@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const bookedOfferSchema = new mongoose.Schema({
   plannername: String,
-  username: String,
   packagename: String,
+  username: String,
   color: String,
   food: String,
   date: String,
@@ -28,8 +28,8 @@ async function createUser() {
   try {
     const bookOfferInstance = new bookOffer({
       plannername: 'hala',
-      username: 'shahd',
       packagename: 'summer2024',
+      username: 'shahd',
       color: 'red', // assuming red is a string
       food: 'lemon w n3n3',
       date: '2024-09-30 00:00:00.000',

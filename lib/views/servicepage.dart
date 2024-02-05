@@ -23,6 +23,10 @@ import 'package:flutter_application/views/visitor.dart';
 import 'package:flutter_application/views/grad.dart';
 import 'package:flutter_application/views/wedding.dart';
 import 'package:flutter_application/views/newser2.dart';
+import 'package:flutter_application/views/rev2.dart';
+import 'package:flutter_application/views/NewProvider.dart';
+import 'package:flutter_application/views/profile2.dart';
+import 'package:flutter_application/views/beforser.dart';
 
 class ServiceItem {
   final String name;
@@ -77,6 +81,7 @@ class CircularServiceButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  
     return Column(
       children: [
         Container(
@@ -307,7 +312,7 @@ class _ServicePageState extends State<ServicePage> {
       name: 'التخرج',
       description: 'Description for Service 2',
       image: AssetImage('images/graduation.png'),
-      servicePageRoute: graduateServicePage(),
+      servicePageRoute:  MyHomePagee(),
     ),
     ServiceItem(
       name: 'baby shower',
@@ -338,6 +343,8 @@ class _ServicePageState extends State<ServicePage> {
 
   @override
   Widget build(BuildContext context) {
+      final newProvider = Provider.of<NewProvider>(context);
+    String usernamee= newProvider.getUsername;
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -345,7 +352,7 @@ class _ServicePageState extends State<ServicePage> {
         ),
         centerTitle: true,
         title: Text(
-          'أختر مناسبتك - ${widget.usern}', // Display username in the app bar title
+          'أختر مناسبتك - ${newProvider.getUsername}', // Display username in the app bar title
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Color(0xFF5BA581),
@@ -356,15 +363,15 @@ class _ServicePageState extends State<ServicePage> {
             // Drawer Header with User Profile
             UserAccountsDrawerHeader(
               accountName: Text(
-                widget.usern,
+                newProvider.getUsername,
                 style: TextStyle(color: Colors.white),
               ),
               accountEmail: Text(
-                "${widget.usern}@gmail.com",
+                "${newProvider.getUsername}@gmail.com",
                 style: TextStyle(color: Colors.white),
               ),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('hala/images/person2.png'),
+                backgroundImage: AssetImage('images/peaple2.png'),
               ),
               decoration: BoxDecoration(
                 color: Color.fromARGB(255, 91, 165, 129),
@@ -387,6 +394,21 @@ class _ServicePageState extends State<ServicePage> {
                     },
                   ),
                   ListTile(
+                    leading: Icon(Icons.check), // Icon for تسجيل الخروج
+                    title: Text(
+                      'الخدمات المحجوزة',
+                      style:
+                          TextStyle(color: Color.fromARGB(255, 91, 165, 129)),
+                    ),
+                    onTap: () {
+                      // Implement logout logic here
+                      // For example, navigate to the login page
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => SelectionPage()),
+                      );
+                    },
+                  ),
+ListTile(
                     leading: Icon(Icons.logout), // Icon for تسجيل الخروج
                     title: Text(
                       'تسجيل الخروج ',
@@ -397,10 +419,14 @@ class _ServicePageState extends State<ServicePage> {
                       // Implement logout logic here
                       // For example, navigate to the login page
                       Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => Login1()),
+                        MaterialPageRoute(builder: (context) => SelectionPage()),
                       );
                     },
                   ),
+
+
+
+
                   // Add other drawer items as needed
                 ],
               ),
@@ -451,7 +477,7 @@ class _ServicePageState extends State<ServicePage> {
           TabItem(icon: Icons.home, title: 'الرئيسية'),
           TabItem(icon: Icons.person, title: 'صفحتك الشخصية'),
           TabItem(icon: Icons.favorite, title: 'الفضلة'),
-          TabItem(icon: Icons.info, title: ' من نحن'),
+          TabItem(icon: Icons.info, title:'التقييم'),
           TabItem(icon: Icons.shopping_cart, title: 'حقيبتي'),
         ],
         onTap: (int index) {
@@ -462,7 +488,7 @@ class _ServicePageState extends State<ServicePage> {
               break;
             case 1:
               Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => ProfilePage()));
+                  .push(MaterialPageRoute(builder: (context) =>ProfilePage2 ()));
               break;
             case 2:
               Navigator.of(context).push(
@@ -470,7 +496,7 @@ class _ServicePageState extends State<ServicePage> {
               break;
             case 3:
               Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => AboutUsPage()));
+                  .push(MaterialPageRoute(builder: (context) => Review2()));
               break;
             case 4:
               Navigator.of(context)

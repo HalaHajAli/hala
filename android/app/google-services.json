@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "886797404311",
-    "project_id": "monasaba-d20d7",
-    "storage_bucket": "monasaba-d20d7.appspot.com"
+    "project_number": "217648702423",
+    "project_id": "monasaba-f5d96",
+    "storage_bucket": "monasaba-f5d96.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:886797404311:android:940c98258191eaf99a41d2",
+        "mobilesdk_app_id": "1:217648702423:android:3893fe3c0e884836dee192",
         "android_client_info": {
           "package_name": "com.Hala.flutter_application"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBOFm8RvFr7Z_NUTzFZ-N2fYUKMTk6J7bk"
+          "current_key": "AIzaSyDQ0P_Q8mVeV-xZz8h1Lo9AOTvdSMqafEw"
         }
       ],
       "services": {

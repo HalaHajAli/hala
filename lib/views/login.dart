@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_application/views/signup.dart';
 import 'package:flutter_application/views/plannerpage.dart';
+import 'package:provider/provider.dart'; // Import the Provider package
+import 'package:flutter_application/views/NameProvider.dart';
+
 
 class Login extends StatefulWidget {
   final String userType;
@@ -117,7 +120,7 @@ class _Login1State extends State<Login> {
                 }
 
                 if (username.isNotEmpty && password.isNotEmpty) {
-                  var url = Uri.parse('http://192.168.1.4:4001/login2');
+                  var url = Uri.parse('http://192.168.1.6:4001/login2');
                   var response = await http.post(
                     url,
                     body: {
@@ -125,7 +128,11 @@ class _Login1State extends State<Login> {
                       'password': password,
                     },
                   );
-                  print(response.statusCode); // Print HTTP status code
+            //      print(response.statusCode); // Print HTTP status code
+             Provider.of<NameProvider>(context, listen: false)
+                    .setUsername(username);
+       String userrname = Provider.of<NameProvider>(context, listen: false).getUsername;
+                print('Username: $userrname');
       print(response.body); // Print response body
 
                   if (response.statusCode == 200) {

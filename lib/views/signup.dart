@@ -56,13 +56,14 @@ class _SignUpPageState extends State<SignUpPage> {
           );
         }
       } else {
+          _showErrorDialog('  المستخدم موجود بالفعل.');
         print('User registration failed');
       }
     }
   }
 
   Future<bool> registerPlanner() async {
-    final url = 'http://192.168.1.4:4001/regplanner';
+    final url = 'http://192.168.1.6:4001/regplanner';
     final Map<String, dynamic> userData = {
       'username': _username,
       'password': _password,
@@ -89,7 +90,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<bool> registerUser() async {
-    final url = 'http://192.168.1.4:4001/register';
+    final url = 'http://192.168.1.6:4001/register';
     final Map<String, dynamic> userData = {
       'username': _username,
       'password': _password,
@@ -153,7 +154,7 @@ class _SignUpPageState extends State<SignUpPage> {
             child: Text(
               validator('')!,
               style: TextStyle(
-                color: Colors.red,
+             //   color: Colors.red,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -207,7 +208,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 prefixIcon: Icons.person,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'الرجاء إدخال اسم المستخدم';
+               //     return 'الرجاء إدخال اسم المستخدم';
                   }
                   return null;
                 },
@@ -222,9 +223,9 @@ class _SignUpPageState extends State<SignUpPage> {
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'الرجاء إدخال كلمة المرور';
+               //     return 'الرجاء إدخال كلمة المرور';
                   } else if (value.length < 6) {
-                    return 'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل';
+                 //   return 'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل';
                   }
                   return null;
                 },
@@ -239,7 +240,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'الرجاء تأكيد كلمة المرور';
+                  //  return 'الرجاء تأكيد كلمة المرور';
                   } else if (value != _password) {
                     return 'كلمات المرور غير متطابقة';
                   }
@@ -255,7 +256,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 prefixIcon: Icons.email,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'الرجاء إدخال البريد الإلكتروني';
+                 //   return 'الرجاء إدخال البريد الإلكتروني';
                   } else if (!value.contains('@')) {
                     return 'بريد إلكتروني غير صحيح';
                   }
@@ -271,7 +272,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 prefixIcon: Icons.phone,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'الرجاء إدخال رقم الجوال';
+                  //  return 'الرجاء إدخال رقم الجوال';
                   } else if (value.length < 10) {
                     return 'يجب أن يحتوي رقم الجوال على 10 أرقام على الأقل';
                   }
@@ -351,4 +352,49 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
     );
   }
+
+  void _showErrorDialog(String message) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(
+          'Error',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.red,
+          ),
+        ),
+        content: Text(
+          message,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              if (message.contains("مستخدم موجود")) {
+                // If the message indicates an existing user, clear the username field
+                _formKey.currentState?.reset();
+              }
+            },
+            child: Text(
+              'OK',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+              ),
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
 }

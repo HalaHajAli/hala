@@ -36,12 +36,55 @@ import 'package:flutter_application/views/newser2.dart';
 import 'package:flutter_application/views/offerProvider.dart';
 import 'package:flutter_application/views/PackProvider.dart';
 import 'package:flutter_application/views/requist.dart';
+import 'package:flutter_application/views/NameProvider.dart';
+import 'package:flutter_application/views/EventProvider.dart';
+import 'package:flutter_application/views/gradProvider.dart';
 
+import 'package:flutter_application/views/ReqProvider.dart';
+import 'package:flutter_application/views/profile.dart';
+import 'package:flutter_application/views/PlanProvider.dart';
+import 'package:flutter_application/views/rev2.dart';
+import 'package:flutter_application/views/NewProvider.dart';
+import 'package:flutter_application/views/watingList.dart';
+import 'package:flutter_application/views/exc.dart';
+import 'package:flutter_application/views/loc.dart';
+import 'package:flutter_application/views/profile2.dart';
+import 'package:flutter_application/views/image.dart';
+import 'package:flutter_application/views/userbook.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_application/views/chat2.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_application/views/budget.dart';
+import 'package:flutter_application/views/beforser.dart';
+import 'dart:typed_data'; 
+import 'dart:ui' as ui; 
+import 'package:flutter/material.dart'; 
+//import 'package:flutter_application_3/views/CameraScreen.dart'; 
+ import 'package:camera/camera.dart'; 
 
-void main()  async {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+   final cameras = await availableCameras(); 
+  final firstCamera = cameras.first; 
+
+  await Firebase.initializeApp(); // Initialize Fireba
+  // FirebaseFirestore.instance.enablePersistence();
+
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+      apiKey: "AIzaSyDQ0P_Q8mVeV-xZz8h1Lo9AOTvdSMqafEw",
+      appId: "1:217648702423:android:3893fe3c0e884836dee192",
+      messagingSenderId: "217648702423",
+      projectId: "monasaba-f5d96",
+    ),
+  );
+
   initializeDateFormatting('ar_SA', null);
   runApp(MyApp());
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -51,26 +94,34 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => FavoritesProvider()),
-        ChangeNotifierProvider(create: (context) => CartProvider()), 
-        ChangeNotifierProvider(create: (context) => SalesOffersProvider()), 
-        ChangeNotifierProvider(create: (context) => OfferProvider()), 
-        ChangeNotifierProvider(create: (context) =>PackageProvider()), 
-
-        // You can add more providers if needed
+        ChangeNotifierProvider(create: (context) => CartProvider()),
+        ChangeNotifierProvider(create: (context) => SalesOffersProvider()),
+        ChangeNotifierProvider(create: (context) => OfferProvider()),
+        ChangeNotifierProvider(create: (context) => PackageProvider()),
+        ChangeNotifierProvider(create: (context) => NameProvider()),
+        ChangeNotifierProvider(create: (context) => EventProvider()),
+        ChangeNotifierProvider(create: (context) => ReqProvider()),
+        ChangeNotifierProvider(create: (context) => PlanProvider()),
+        ChangeNotifierProvider(create: (context) => NewProvider()),
+        ChangeNotifierProvider(create: (context) => WaitingListProvider()),
+        ChangeNotifierProvider(create: (context) => ExecutionListProvider()),
+        ChangeNotifierProvider(create: (context) => BudgetProvider()),
+        ChangeNotifierProvider(create: (context) =>  GradProvider()),
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         // Localizations setup
-        locale: const Locale('ar', 'SA'), 
-        textDirection: TextDirection.rtl, 
-        translations: Messages(), 
+        locale: const Locale('ar', 'SA'),
+        textDirection: TextDirection.rtl,
+        translations: Messages(),
         fallbackLocale: Locale('ar', 'SA'),
 
-        home:Welcome(), 
+        home: Welcome (),
       ),
     );
   }
 }
+
 // Custom translations for Arabic
 class Messages extends Translations {
   @override
@@ -79,6 +130,4 @@ class Messages extends Translations {
           'title': 'عنوان',
         },
       };
-
-
 }

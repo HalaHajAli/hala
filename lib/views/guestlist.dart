@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/views/ReqProvider.dart';
+import 'package:flutter_application/views/GradProvider.dart';
+
+import 'package:provider/provider.dart';
+import 'review.dart'; // Import the next page file
 
 class Guest {
   String name;
@@ -15,70 +20,106 @@ class GuestListPage extends StatefulWidget {
 class _GuestListPageState extends State<GuestListPage> {
   List<Guest> guestList = [];
   TextEditingController guestNameController = TextEditingController();
+  TextEditingController maxGuestController = TextEditingController();
+  int maxGuests = 0; // Default maximum number of guests
+
+  // Define a list of different colors for the cards
+  List<Color> cardColors = [
+    Color.fromARGB(255, 164, 124, 129),
+
+  ];
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: Text('قائمة الحضور', style: TextStyle(color: Colors.white)),
+        title: Text('قائمة الحضور', style: TextStyle(fontFamily: 'Arabic', color: Colors.white,fontWeight: FontWeight.bold)),
         backgroundColor: Color(0xFF5BA581),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.white, Color(0xFF5BA581)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: guestNameController,
-                      decoration: InputDecoration(
-                        labelText: 'الإسم',
-                      ),
+        color: Colors.white, // Set the background color to white
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: maxGuestController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: 'العدد الأقصى للضيوف',
                     ),
                   ),
-                  SizedBox(width: 8),
-                  ElevatedButton(
-                    onPressed: () {
-                      addGuest();
-                    },
-                    style: ElevatedButton.styleFrom(
-                   primary: Color(0xFF5BA581), // Set the background color to green
-                        ),
-                     child: Text(
-                        'أضف للقائمة',
-                           style: TextStyle(color: Colors.white), // Set the text color to white
-               ),
+                ),
+                SizedBox(width: 8),
+                ElevatedButton(
+                  onPressed: setMaxGuests,
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF5BA581),
                   ),
-                ],
-              ),
-              SizedBox(height: 16),
-              Text(
-                'القائمة:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: guestList.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(guestList[index].name),
+                  child: Text(
+                    'تعيين',
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            Text(
+              'العدد الأقصى للضيوف: $maxGuests',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Arabic'),
+            ),
+            SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: guestNameController,
+                    decoration: InputDecoration(
+                      labelText: 'الإسم',
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8),
+                ElevatedButton(
+                  onPressed: addGuest,
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF5BA581),
+                  ),
+                  child: Text(
+                    'أضف للقائمة',
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            Text(
+              'القائمة:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Arabic',),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: guestList.length,
+                itemBuilder: (context, index) {
+                  // Use modulo to cycle through the list of colors
+                  Color cardColor = cardColors[index % cardColors.length];
+
+                  return Card(
+                    elevation: 3,
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    color: cardColor,
+                    child: ListTile(
+                      title: Text(guestList[index].name, style: TextStyle(fontFamily: 'Arabic')),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -90,7 +131,7 @@ class _GuestListPageState extends State<GuestListPage> {
                             activeColor: Color(0xFF5BA581),
                           ),
                           IconButton(
-                            icon: Icon(Icons.delete, color: Colors.red),
+                            icon: Icon(Icons.delete, color: Colors.white),
                             onPressed: () {
                               showDeleteDialog(index);
                             },
@@ -100,15 +141,61 @@ class _GuestListPageState extends State<GuestListPage> {
                       onTap: () {
                         editGuestName(index);
                       },
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to the next page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => review()),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF5BA581),
+                padding: EdgeInsets.all(16),
+              ),
+              child: Text(
+                'الصفحة التالية',
+                style: TextStyle(color: Colors.white, fontFamily: 'Arabic', fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  void setMaxGuests() {
+    int enteredMaxGuests = int.tryParse(maxGuestController.text) ?? maxGuests;
+
+    if (enteredMaxGuests > 400) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('تنبيه'),
+            content: Text('يمكنك فقط إضافة حتى 400 ضيف. الرجاء تحديد عدد أقل.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                child: Text('موافق'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      setState(() {
+        maxGuests = enteredMaxGuests;
+      });
+    }
   }
 
   void addGuest() {
@@ -167,7 +254,7 @@ class _GuestListPageState extends State<GuestListPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('حذف'),
-          content: Text('هل أنت متأكد من أمك تريد حذذف ${guestList[index].name}?من القائمة'),
+          content: Text('هل أنت متأكد من أنك تريد حذف ${guestList[index].name} من القائمة؟'),
           actions: <Widget>[
             TextButton(
               onPressed: () {

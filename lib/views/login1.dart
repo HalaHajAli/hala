@@ -6,8 +6,14 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter_application/views/Responsive .dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_application/views/service2.dart';
-
 import 'package:flutter_application/views/offerProvider.dart';
+import 'package:flutter_application/views/NewProvider.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_application/views/loc.dart';
+import 'package:another_flushbar/flushbar.dart';
+
+
+
 class Login1 extends StatefulWidget {
   final String userType;
   final String usern;
@@ -24,16 +30,137 @@ class Login1 extends StatefulWidget {
   _Login1State createState() => _Login1State();
 }
 
+
+
 class _Login1State extends State<Login1> {
   String username = '';
   String password = '';
-  String email = '';
 
   String usernameError = '';
   String passwordError = '';
 
+  Future<void> loginUser() async {
+    if (validateInputs()) {
+      try {
+        var url = Uri.parse('http://192.168.1.6:4001/login1');
+
+        var response = await http.post(
+          url,
+          body: {
+            'username': username,
+            'password': password,
+          },
+        ).timeout(Duration(seconds: 10));
+
+        handleResponse(response);
+      } catch (error) {
+        handleGeneralError();
+      }
+    }
+  }
+
+  bool validateInputs() {
+    bool isValid = true;
+
+    if (username.isEmpty) {
+      setState(() {
+        usernameError = 'من فضلك أدخل اسم المستخدم';
+      });
+      isValid = false;
+    } else {
+      usernameError = '';
+    }
+
+    if (password.isEmpty) {
+      setState(() {
+        passwordError = 'من فضلك أدخل كلمة المرور';
+      });
+      isValid = false;
+    } else {
+      passwordError = '';
+    }
+
+    return isValid;
+  }
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+void showTopNotification(String message) {
+  Flushbar(
+    message: message,
+    flushbarPosition: FlushbarPosition.TOP,
+    flushbarStyle: FlushbarStyle.GROUNDED,
+    backgroundColor: Colors.green,
+     duration: Duration(seconds: 3),
+   boxShadows: [BoxShadow(color: Colors.black, offset: Offset(0.0, 2.0), blurRadius: 3.0)],
+  )..show(context);
+}
+
+
+  void handleResponse(http.Response response) {
+    if (response.statusCode == 200) {
+  //  showTopNotification('تم تسجيل الدخول بنجاح!');
+
+
+          final newProvider = Provider.of<NewProvider>(context, listen: false);
+      newProvider.setUsername(username);
+
+      // Successful login
+      final offerProvider = Provider.of<OfferProvider>(context, listen: false);
+      offerProvider.addToCart("hala"); // planner name
+         //   offerProvider.addToCart("summer2024"); // planner name
+
+      //offerProvider.addToCart(username.toString());
+      //offerProvider.addToCart("Lemon w n3n3"); // planner name
+
+      // Flushbar(
+      //   title: 'تسجيل الدخول',
+      //   message: 'تم تسجيل الدخول بنجاح!',
+      //   duration: Duration(seconds: 5),
+      // )..show(context);
+
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => AddItemPage(),
+   //  ServicePage(
+          //   userType: widget.userType,
+          //   usern: username,
+          //   ema: '',
+          // ),
+        ),
+      );
+    } else {
+      // Handle other HTTP status codes
+      handleHttpError(response.statusCode);
+    }
+  }
+
+  void handleHttpError(int statusCode) {
+    // Handle specific HTTP status codes
+    if (statusCode == 404) {
+      print('User not found');
+    } else {
+      print('HTTP Error: $statusCode');
+    }
+
+    setState(() {
+      usernameError = 'المستخدم غير موجود';
+      passwordError = 'كلمة المرور غير صحيحة';
+    });
+  }
+
+  void handleGeneralError() {
+    
+    // Handle general errors
+    Flushbar(
+      title: 'خطأ',
+      message: 'حدث خطأ أثناء تسجيل الدخول',
+      duration: Duration(seconds: 5),
+    )..show(context);
+  }
+
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -56,9 +183,10 @@ class _Login1State extends State<Login1> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30.0),
                     borderSide: BorderSide(
-                        color: usernameError.isNotEmpty
-                            ? Colors.red
-                            : Color.fromARGB(255, 91, 165, 129)),
+                      color: usernameError.isNotEmpty
+                          ? Colors.red
+                          : Color.fromARGB(255, 91, 165, 129),
+                    ),
                   ),
                   errorText: usernameError.isNotEmpty ? usernameError : null,
                 ),
@@ -80,9 +208,10 @@ class _Login1State extends State<Login1> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30.0),
                     borderSide: BorderSide(
-                        color: passwordError.isNotEmpty
-                            ? Colors.red
-                            : Color.fromARGB(255, 91, 165, 129)),
+                      color: passwordError.isNotEmpty
+                          ? Colors.red
+                          : Color.fromARGB(255, 91, 165, 129),
+                    ),
                   ),
                   errorText: passwordError.isNotEmpty ? passwordError : null,
                 ),
@@ -97,68 +226,7 @@ class _Login1State extends State<Login1> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () async {
-                if (username.isEmpty) {
-                  setState(() {
-                    usernameError = 'من فضلك أدخل اسم المستخدم';
-                  });
-                } else {
-                  usernameError = '';
-                }
-                if (password.isEmpty) {
-                  setState(() {
-                    passwordError = 'من فضلك أدخل كلمة المرور';
-                  });
-                } else {
-                  passwordError = '';
-                }
-
-                if (username.isNotEmpty && password.isNotEmpty) {
-                  var url = Uri.parse('http://192.168.1.4:4001/login1');
-                  var response = await http.post(
-                    url,
-                    body: {
-                      'username': username,
-                      'password': password,
-                    },
-                  );
-
-                  if (response.statusCode == 200) {
-
-                        final offerProvider = Provider.of<OfferProvider>(context, listen: false);
-                         offerProvider.addToCart("Hala");// planner name
-                             offerProvider.addToCart(username.toString());
-                           offerProvider.addToCart("Lemon w n3n3");// planner name
-
-                    Flushbar(
-                      title: 'تسجيل الدخول',
-                      message: 'تم تسجيل الدخول بنجاح!',
-                      duration: Duration(seconds: 5),
-                    )..show(context);
-
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => ServicePage(
-                          userType: widget.userType,
-                          usern: username,
-                          ema: email,
-                        ),
-                      ),
-                    );
-                  } else {
-                    Flushbar(
-                      title: 'خطأ',
-                      message: 'المستخدم غير موجود أو كلمة المرور غير صحيحة',
-                      duration: Duration(seconds: 5),
-                    )..show(context);
-
-                    setState(() {
-                      usernameError = 'المستخدم غير موجود';
-                      passwordError = 'كلمة المرور غير صحيحة';
-                    });
-                  }
-                }
-              },
+              onPressed: loginUser,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 15.0),
                 child: Text(

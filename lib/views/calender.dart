@@ -16,6 +16,12 @@ class _CalendarPageState extends State<CalendarPage> {
     super.initState();
     _selectedDay = DateTime.now();
     _focusedDay = DateTime.now();
+    DateTime lastDay = DateTime.utc(2023, 12, 31);
+
+    if (!_focusedDay.isBefore(lastDay)) {
+      _focusedDay = lastDay.subtract(Duration(days: 1));
+    }
+
     _events = {
       DateTime.utc(2023, 11, 4): [
         Event('تفاصيل الحدث 1', DateTime(2023, 11, 4, 9, 0), 'وصف الحدث 1'),
@@ -24,7 +30,6 @@ class _CalendarPageState extends State<CalendarPage> {
       DateTime.utc(2023, 11, 6): [
         Event('تفاصيل الحدث 3', DateTime(2023, 11, 6, 12, 0), 'وصف الحدث 3'),
       ],
-      // Add more events for different dates in November...
       DateTime.utc(2023, 12, 10): [
         Event('تفاصيل الحدث 4', DateTime(2023, 12, 10, 11, 0), 'وصف الحدث 4'),
       ],
@@ -33,15 +38,16 @@ class _CalendarPageState extends State<CalendarPage> {
       ],
     };
   }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('ا تقويم المناسبات'),
+          title: Text('تقويم المناسبات'),
           backgroundColor: Color(0xFF5BA581),
-          titleSpacing: 50.0, // Adjust the spacing as needed
+          titleSpacing: 50.0,
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -61,8 +67,8 @@ class _CalendarPageState extends State<CalendarPage> {
                     _focusedDay = focusedDay;
                   });
 
-                  // Show details for the selected date
-                  if (_events[selectedDay] != null && _events[selectedDay]!.isNotEmpty) {
+                  if (_events[selectedDay] != null &&
+                      _events[selectedDay]!.isNotEmpty) {
                     showDialog(
                       context: context,
                       builder: (context) {
@@ -75,8 +81,11 @@ class _CalendarPageState extends State<CalendarPage> {
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(event.title, style: TextStyle(fontWeight: FontWeight.bold)),
-                                  Text('التاريخ: ${event.dateTime.day}/${event.dateTime.month}/${event.dateTime.year}'),
+                                  Text(event.title,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  Text(
+                                      'التاريخ: ${event.dateTime.day}/${event.dateTime.month}/${event.dateTime.year}'),
                                   Text('الوقت: ${event.dateTime.hour}:${event.dateTime.minute}'),
                                   Text(event.description),
                                   SizedBox(height: 10),
@@ -110,7 +119,6 @@ class _CalendarPageState extends State<CalendarPage> {
                   selectedDecoration: BoxDecoration(
                     color: Color(0xFF5BA581).withOpacity(0.5),
                     shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(5.0),
                   ),
                   selectedTextStyle: TextStyle(color: Colors.white),
                   todayTextStyle: TextStyle(color: Colors.white),
@@ -125,7 +133,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   weekdayStyle: TextStyle().copyWith(color: Color(0xFF5BA581)),
                   weekendStyle: TextStyle().copyWith(color: Color(0xFF5BA581)),
                 ),
-                daysOfWeekHeight: 50, // Adjust this value as needed
+                daysOfWeekHeight: 50,
               ),
             ],
           ),

@@ -17,6 +17,9 @@ import 'package:flutter_application/views/flowerbirth.dart';
 import 'package:flutter_application/views/saleprovider.dart';
 import 'package:flutter_application/views/serviceadmin.dart';
 import 'package:flutter_application/views/guestlist.dart';
+import 'package:flutter_application/views/review.dart';
+import 'package:flutter_application/views/dj.dart';
+import 'package:flutter_application/views/photo.dart';
 
 class graduateServicePage extends StatefulWidget {
   @override
@@ -30,9 +33,14 @@ class _graduateServicePageState extends State<graduateServicePage> {
     {'text': 'قائمة الطعام', 'icon': Icons.fastfood},
     {'text': 'القاعة', 'icon': Icons.location_city},
     {'text': 'قائمة الحضور', 'icon': Icons.person},
+    {'text':'مصمم الحفل', 'icon': Icons.person},
+    {'text':'التصوير', 'icon': Icons.person},
+    {'text':'الدي جي', 'icon': Icons.person},
+
+
+
     // Add more service options if needed
   ];
-
   void navigateToFoodPage() {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -64,13 +72,38 @@ class _graduateServicePageState extends State<graduateServicePage> {
       ),
     );
   }
+  void navigateToplanner() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => review(),
+      ),
+    );
+  }
+
+  void navigateTodj() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => DjServicesPage(),
+      ),
+    );
+  }
+
+  void navigateToimage() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => PhotographyGardensPage(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF5BA581),
-        title: Text(' حفلات التخرج'),
+        title: Text(' حفلات التخرج',  style: TextStyle(
+          color: Colors.white,
+        ),),
         centerTitle: true,
       ),
       body: Container(
@@ -78,7 +111,7 @@ class _graduateServicePageState extends State<graduateServicePage> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.white, Colors.green],
+            colors: [Colors.white, Color(0xFF5BA581)],
           ),
         ),
         child: Center(
@@ -102,6 +135,14 @@ class _graduateServicePageState extends State<graduateServicePage> {
                     } else if (item['text'] == 'قائمة الحضور') {
                       navigateToGuestPage();
                     }
+                    else if (item['text'] == 'مصمم الحفل') {
+                      navigateToplanner();
+                    }
+                     else if (item['text'] == 'التصوير') {
+                      navigateToimage();
+                    } else if (item['text'] == 'الدي جي') {
+                      navigateTodj();
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Colors.transparent,
@@ -118,8 +159,9 @@ class _graduateServicePageState extends State<graduateServicePage> {
                       Text(
                         item['text'],
                         style: TextStyle(
-                          fontSize: 18.0,
-                          color: Color(0xFF5BA581),
+                          fontSize: 28.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[800],
                         ),
                       ),
                     ],

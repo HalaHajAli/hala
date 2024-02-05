@@ -12,7 +12,7 @@ class SelectionPage extends StatelessWidget {
           children: [
             WaveBackground(),
             Container(
-  padding: EdgeInsets.fromLTRB(16, 100, 16, 16), // Add top padding
+              padding: EdgeInsets.fromLTRB(16, 100, 16, 16),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -42,11 +42,12 @@ class SelectionPage extends StatelessWidget {
                             ),
                             child: Padding(
                               padding: EdgeInsets.symmetric(
-                                  vertical: 15.0, horizontal: 30.0),
+                                vertical: 15.0,
+                                horizontal: 30.0,
+                              ),
                               child: Text(
                                 'تسجيل دخول ',
-                                style:
-                                    TextStyle(fontWeight: FontWeight.bold),
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
@@ -65,27 +66,33 @@ class SelectionPage extends StatelessWidget {
                             ),
                             child: Padding(
                               padding: EdgeInsets.symmetric(
-                                  vertical: 15.0, horizontal: 30.0),
+                                vertical: 15.0,
+                                horizontal: 30.0,
+                              ),
                               child: Text(
                                 ' إنشاء حساب',
-                                style:
-                                    TextStyle(fontWeight: FontWeight.bold),
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
-                          SizedBox(height: 90),
+                          SizedBox(height: 20),
                           GestureDetector(
                             onTap: () {
+                              // Handle the action when "I am a Planner" is pressed
+                              // For now, let's navigate to the Login page as an example
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => Login(),
                                 ),
                               );
                             },
-                            child: Icon(
-                              Icons.arrow_downward,
-                              size: 20,
-                              color: Color(0xFF5BA581),
+                            child: Text(
+                              'انا مخطط',
+                              style: TextStyle(
+                                color: Color(0xFF5BA581),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
                             ),
                           ),
                         ],

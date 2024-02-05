@@ -297,7 +297,7 @@ final offerProvider = Provider.of<OfferProvider>(context);
                       Text(
                         packageList.isNotEmpty
                             ? packageList[0].packageName
-                            : "Default Name",
+                            : "Hala Events",
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -339,7 +339,7 @@ final offerProvider = Provider.of<OfferProvider>(context);
                       Container(
                         padding: EdgeInsets.only(right: 20),
                         child: Text(
-                          "نابلس - شارع سفيان",
+                                     "نابلس",
                           style: TextStyle(fontSize: 15, color: Colors.grey),
                         ),
                       ),
@@ -572,7 +572,7 @@ final offerProvider = Provider.of<OfferProvider>(context);
                               child: Stack(children: [
                                 CircleAvatar(
                                   backgroundColor: Colors.grey,
-                                  // backgroundImage: AssetImage(""),
+                                   backgroundImage: AssetImage("images/p.png"),
                                 ),
                                 Container(
                                     margin: EdgeInsets.only(right: 120),
@@ -580,7 +580,7 @@ final offerProvider = Provider.of<OfferProvider>(context);
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          Text("${"Zoya Patel"}",
+                                          Text("${"Ali_Ahmad"}",
                                               style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
@@ -588,7 +588,7 @@ final offerProvider = Provider.of<OfferProvider>(context);
                                           Container(
                                               margin: EdgeInsets.only(left: 65),
                                               child: Row(children: [
-                                                for (int i = 0; i < 3; i++)
+                                                for (int i = 0; i < 5; i++)
                                                   Container(
                                                       child: Icon(
                                                     Icons.star,
@@ -596,16 +596,16 @@ final offerProvider = Provider.of<OfferProvider>(context);
                                                     color: Colors.yellow,
                                                   )),
                                                 //where rating is 3 and total num of star is 5
-                                                for (int i = 0; i < 5 - 3; i++)
-                                                  Container(
-                                                    child: Icon(
-                                                      Icons.star_border,
-                                                      size: 18,
-                                                      color: Colors.yellow,
-                                                    ),
-                                                  )
+                                              //  for (int i = 0; i < 5 - 3; i++)
+                                                  // Container(
+                                                  //   child: Icon(
+                                                  //     Icons.star_border,
+                                                  //     size: 18,
+                                                  //     color: Colors.yellow,
+                                                  //   ),
+                                                  // )
                                               ])),
-                                          Text("lkdjfielwkft",
+                                          Text("the best planner , thank you for your work",
                                               style: TextStyle(
                                                   fontSize: 13,
                                                   color: Colors.grey))
@@ -653,7 +653,7 @@ final offerProvider = Provider.of<OfferProvider>(context);
               }
                                     
               if (anotherList.isNotEmpty) {
-                  var url = Uri.parse('http://192.168.1.4:4001/bookedOffers');
+                  var url = Uri.parse('http://192.168.1.6:4001/bookedOffers');
                   var response =  http.post(
                     url,
                     body: {
@@ -666,12 +666,50 @@ final offerProvider = Provider.of<OfferProvider>(context);
                          'time':anotherList[6],
 
                     },
-                  );
-  
-                                    
-                                    
+                  );                 
                                     
               }
+
+      // Show success dialog
+      showDialog(
+  context: context,
+  builder: (BuildContext context) {
+    return AlertDialog(
+      title: Text(
+        'Success',
+        style: TextStyle(
+          fontSize: 20, // Adjust the font size as needed
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      content: Text(
+        'لقد تم حجز العرض بنجاح!',
+        style: TextStyle(
+          fontSize: 18, // Adjust the font size as needed
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(
+            'موافق',
+            style: TextStyle(
+              fontSize: 16, // Adjust the font size as needed
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
+  },
+);
+
+
+
+
+
                                       },
                         child: Text(
                           "احجز العرض",

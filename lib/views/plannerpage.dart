@@ -7,6 +7,11 @@ import 'package:http/http.dart' as http;
 import 'dart:convert'; 
 import 'package:flutter_application/views/addOffer.dart';
 import 'package:flutter_application/views/homepage.dart';
+import 'package:flutter_application/views/profile.dart';
+import 'package:flutter_application/views/exc.dart';
+import 'package:flutter_application/views/EventProvider.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_application/views/req2.dart';
 
 class HomePage extends StatefulWidget {
   final String usern;
@@ -39,6 +44,11 @@ class _HomePageState extends State<HomePage> {
       "icon": Icons.email,
       "category": "الطلبات",
     },
+ {
+      "icon": Icons.email,
+      "category": " طلبات أخرى",
+    },
+
   ];
 
   List<Map<String, dynamic>> Events = [
@@ -59,13 +69,17 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _currentIndex = index;
       if (index == 0) {
-        _scaffoldKey.currentState?.openEndDrawer();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProfilePage(),
+          ),
+        );
       }
     });
   }
 
-  final Map<String, dynamic> packageDetails = 
-  {
+  final Map<String, dynamic> packageDetails = {
     "username": "shahd",
     "name": "Package c",
     "price": "454",
@@ -79,23 +93,22 @@ class _HomePageState extends State<HomePage> {
     },
     "detailsPage": {
       "details": "Some details about the package"
-      }
+    }
   };
 
   Future<void> sendPackageOffer() async {
     try {
       String jsonPackageDetails = jsonEncode(packageDetails);
-    print('Request Body: $jsonPackageDetails'); 
+      print('Request Body: $jsonPackageDetails');
 
-      var url = Uri.parse('http://192.168.1.4:4001/login2/package');
+      var url = Uri.parse('http://192.168.1.6:4001/login2/package');
 
       final response = await http.post(
         url,
         body: jsonPackageDetails,
-        headers: {"Content-Type": "application/json"}, // Add this line
-
+        headers: {"Content-Type": "application/json"},
       );
-      
+
       if (response.statusCode == 201) {
         print('Package created successfully');
       } else {
@@ -195,8 +208,10 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => PackageEntryForm()));
-
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PackageEntryForm()),
+                );
               },
             ),
             ListTile(
@@ -210,7 +225,9 @@ class _HomePageState extends State<HomePage> {
               ),
               onTap: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => SelectionPage()));
+                  context,
+                  MaterialPageRoute(builder: (context) => SelectionPage()),
+                );
               },
             ),
           ],
@@ -239,82 +256,92 @@ class _HomePageState extends State<HomePage> {
               ),
               SizedBox(height: 7.0),
               Container(
-                  height: 60.0,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: medCat.length,
-                    itemBuilder: (context, index) {
-                      bool isSelected = false;
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                              isSelected ? Colors.green : Color(0xFF5BA581),
-                            ),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                            ),
-                            padding: MaterialStateProperty.all(
-                              EdgeInsets.symmetric(
-                                vertical: 8.0,
-                                horizontal: 20,
-                              ),
+                height: 60.0,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: medCat.length,
+                  itemBuilder: (context, index) {
+                    bool isSelected = false;
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            isSelected ? Colors.green : Color(0xFF5BA581),
+                          ),
+                          shape: MaterialStateProperty.all<
+                              RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
                             ),
                           ),
-                          onPressed: () {
-                            switch (index) {
-                              case 0:
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => CalendarPage()),
-                                );
-                                break;
-                              case 1:
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => TabBarPage()),
-                                );
-                                break;
-                              case 2:
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => EventRequestPage()),
-                                );
-
-                                // Add navigation for the third icon in medCat
-                                break;
-                              default:
-                                break;
-                            }
-                          },
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                medCat[index]['icon'],
-                                color: Colors.white,
-                                size: 24,
-                              ),
-                              SizedBox(width: 8),
-                              Text(
-                                medCat[index]['category'],
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
+                          padding: MaterialStateProperty.all(
+                            EdgeInsets.symmetric(
+                              vertical: 8.0,
+                              horizontal: 20,
+                            ),
                           ),
                         ),
-                      );
-                    },
-                  )),
+                        onPressed: () {
+                          switch (index) {
+                            case 0:
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CalendarPage()),
+                              );
+                              break;
+                            case 1:
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => TabBarPage()),
+                              );
+                              break;
+                            case 2:
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EventRequestPage()),
+                              );
+                              break;
+  case 3:
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>  GradListPage()),
+                              );
+                              break;
+
+
+
+
+                            default:
+                              break;
+                          }
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            Icon(
+                              medCat[index]['icon'],
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              medCat[index]['category'],
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
               SizedBox(height: 1.0),
               Text(
                 'الفعاليات القادمة',
@@ -324,60 +351,72 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               SizedBox(height: 10.0),
-              Column(
-                children: Events.map((appointment) {
+              Consumer<ExecutionListProvider>(
+                builder: (context, executionListProvider, _) {
+                  List<EventRequest> executionList =
+                      executionListProvider.getExecutionList;
+
                   return Column(
-                    children: <Widget>[
-                      Container(
-                        width: 400.0,
-                        height: 183.0,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Color(0xFF5BA581)),
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: Colors.white,
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
+                    children: executionList.map((request) {
+                      return Column(
+                        children: <Widget>[
+                          Container(
+                            width: 400.0,
+                            height: 183.0,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Color(0xFF5BA581)),
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: Colors.white,
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(
-                                    'المستخدم: ${appointment['user']}',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                  Row(
+                                    children: <Widget>[
+                                      Text(
+                                        'المستخدم: ${request.username}',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                           
+                            
+                                  Container(
+                                    width: 400,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF5BA581),
+                                      borderRadius:
+                                          BorderRadius.circular(10.0),
+                                    ),
+                                    padding: EdgeInsets.all(20.0),
+                                    margin: EdgeInsets.only(top: 15.0),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Icon(Icons.calendar_today,
+                                            color: Colors.white, size: 18),
+                                        SizedBox(width: 8),
+                                        Text(request.date,
+                                            style: TextStyle(
+                                                color: Colors.white)),
+                                        SizedBox(width: 20),
+                                        Icon(Icons.access_time,
+                                            color: Colors.white, size: 18),
+                                        SizedBox(width: 8),
+                                        Text(request.time,
+                                            style: TextStyle(
+                                                color: Colors.white)),
+                                      ],
                                     ),
                                   ),
-                                ],
-                              ),
-                              Container(
-                                width: 400,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFF5BA581),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                padding: EdgeInsets.all(20.0),
-                                margin: EdgeInsets.only(top: 15.0),
-                                child: Row(
-                                  children: <Widget>[
-                                    Icon(Icons.calendar_today,
-                                        color: Colors.white, size: 18),
-                                    SizedBox(width: 8),
-                                    Text(appointment['date'],
-                                        style: TextStyle(color: Colors.white)),
-                                    SizedBox(width: 20),
-                                    Icon(Icons.access_time,
-                                        color: Colors.white, size: 18),
-                                    SizedBox(width: 8),
-                                    Text(appointment['time'],
-                                        style: TextStyle(color: Colors.white)),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 10.0),
-                              Row(
+                              SizedBox(height: 6.0),
+
+   Row(
                                 children: <Widget>[
                                   Container(
                                     width: 140,
@@ -414,16 +453,30 @@ class _HomePageState extends State<HomePage> {
                                       child: Text('مكتمل'),
                                     ),
                                   ),
+                                   ],
+                              ),
+
+
+
+
+
+                                  SizedBox(height: 10.0),
+                                  // ... Other existing code ...
                                 ],
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                      SizedBox(height: 40.0),
-                    ],
+                          SizedBox(height: 40.0),
+
+
+
+
+                          
+                        ],
+                      );
+                    }).toList(),
                   );
-                }).toList(),
+                },
               ),
             ],
           ),
@@ -431,7 +484,6 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color(0xFF5BA581),
-
         currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(

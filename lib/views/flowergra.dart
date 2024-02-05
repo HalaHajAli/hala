@@ -3,6 +3,9 @@ import 'package:flutter_application/views/favorites_provider.dart';
 import 'package:flutter_application/views/servicepage.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_application/views/CartProvider.dart';
+import 'package:flutter_application/views/ReqProvider.dart';
+import 'package:flutter_application/views/food.dart';
+import 'package:flutter_application/views/gradProvider.dart';
 
 class FlowerColorPage1 extends StatefulWidget {
   @override
@@ -52,13 +55,17 @@ class _FlowerColorPageState extends State<FlowerColorPage1> {
           .toList();
     } else {
       return flowerImages
-          .where((imagePath) => imagePath.toLowerCase().contains(color.toLowerCase()))
+          .where((imagePath) =>
+              imagePath.toLowerCase().contains(color.toLowerCase()))
           .toList();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final reqProvider = Provider.of<ReqProvider>(context, listen: false);
+    final gradProvider = Provider.of<GradProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -102,6 +109,11 @@ class _FlowerColorPageState extends State<FlowerColorPage1> {
             onChanged: (newColor) {
               setState(() {
                 selectedColor = newColor;
+            gradProvider.addToGradList('نوع المناسبة :حفل تخرج');
+
+                gradProvider.addToGradList('اللون: $newColor');
+                print(
+                    newColor); // Add the text label when storing in GradProvider
               });
             },
             items: flowerColors.map((color) {
@@ -112,14 +124,14 @@ class _FlowerColorPageState extends State<FlowerColorPage1> {
             }).toList(),
           ),
           Wrap(
-            children: getFilteredFlowerImages(selectedColor)
-                .map((imagePath) {
+            children: getFilteredFlowerImages(selectedColor).map((imagePath) {
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FullScreenImagePage(imagePath: imagePath),
+                      builder: (context) =>
+                          FullScreenImagePage(imagePath: imagePath),
                     ),
                   );
                 },
@@ -135,8 +147,32 @@ class _FlowerColorPageState extends State<FlowerColorPage1> {
               );
             }).toList(),
           ),
-          SizedBox(height: 20), // Add some spacing
+          SizedBox(height: 20),
         ],
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Container(
+          width: 50, // Set the width to your desired size
+          child: ElevatedButton.icon(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FoodManagementPage(),
+                ),
+              );
+            },
+            icon: Icon(Icons.arrow_forward,
+                size: 20, color: Colors.white), // Adjust the size as needed
+            label: Text('',
+                style:
+                    TextStyle(fontSize: 14)), // Adjust the font size as needed
+            style: ElevatedButton.styleFrom(
+              primary: Color.fromARGB(255, 91, 165, 129),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -171,22 +207,20 @@ class FullScreenImagePage extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      // Add the image to favorites
-                      final favoritesProvider =
-                          Provider.of<FavoritesProvider>(context, listen: false);
+                      final favoritesProvider = Provider.of<FavoritesProvider>(
+                          context,
+                          listen: false);
                       favoritesProvider.addToFavorites(imagePath);
                       Navigator.pop(context);
                     },
                     child: Text('إضافة إلى المفضلة'),
                   ),
-                  SizedBox(width: 20),
                   ElevatedButton(
                     onPressed: () {
-                      // Add the image to the cart
                       final cartProvider =
                           Provider.of<CartProvider>(context, listen: false);
                       cartProvider.addToCart(imagePath);
@@ -199,6 +233,21 @@ class FullScreenImagePage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class NextPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Next Page'),
+        backgroundColor: Color.fromARGB(255, 91, 165, 129),
+      ),
+      body: Center(
+        child: Text('Content of the Next Page'),
       ),
     );
   }

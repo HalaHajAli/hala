@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:flutter_application/views/offerProvider.dart';
+import 'package:flutter_application/views/HallServicePage.dart';
 
 class newser2 extends StatefulWidget {
   @override
@@ -68,7 +69,7 @@ class _NewserState extends State<newser2> {
       });
 
       final response = await http
-          .get(Uri.parse('http://192.168.1.4:4001/login1/offer/shahd'));
+          .get(Uri.parse('http://192.168.1.6:4001/login1/offer/shahd'));
 
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
@@ -88,6 +89,9 @@ class _NewserState extends State<newser2> {
           final offerProvider =
               Provider.of<OfferProvider>(context, listen: false);
           offerProvider.addToCart(' $packageName');
+                    offerProvider.addToCart(' shahd');
+                    offerProvider.addToCart(' w');
+
           //   print("###################################################################################################");
           // print('Package Name: $packageName');
           // print("###################################################################################################");
@@ -304,7 +308,7 @@ class _NewserState extends State<newser2> {
                     //   borderRadius: BorderRadius.circular(8),
                     // ),
                     child: Text(
-                      ' اكتشف العروض والخدمات->',
+                      ' اكتشف العروض والخدمات',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -509,7 +513,7 @@ class PackageCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              price ?? 'No Price',
+                             '$price NIS',
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -582,7 +586,7 @@ class PackageCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Login1(),
+            builder: (context) => HallServicePage(),
           ),
         );
         break;

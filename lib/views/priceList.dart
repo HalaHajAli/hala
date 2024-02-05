@@ -195,7 +195,7 @@ final offerProvider = Provider.of<OfferProvider>(context);
         navigateToFlowerArrangementPage(context);
         break;
       case 'قائمة الطعام':
-        // Handle button press for قائمة الطعام
+        navigateToFlowerArrangementPage2(context);
         break;
       case 'القاعة':
         navigateToFlowerArrangementPage3(context);
